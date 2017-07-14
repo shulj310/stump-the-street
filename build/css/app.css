@@ -1,0 +1,111 @@
+@import url('https://fonts.googleapis.com/css?family=Raleway');
+
+.header{
+  background-image: url('../assets/HeaderImage.png');
+  box-shadow: 0px 4px 3px #888888;
+  margin-top: 3%
+
+}
+
+.wrapper{
+  font-family: "Raleway";
+  border: 10px 10px solid #000000;
+  margin-top: 2%;
+}
+
+#main-logo{
+  margin-left: 2%;
+  width: 12%;
+  height: 12%;
+}
+
+body{
+  align-content: center;
+  background-image: url('../assets/Background.png')
+}
+
+.footer{
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+#image-footer{
+  position: relative;
+  top: 0;
+  left: 0;
+}
+
+.pend-logo{
+  position: absolute;
+  float: left;
+  left: 10px;
+  top: 30px;
+  /*box-shadow: come back to this;*/
+}
+
+.footer-li{
+  z-index: 100;
+  position: absolute;
+  top: 200px;
+  left: 0;
+  width: 100%;
+}
+
+.images{
+  margin: 2% 0%;
+}
+
+.row-extend{
+  margin: 0% .1%;
+}
+
+
+div.nav{
+  margin-top: 2%;
+  box-shadow:0px 1px 0px #888888;
+}
+
+.banner{
+  margin: 1% 1%;
+  align-content: center;
+  margin: 0px 0px 0px 15px;
+}
+
+.block {
+    box-shadow:1px 3px 5px #888888;
+    margin: 1% 0%;
+    border-radius: 7px;
+}
+
+.signup{
+  margin: 2% 0%;
+  float: right;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+li{
+  margin-bottom: .5%;
+  font-family: "Raleway";
+}
+
+li.nav-item {
+    float: left;
+    margin-left: 2%
+}
+li.right {
+    float: right;
+    margin-right: 2%
+}
+
+li a {
+    display: block;
+    padding: 8px;
+    background-color: #dddddd;
+}
