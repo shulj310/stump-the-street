@@ -10,23 +10,65 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170714185237) do
+ActiveRecord::Schema.define(version: 20170718014753) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "users", force: :cascade do |t|
-    t.string   "first_name",    null: false
-    t.string   "last_name",     null: false
-    t.string   "email",         null: false
-    t.string   "password",      null: false
-    t.boolean  "authorization", null: false
-    t.date     "dob",           null: false
-    t.string   "zip_code",      null: false
-    t.string   "country",       null: false
-    t.float    "wallet",        null: false
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
+  create_table "competitions", force: :cascade do |t|
+    t.integer  "length",          null: false
+    t.datetime "deadline",        null: false
+    t.integer  "wager_amount",    null: false
+    t.float    "odds_calculated", null: false
+    t.float    "current_value",   null: false
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.integer  "user_id",         null: false
+    t.integer  "competitor_id",   null: false
+  end
+
+  create_table "competitor_portfolios", force: :cascade do |t|
+    t.float    "return",         null: false
+    t.float    "value",          null: false
+    t.float    "cost",           null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.integer  "competition_id", null: false
+  end
+
+  create_table "competitors", force: :cascade do |t|
+    t.string "name",      null: false
+    t.string "image_url", null: false
+  end
+
+  create_table "portfolios", force: :cascade do |t|
+    t.string   "name",           null: false
+    t.float    "value",          null: false
+    t.float    "cost",           null: false
+    t.float    "return",         null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.integer  "competition_id", null: false
+  end
+
+  create_table "positions", force: :cascade do |t|
+    t.integer  "portfolio_id", null: false
+    t.integer  "shares",       null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.integer  "stock_id",     null: false
+    t.index ["portfolio_id"], name: "index_positions_on_portfolio_id", using: :btree
+  end
+
+  create_table "trades", force: :cascade do |t|
+    t.integer  "portfolio_id",      null: false
+    t.integer  "stock_id",          null: false
+    t.float    "transaction_price", null: false
+    t.integer  "shares",            null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.index ["portfolio_id"], name: "index_trades_on_portfolio_id", using: :btree
+    t.index ["stock_id"], name: "index_trades_on_stock_id", using: :btree
   end
 
 end
