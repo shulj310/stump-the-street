@@ -1,0 +1,15 @@
+<%= form_for @competition do |f| %>
+  <div class="field">
+    <%= f.label :length, "Length of Competition (weeks)" %><br />
+    <%= f.text_field :length %>
+  </div>
+
+  <div class="field">
+    <%= f.label :wager_amount, "Wager ($)" %><br />
+    <%= f.text_field :wager_amount %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
