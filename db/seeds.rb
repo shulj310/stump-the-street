@@ -6,6 +6,39 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+User.create(
+  first_name: "Jared",
+  last_name: "Shulman",
+  dob: Date.new(1990,3,10),
+  zip: "02111",
+  country: "USA",
+  email: "shulman.jared@gmail.com",
+  password: "pass123"
+)
+
+Competitor.create(
+  name: "Market",
+  image_url: "app/assets/images/market.png"
+)
+
+Competition.create(
+  length: 30,
+  deadline: DateTime.now + 30,
+  wager_amount: 100,
+  odds_calculated: 1.0,
+  current_value: 90,
+  user_id: 1,
+  competitor_id: 1
+)
+
+Portfolio.create(
+  name: "Going Long!",
+  value: 100000,
+  cost: 100000,
+  return: 0.0,
+  competition_id: 1
+)
+
 Stock.create(
   name: "Netflix",
   price: 183.60,
