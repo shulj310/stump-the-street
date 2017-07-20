@@ -4,4 +4,5 @@ class Portfolio < ApplicationRecord
   has_many :positions
   has_many :stocks,
     through: :positions
+  accepts_nested_attributes_for :stocks
 end
