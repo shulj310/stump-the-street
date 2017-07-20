@@ -15,22 +15,39 @@ class Portfolio extends Component{
     fetch('/api/v1/portfolios/1/stocks')
     .then(response => response.json())
     .then(body =>{
-      this.setState({ stocks: body})
+      this.setState({ stocks: body })
     })
   }
 
 
   makeTrade(payLoad){
-    fetch('/api/v1/portfolio/1/stocks', {
+    fetch('/api/v1/portfolios/1/stocks', {
       method: "POST",
       body: JSON.stringify(payLoad)
     }).then(response =>{
       let body = response.json()
       return body
     }).then(body=>{
-      let newComps = this.state.stock.slice()
-      newComps.unshift(body)
-      this.setState({stocks: newComps})
+      let newPosition = this.state.stocks.slice()
+
+      function currentlyOwns(id) {
+        return id === body.stock_id
+      }
+
+      function filterById(object) {
+        if (currentlyOwns(object.stock_id)){
+          return false
+        }
+        else{
+          return true
+        }
+      }
+
+      let filteredPositions = newPosition.filter(filterById)
+
+
+      filteredPositions.unshift(body)
+      this.setState({stocks: filteredPositions})
     })
   }
 
@@ -46,10 +63,14 @@ class Portfolio extends Component{
     })
     return(
         <div>
-          {stocks}
+          <h2>My Portfolio </h2>
+          <hr/>
           <TradeForm
-            makeTrade = {this.makeTrade}
-            />
+          makeTrade = {this.makeTrade}
+          />
+          <hr/>
+          {stocks}
+          <hr/>
         </div>
     )
   }

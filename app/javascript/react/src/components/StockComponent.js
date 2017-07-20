@@ -1,10 +1,13 @@
 import React from 'react';
 
 const StockComponenet = props => {
+  let value = props.stock.shares * props.stock.stock.price
   return (
-<div>
-  {props.stock.stock.ticker} | {props.stock.shares} | {props.stock.stock.price}
-</div>
+  <div>
+    <tr>
+    {props.stock.stock.ticker} | {props.stock.shares}
+    | {props.stock.stock.price} | {value}
+  </div>
   );
 }
 

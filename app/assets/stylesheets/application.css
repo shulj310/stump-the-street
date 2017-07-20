@@ -13,3 +13,12 @@
  *= require_tree .
  *= require_self
  */
+.buy {
+  background-color: green;
+}
+.sell{
+  background-color: red;
+}
+button{
+  color: white;
+}
