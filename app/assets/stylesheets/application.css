@@ -10,15 +10,45 @@
  * files in this directory. Styles in this file should be added after the last require_* statement.
  * It is generally better to create a new file per style scope.
  *
+
  *= require_tree .
  *= require_self
  */
+ @import url('https://fonts.googleapis.com/css?family=Source+Code+Pro|Ubuntu');
+ @import url("https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css");
+ @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+
+ h2{
+   font-family: "Ubuntu"
+ }
+
+#app{
+  background-color: black
+}
+
+ .body{
+   padding: 1% 1%;
+   background-color: white;
+ }
+
+ .form-div {
+   padding: 1% 10%
+ }
+
 .buy {
   background-color: green;
+}
+.buy:hover{
+  background: yellow
 }
 .sell{
   background-color: red;
 }
-button{
+.btn-small{
   color: white;
+  height: 20px;
+  line-height: 24px;
+  margin-top: 10%;
+  padding: 0 0.5rem;
+}
 }

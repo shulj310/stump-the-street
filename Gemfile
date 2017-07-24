@@ -9,6 +9,9 @@ gem 'jquery-rails'
 gem "simple_form"
 gem "devise"
 gem "webpacker"
+gem 'materialize-sass'
+gem 'material_icons'
+gem 'stock_quote'
 
 group :development do
   gem 'listen', '~> 3.0.5'

@@ -2,14 +2,13 @@ import React from 'react';
 
 const TextField = props => {
   return (
-    <label>{props.label}:
-      <input
-        name={props.name}
-        onChange={props.handlerFunction}
-        type='text'
-        value={props.content}
-      />
-    </label>
+
+    <div className="input-field col s4">
+        <input type="text" id="autocomplete-input" className="autocomplete"
+          name={props.name} onChange={props.handlerFunction} value={props.content} />
+        <label for="autocomplete-input">{props.label}</label>
+      </div>
+
   );
 }
 

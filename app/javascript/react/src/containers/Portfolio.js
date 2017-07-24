@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Icon } from 'react-materialize'
 import StockComponenet from '../components/StockComponent';
 import TradeForm from './TradeForm'
 
@@ -28,6 +29,7 @@ class Portfolio extends Component{
       let body = response.json()
       return body
     }).then(body=>{
+
       let newPosition = this.state.stocks.slice()
 
       function currentlyOwns(id) {
@@ -44,6 +46,9 @@ class Portfolio extends Component{
       }
 
       let filteredPositions = newPosition.filter(filterById)
+
+      body["ticker"] = body.stock.ticker
+      body["price"] = body.stock.price
 
 
       filteredPositions.unshift(body)
@@ -62,15 +67,24 @@ class Portfolio extends Component{
       )
     })
     return(
-        <div>
-          <h2>My Portfolio </h2>
-          <hr/>
+        <div className="body">
+              <h2>My Portfolio </h2>
           <TradeForm
           makeTrade = {this.makeTrade}
           />
-          <hr/>
+          <table>
+          <tbody>
+          <tr>
+            <th>Ticker</th>
+            <th>Shares</th>
+            <th>Mkt Value</th>
+            <th>Price</th>
+            <th>Cost</th>
+            <th>Return</th>
+          </tr>
           {stocks}
-          <hr/>
+          </tbody>
+        </table>
         </div>
     )
   }

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import TextField from '../components/TextField'
+import {Button, Icon} from 'react-materialize'
+
 
 class TradeForm extends Component{
   constructor(props){
@@ -49,36 +51,44 @@ handleClearForm(event){
   render(){
 
     return(
-      <form className="form">
-      <div>
-      <TextField
-      content={this.state.ticker}
-      label= "Ticker"
-      name="ticker"
-      handlerFunction={this.handleChange}
-      />
+    <div className="row">
+      <div className="col s12">
+        <form className="col 2">
+        <div className="row">
+          <div className="col s12">
+            <div className="row">
+            <TextField
+              content={this.state.ticker}
+              label= "Ticker"
+              name="ticker"
+              handlerFunction={this.handleChange}
+              />
+              <TextField
+                content={this.state.share_amount}
+                label= "Shares"
+                name="share_amount"
+                handlerFunction={this.handleChange}
+              />
+              <div>
+                <a
+                  className="waves-effect waves-light btn btn-small buy"
+                  onClick={this.handleBuySubmit}>
+                  Buy
+                </a>
+                <a
+                  className="waves-effect waves-light btn btn-small sell"
+                  onClick={this.handleSellSubmit}>
+                  Sell
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+        </div>
+        </form>
       </div>
-      <div>
-      <TextField
-        content={this.state.share_amount}
-        label= "Shares"
-        name="share_amount"
-        handlerFunction={this.handleChange}
-      />
-      </div>
-      <div>
-        <button type="button"
-        className="buy"
-        onClick={this.handleBuySubmit}>
-          Buy
-        </button>
-        <button type="button"
-         className="sell"
-         onClick={this.handleSellSubmit}>
-          Sell
-        </button>
-      </div>
-      </form>
+    </div>
     )
   }
 }
