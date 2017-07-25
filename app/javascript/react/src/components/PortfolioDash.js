@@ -6,10 +6,9 @@ const PortfolioDash = (props) => {
 
   if (props.portfolio.competition){
     deadline = (props.portfolio.competition.deadline)
-    var n = date.toDateString();
-    var time = date.toLocaleTimeString();
-    console.log(props.portfolio.competition)
-
+    deadline = Date(deadline).split(" ").slice(0,4).join(" ")
+    debugger;
+  }
   return(
 
     <div>
