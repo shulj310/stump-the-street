@@ -1,10 +1,10 @@
-class Api::V1::CompetitionsController < ApplicationController
+class Api::V1::PortfoliosController < ApplicationController
   skip_before_action :verify_authenticity_token
 
-
   def show
-    binding.pry
-    render json: Portfolio.where(id:params[:portfolio_id])
+    portfolio = Portfolio.find(params[:id])
+    portfolio.touch
+    render json: portfolio, include: ["competition"]
   end
 
 end

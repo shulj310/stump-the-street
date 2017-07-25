@@ -8,7 +8,8 @@ class TradeForm extends Component{
   super(props)
   this.state = {
     ticker: "",
-    share_amount: ""
+    share_amount: "",
+    side: null
   }
   this.handleChange = this.handleChange.bind(this)
   this.handleBuySubmit = this.handleBuySubmit.bind(this)
@@ -20,7 +21,8 @@ handleBuySubmit(event){
   event.preventDefault();
   let formPayload = {
     ticker: this.state.ticker,
-    share_amount: this.state.share_amount
+    share_amount: this.state.share_amount,
+    side: true
   }
   this.props.makeTrade(formPayload)
   this.handleClearForm(event);
@@ -30,7 +32,8 @@ handleSellSubmit(event){
   event.preventDefault();
   let formPayload = {
     ticker: this.state.ticker,
-    share_amount: -(this.state.share_amount)
+    share_amount: this.state.share_amount,
+    side:false
   }
   this.props.makeTrade(formPayload)
   this.handleClearForm(event);
@@ -40,7 +43,8 @@ handleClearForm(event){
   event.preventDefault();
   this.setState({
     share_amount: "",
-    ticker:""
+    ticker:"",
+    side: null
   })
 }
 
@@ -71,12 +75,12 @@ handleClearForm(event){
               />
               <div>
                 <a
-                  className="waves-effect waves-light btn btn-small buy"
+                  className="waves-effect waves-light btn buy btn-small"
                   onClick={this.handleBuySubmit}>
                   Buy
                 </a>
                 <a
-                  className="waves-effect waves-light btn btn-small sell"
+                  className="waves-effect waves-light btn sell btn-small"
                   onClick={this.handleSellSubmit}>
                   Sell
                 </a>

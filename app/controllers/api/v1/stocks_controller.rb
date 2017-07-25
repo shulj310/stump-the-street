@@ -3,57 +3,58 @@ class Api::V1::StocksController < ApplicationController
 
   def index
 
+    ######## current_user.competitions.find(Portfolio.find(params[:portfolio_id]))
+
     stocks = Portfolio.select(:id,"stocks.id AS stock_id",
-      :'positions.shares',:'positions.cost',:'stocks.ticker',:'stocks.price').joins(
-          :positions,:stocks).where("stocks.id = positions.stock_id")
+      :'positions.shares',:'positions.cost',:'stocks.ticker',
+        :'stocks.price',"stocks.price * positions.shares AS value"
+          ).joins(:positions,:stocks).where(
+          "stocks.id = positions.stock_id","#{params[:portfolio_id]} AND
+              positions.shares > 0").order("value DESC")
 
     render json: stocks
   end
 
   def create
-    data = JSON.parse(request.body.read)
-    ticker = data["ticker"]
-    shares = data["share_amount"].to_i
+
+    ticker,shares,side = trade_params
+
     stock = Stock.find_by(ticker:ticker)
 
     if stock.nil?
       stock = new_stock(ticker)
     end
 
+    stock.touch
+
     Trade.create(
       portfolio_id: params[:portfolio_id],
       stock_id: stock.id,
       transaction_price: stock.price,
-      shares: shares
+      shares: shares,
+      side: side
     )
 
-    position = Position.find_by(stock_id:stock.id)
+    position = Position.find_by(
+      stock_id:stock.id,portfolio_id:params[:portfolio_id])
 
-    if position
-      render json: position, include: ["stock"], notice: "You traded #{ticker} at #{stock.price}"
-    else
-
-      new_stock = {
-        shares:shares,
-        price: stock.price,
-        value: stock.price*shares,
-        cost:stock.price*shares,
-        id:stock.id
-      }
-
-      render json: new_stock, notice: "You traded #{ticker} at #{stock.price}"
-    end
+    render json: position, include: ["stock"],
+          notice: "You traded #{ticker} at #{stock.price}"
   end
 
 
-  def new_stock(ticker)
-    new_stock = StockQuote::Stock.quote(ticker)
+  def trade_params
+    data = JSON.parse(request.body.read)
+    return [data["ticker"].upcase , data["share_amount"].to_i, data["side"]]
+  end
 
-    stock = Stock.create(
-          ticker:ticker,
-          name:new_stock.name,
-          price:new_stock.last_trade_price_only
-        )
+  def new_stock(ticker)
+
+    stock = Stock.new
+
+    stock.ticker = ticker
+    stock.get_price_and_name
+
     return stock
   end
 

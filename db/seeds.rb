@@ -13,7 +13,8 @@ User.create(
   zip: "02111",
   country: "USA",
   email: "shulman.jared@gmail.com",
-  password: "pass123"
+  password: "pass123",
+  admin: true
 )
 
 Competitor.create(
@@ -33,39 +34,8 @@ Competition.create(
 
 Portfolio.create(
   name: "Going Long!",
-  value: 100000,
-  cost: 100000,
+  value: 0,
+  cash: 1000000,
   return: 0.0,
   competition_id: 1
-)
-
-Stock.create(
-  name: "Netflix",
-  price: 183.60,
-  ticker:"NFLX"
-)
-Stock.create(
-name: "Charles Schwab",
-price: 42.86,
-ticker:"SCHW"
-)
-Stock.create(
-name: "Tesla",
-price: 328.24,
-ticker:"TSLA"
-)
-Stock.create(
-name: "Intuitive Surgical",
-price: 946.65,
-ticker:"ISRG"
-)
-Stock.create(
-name: "Herbalife",
-price: 72.09,
-ticker:"HLF"
-)
-Stock.create(
-name: "Equity Residential",
-price: 66.05,
-ticker:"EQR"
 )

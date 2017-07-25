@@ -1,7 +1,7 @@
 import React from 'react';
 
 const StockComponenet = props => {
-  let value = Number((props.stock.shares * props.stock.price).toFixed(2))
+  let value = Number(props.stock.value).toFixed(2)
   let price_return = Number(props.stock.price/props.stock.cost-1).toFixed(2)
   return (
     <tr>

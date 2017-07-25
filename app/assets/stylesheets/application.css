@@ -14,6 +14,8 @@
  *= require_tree .
  *= require_self
  */
+
+ @import "materialize";
  @import url('https://fonts.googleapis.com/css?family=Source+Code+Pro|Ubuntu');
  @import url("https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css");
  @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
