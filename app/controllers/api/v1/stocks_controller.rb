@@ -5,12 +5,17 @@ class Api::V1::StocksController < ApplicationController
 
     ######## current_user.competitions.find(Portfolio.find(params[:portfolio_id]))
 
+    Portfolio.find(params[:portfolio_id]).positions.each do |position|
+      position.stock.touch
+    end
+
     stocks = Portfolio.select(:id,"stocks.id AS stock_id",
       :'positions.shares',:'positions.cost',:'stocks.ticker',
         :'stocks.price',"stocks.price * positions.shares AS value"
           ).joins(:positions,:stocks).where(
           "stocks.id = positions.stock_id","#{params[:portfolio_id]} AND
               positions.shares > 0").order("value DESC")
+
 
     render json: stocks
   end
@@ -37,6 +42,10 @@ class Api::V1::StocksController < ApplicationController
 
     position = Position.find_by(
       stock_id:stock.id,portfolio_id:params[:portfolio_id])
+
+    # binding.pry
+    #
+    # position["side"] = side
 
     render json: position, include: ["stock"],
           notice: "You traded #{ticker} at #{stock.price}"

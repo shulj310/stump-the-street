@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
 import { Icon } from 'react-materialize'
 import StockComponenet from '../components/StockComponent';
-import TradeForm from './TradeForm'
-import PortfolioDash from '../components/PortfolioDash'
+import TradeForm from './TradeForm';
+import PortfolioDash from '../components/PortfolioDash';
+import ReactTable from 'react-table'
 
 class Portfolio extends Component{
   constructor(props){
   super(props)
   this.state = {
     stocks: [],
-    portfolio: {}
+    portfolio: {},
+    chartLength: 3
   }
   this.makeTrade = this.makeTrade.bind(this)
 }
@@ -20,7 +22,16 @@ class Portfolio extends Component{
     })
     .then(response => response.json())
     .then(body =>{
-      this.setState({ stocks: body })
+
+
+      function filterByShares(object){
+        return object.shares > 0
+      }
+
+
+      let portfolio = body.filter(filterByShares)
+      let chartLength = portfolio.length
+      this.setState({ stocks: portfolio, chartLength: chartLength })
     })
     fetch('/api/v1/portfolios/1',{
       credentials: 'same-origin'
@@ -30,6 +41,7 @@ class Portfolio extends Component{
       this.setState({ portfolio: body })
     })
   }
+
 
 
   makeTrade(payLoad){
@@ -66,23 +78,34 @@ class Portfolio extends Component{
       new_portfolio["cash"] -= body["value"]
 
       filteredPositions.unshift(body)
-      this.setState({stocks: filteredPositions,portfolio:new_portfolio})
+      this.setState({stocks: filteredPositions,portfolio:new_portfolio,chartLength: filteredPositions.length})
     })
   }
 
   render (){
 
-    let stocks = this.state.stocks.map( (stock,index) =>{
-
-      if (stock.shares > 0) {
-      return(
-        <StockComponenet
-          key= {index}
-          stock = {stock}
-        />
-      )
-    }
-    })
+    const columns = [{
+        Header: 'Stock Info',
+        columns: [{
+          Header: 'Ticker',
+          accessor: 'ticker'
+        }, {
+          Header: 'Shares',
+          accessor: 'shares'
+        }]
+      }, {
+        Header: 'Value',
+        columns: [{
+          Header: 'Market Value',
+          accessor: 'value'
+        },{
+          Header: 'Price',
+          accessor: 'price'
+        },{
+          Header: 'Cost',
+          accessor: 'cost'
+        }]
+      }]
 
     return(
         <div className="body">
@@ -92,19 +115,12 @@ class Portfolio extends Component{
           <TradeForm
           makeTrade = {this.makeTrade}
           />
-          <table className="striped borded stocks">
-          <tbody>
-          <tr>
-            <th>Ticker</th>
-            <th>Shares</th>
-            <th>Mkt Value</th>
-            <th>Price</th>
-            <th>Cost</th>
-            <th>Return</th>
-          </tr>
-          {stocks}
-          </tbody>
-        </table>
+        <ReactTable
+          data={this.state.stocks}
+          columns={columns}
+          minRows={this.state.chartLength}
+          defaultPageSize={20}
+        />
         </div>
     )
   }

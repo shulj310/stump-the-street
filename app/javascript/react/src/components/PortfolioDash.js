@@ -7,7 +7,6 @@ const PortfolioDash = (props) => {
   if (props.portfolio.competition){
     deadline = (props.portfolio.competition.deadline)
     deadline = Date(deadline).split(" ").slice(0,4).join(" ")
-    debugger;
   }
   return(
 

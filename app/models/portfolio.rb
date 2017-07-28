@@ -6,14 +6,9 @@ class Portfolio < ApplicationRecord
     through: :positions
   accepts_nested_attributes_for :stocks
 
-
-  after_touch do |portfolio|
-
-    portfolio.value = calc_value + self.cash
-
-  end
-
   def calc_value
-    self.positions.pluck(:value).inject(0) {|sum,x| sum + x}
+    self.positions.each {|pos| pos.touch}
+    self.value = self.positions.pluck(:value).inject(0) {|sum,x| sum + x} + self.cash
+    self.save
   end
 end
