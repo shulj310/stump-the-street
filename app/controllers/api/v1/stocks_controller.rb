@@ -43,12 +43,11 @@ class Api::V1::StocksController < ApplicationController
     position = Position.find_by(
       stock_id:stock.id,portfolio_id:params[:portfolio_id])
 
-    # binding.pry
-    #
-    # position["side"] = side
+    binding.pry
+    
+    position["side"] = side
 
-    render json: position, include: ["stock"],
-          notice: "You traded #{ticker} at #{stock.price}"
+    render json: position, include: ["stock"]
   end
 
 
