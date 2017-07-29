@@ -1,8 +1,14 @@
 import React from 'react';
+import numeral from 'numeral'
 
 const PortfolioDash = (props) => {
 
   let deadline;
+  let portReturn;
+
+  if (props.portfolio.return){
+    portReturn = numeral(props.portfolio.value/1000000).format('0.00%')
+  }
 
   if (props.portfolio.competition){
     deadline = (props.portfolio.competition.deadline)
@@ -20,9 +26,9 @@ const PortfolioDash = (props) => {
         <th>Cash </th>
         <th>Return </th>
       </tr>
-        <td>{props.portfolio.value} </td>
-        <td>{props.portfolio.cash} </td>
-        <td>{props.portfolio.return} </td>
+        <td>{numeral(props.portfolio.value).format('$0,0.00')} </td>
+        <td>{numeral(props.portfolio.cash).format('$0,0.00')} </td>
+        <td>{numeral(props.portfolio.value/1000000-1).format('0.00%')} </td>
       </tbody>
       </table>
     </div>

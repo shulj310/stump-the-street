@@ -3,7 +3,8 @@ import { Icon } from 'react-materialize'
 import StockComponenet from '../components/StockComponent';
 import TradeForm from './TradeForm';
 import PortfolioDash from '../components/PortfolioDash';
-import ReactTable from 'react-table'
+import ReactTable from 'react-table';
+import numeral from 'numeral'
 
 class Portfolio extends Component{
   constructor(props){
@@ -11,40 +12,82 @@ class Portfolio extends Component{
   this.state = {
     stocks: [],
     portfolio: {},
-    chartLength: 3
+    chartLength: 3,
+    last_trade: false,
+    shares_traded: 0
   }
   this.makeTrade = this.makeTrade.bind(this)
+  this.newStocks = this.newStocks.bind(this)
 }
+    newStocks(){
+      fetch('/api/v1/portfolios/1/stocks',{
+        credentials: "same-origin"
+      })
+      .then(response => response.json())
+      .then(body =>{
+
+
+        function filterByShares(object){
+          return object.shares > 0
+        }
+
+        let portfolio = body.filter(filterByShares)
+
+        let newPortfolio = portfolio.map((position)=>{
+          position["return"] = position["price"]/position["cost"]-1
+        })
+
+        let chartLength = portfolio.length
+        this.setState({ stocks: portfolio, chartLength: chartLength })
+      })
+      fetch('/api/v1/portfolios/1',{
+        credentials: 'same-origin'
+      })
+      .then(response => response.json())
+      .then(body=>{
+        this.setState({ portfolio: body })
+      })
+    }
+
+    refreshButton(){
+      this.newStocks()
+    }
 
   componentDidMount(){
-    fetch('/api/v1/portfolios/1/stocks',{
-      credentials: "same-origin"
-    })
-    .then(response => response.json())
-    .then(body =>{
-
-
-      function filterByShares(object){
-        return object.shares > 0
-      }
-
-
-      let portfolio = body.filter(filterByShares)
-      let chartLength = portfolio.length
-      this.setState({ stocks: portfolio, chartLength: chartLength })
-    })
-    fetch('/api/v1/portfolios/1',{
-      credentials: 'same-origin'
-    })
-    .then(response => response.json())
-    .then(body=>{
-      this.setState({ portfolio: body })
-    })
+    this.newStocks()
+    // fetch('/api/v1/portfolios/1/stocks',{
+    //   credentials: "same-origin"
+    // })
+    // .then(response => response.json())
+    // .then(body =>{
+    //
+    //
+    //   function filterByShares(object){
+    //     return object.shares > 0
+    //   }
+    //
+    //   let portfolio = body.filter(filterByShares)
+    //
+    //   let newPortfolio = portfolio.map((position)=>{
+    //     position["return"] = position["price"]/position["cost"]-1
+    //   })
+    //
+    //   let chartLength = portfolio.length
+    //   this.setState({ stocks: portfolio, chartLength: chartLength })
+    // })
+    // fetch('/api/v1/portfolios/1',{
+    //   credentials: 'same-origin'
+    // })
+    // .then(response => response.json())
+    // .then(body=>{
+    //   this.setState({ portfolio: body })
+    // })
   }
 
 
 
   makeTrade(payLoad){
+    this.setState({last_trade: payLoad.side,shares_traded: payLoad.share_amount})
     fetch('/api/v1/portfolios/1/stocks', {
       method: "POST",
       body: JSON.stringify(payLoad)
@@ -73,9 +116,15 @@ class Portfolio extends Component{
       body["ticker"] = body.stock.ticker
       body["price"] = body.stock.price
       body["value"] = body.stock.price * body.shares
+      body["return"] = body["price"]/body["cost"]-1
+
+      let updateValue = body.stock.price * this.state.shares_traded
 
       let new_portfolio = this.state.portfolio
-      new_portfolio["cash"] -= body["value"]
+      if (this.state.last_trade)
+      {new_portfolio["cash"] -= updateValue} else {
+        {new_portfolio["cash"] += updateValue}
+      }
 
       filteredPositions.unshift(body)
       this.setState({stocks: filteredPositions,portfolio:new_portfolio,chartLength: filteredPositions.length})
@@ -97,15 +146,26 @@ class Portfolio extends Component{
         Header: 'Value',
         columns: [{
           Header: 'Market Value',
-          accessor: 'value'
+          accessor: 'value',
+          Cell: props => <span className='number'>{numeral(props.value).format('$0,0.00')}</span>
         },{
           Header: 'Price',
-          accessor: 'price'
+          accessor: 'price',
+          Cell: props => <span className='number'>{numeral(props.value).format('$0,0.00')}</span>
         },{
           Header: 'Cost',
-          accessor: 'cost'
+          accessor: 'cost',
+          Cell: props => <span className='number'>{numeral(props.value).format('$0,0.00')}</span>
+        },
+        {
+          Header: 'Return',
+          accessor: 'return',
+          Cell: props => <span className='number'>{numeral(props.value).format('0.00%')}</span>
         }]
       }]
+
+
+
 
     return(
         <div className="body">
@@ -120,6 +180,7 @@ class Portfolio extends Component{
           columns={columns}
           minRows={this.state.chartLength}
           defaultPageSize={20}
+
         />
         </div>
     )
