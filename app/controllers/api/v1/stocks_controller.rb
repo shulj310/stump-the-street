@@ -16,7 +16,6 @@ class Api::V1::StocksController < ApplicationController
           "stocks.id = positions.stock_id","#{params[:portfolio_id]} AND
               positions.shares > 0").order("value DESC")
 
-
     render json: stocks
   end
 
@@ -42,10 +41,6 @@ class Api::V1::StocksController < ApplicationController
 
     position = Position.find_by(
       stock_id:stock.id,portfolio_id:params[:portfolio_id])
-
-    binding.pry
-    
-    position["side"] = side
 
     render json: position, include: ["stock"]
   end

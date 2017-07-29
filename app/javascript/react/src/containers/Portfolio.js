@@ -3,7 +3,8 @@ import { Icon } from 'react-materialize'
 import StockComponenet from '../components/StockComponent';
 import TradeForm from './TradeForm';
 import PortfolioDash from '../components/PortfolioDash';
-import ReactTable from 'react-table'
+import ReactTable from 'react-table';
+import numeral from 'numeral'
 
 class Portfolio extends Component{
   constructor(props){
@@ -11,7 +12,8 @@ class Portfolio extends Component{
   this.state = {
     stocks: [],
     portfolio: {},
-    chartLength: 3
+    chartLength: 3,
+    last_trade: false
   }
   this.makeTrade = this.makeTrade.bind(this)
 }
@@ -45,6 +47,7 @@ class Portfolio extends Component{
 
 
   makeTrade(payLoad){
+    this.setState({last_trade: payLoad.side})
     fetch('/api/v1/portfolios/1/stocks', {
       method: "POST",
       body: JSON.stringify(payLoad)
@@ -75,7 +78,10 @@ class Portfolio extends Component{
       body["value"] = body.stock.price * body.shares
 
       let new_portfolio = this.state.portfolio
-      new_portfolio["cash"] -= body["value"]
+      if (this.state.last_trade)
+      {new_portfolio["cash"] -= body["value"]} else {
+        {new_portfolio["cash"] += body["value"]}
+      }
 
       filteredPositions.unshift(body)
       this.setState({stocks: filteredPositions,portfolio:new_portfolio,chartLength: filteredPositions.length})
@@ -97,15 +103,24 @@ class Portfolio extends Component{
         Header: 'Value',
         columns: [{
           Header: 'Market Value',
-          accessor: 'value'
+          accessor: 'value',
+          Cell: props => <span className='number'>{numeral(props.value).format('$0,0.00')}</span>
         },{
           Header: 'Price',
-          accessor: 'price'
+          accessor: 'price',
+          Cell: props => <span className='number'>{numeral(props.value).format('$0,0.00')}</span>
         },{
           Header: 'Cost',
-          accessor: 'cost'
+          accessor: 'cost',
+          Cell: props => <span className='number'>{numeral(props.value).format('$0,0.00')}</span>
+        },
+        {
+          Header: 'Return',
+          accessor: 'return',
+          Cell: props => <span className='number'>{numeral(columns[1].columns[1].price/columns[1].columns[2].cost-1).format('0.00%')}</span>
         }]
       }]
+
 
     return(
         <div className="body">
@@ -120,6 +135,7 @@ class Portfolio extends Component{
           columns={columns}
           minRows={this.state.chartLength}
           defaultPageSize={20}
+
         />
         </div>
     )
