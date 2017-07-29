@@ -13,41 +13,81 @@ class Portfolio extends Component{
     stocks: [],
     portfolio: {},
     chartLength: 3,
-    last_trade: false
+    last_trade: false,
+    shares_traded: 0
   }
   this.makeTrade = this.makeTrade.bind(this)
+  this.newStocks = this.newStocks.bind(this)
 }
+    newStocks(){
+      fetch('/api/v1/portfolios/1/stocks',{
+        credentials: "same-origin"
+      })
+      .then(response => response.json())
+      .then(body =>{
+
+
+        function filterByShares(object){
+          return object.shares > 0
+        }
+
+        let portfolio = body.filter(filterByShares)
+
+        let newPortfolio = portfolio.map((position)=>{
+          position["return"] = position["price"]/position["cost"]-1
+        })
+
+        let chartLength = portfolio.length
+        this.setState({ stocks: portfolio, chartLength: chartLength })
+      })
+      fetch('/api/v1/portfolios/1',{
+        credentials: 'same-origin'
+      })
+      .then(response => response.json())
+      .then(body=>{
+        this.setState({ portfolio: body })
+      })
+    }
+
+    refreshButton(){
+      this.newStocks()
+    }
 
   componentDidMount(){
-    fetch('/api/v1/portfolios/1/stocks',{
-      credentials: "same-origin"
-    })
-    .then(response => response.json())
-    .then(body =>{
-
-
-      function filterByShares(object){
-        return object.shares > 0
-      }
-
-
-      let portfolio = body.filter(filterByShares)
-      let chartLength = portfolio.length
-      this.setState({ stocks: portfolio, chartLength: chartLength })
-    })
-    fetch('/api/v1/portfolios/1',{
-      credentials: 'same-origin'
-    })
-    .then(response => response.json())
-    .then(body=>{
-      this.setState({ portfolio: body })
-    })
+    this.newStocks()
+    // fetch('/api/v1/portfolios/1/stocks',{
+    //   credentials: "same-origin"
+    // })
+    // .then(response => response.json())
+    // .then(body =>{
+    //
+    //
+    //   function filterByShares(object){
+    //     return object.shares > 0
+    //   }
+    //
+    //   let portfolio = body.filter(filterByShares)
+    //
+    //   let newPortfolio = portfolio.map((position)=>{
+    //     position["return"] = position["price"]/position["cost"]-1
+    //   })
+    //
+    //   let chartLength = portfolio.length
+    //   this.setState({ stocks: portfolio, chartLength: chartLength })
+    // })
+    // fetch('/api/v1/portfolios/1',{
+    //   credentials: 'same-origin'
+    // })
+    // .then(response => response.json())
+    // .then(body=>{
+    //   this.setState({ portfolio: body })
+    // })
   }
 
 
 
   makeTrade(payLoad){
-    this.setState({last_trade: payLoad.side})
+    this.setState({last_trade: payLoad.side,shares_traded: payLoad.share_amount})
     fetch('/api/v1/portfolios/1/stocks', {
       method: "POST",
       body: JSON.stringify(payLoad)
@@ -76,11 +116,14 @@ class Portfolio extends Component{
       body["ticker"] = body.stock.ticker
       body["price"] = body.stock.price
       body["value"] = body.stock.price * body.shares
+      body["return"] = body["price"]/body["cost"]-1
+
+      let updateValue = body.stock.price * this.state.shares_traded
 
       let new_portfolio = this.state.portfolio
       if (this.state.last_trade)
-      {new_portfolio["cash"] -= body["value"]} else {
-        {new_portfolio["cash"] += body["value"]}
+      {new_portfolio["cash"] -= updateValue} else {
+        {new_portfolio["cash"] += updateValue}
       }
 
       filteredPositions.unshift(body)
@@ -117,9 +160,11 @@ class Portfolio extends Component{
         {
           Header: 'Return',
           accessor: 'return',
-          Cell: props => <span className='number'>{numeral(columns[1].columns[1].price/columns[1].columns[2].cost-1).format('0.00%')}</span>
+          Cell: props => <span className='number'>{numeral(props.value).format('0.00%')}</span>
         }]
       }]
+
+
 
 
     return(

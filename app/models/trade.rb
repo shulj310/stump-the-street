@@ -27,8 +27,6 @@ class Trade < ApplicationRecord
         value: trade.transaction_price*trade.shares,
         cost: (trade.transaction_price)
       )
-
-      puts "You opened a position on #{trade.stock.ticker}"
     end
   end
 
