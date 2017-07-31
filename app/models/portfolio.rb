@@ -7,7 +7,6 @@ class Portfolio < ApplicationRecord
   accepts_nested_attributes_for :stocks
 
   after_touch do |port|
-    puts "Your ports been touched"
     port.calc_value
 
   end

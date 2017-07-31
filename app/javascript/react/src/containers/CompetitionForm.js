@@ -3,6 +3,8 @@ import TextField from "../components/TextField"
 import SelectField from "../components/SelectField"
 import ImageTile from "../components/ImageTile"
 import { Row,Button } from 'react-materialize'
+import ErrorTile from '../components/ErrorTile'
+import { errorDictionary } from '../utils/competitionErrorDictionary'
 
 
 class CompetitionForm extends Component{
@@ -13,7 +15,10 @@ class CompetitionForm extends Component{
     wager_amount: "",
     competitor: 0,
     showPortfolio: false,
-    portfolio_name:""
+    portfolio_name:"",
+    errorList: [],
+    hoverShow:0,
+    errors:false
   }
   this.handleChange = this.handleChange.bind(this)
   this.handleFormSubmit = this.handleFormSubmit.bind(this)
@@ -21,19 +26,42 @@ class CompetitionForm extends Component{
   this.handleCompClick = this.handleCompClick.bind(this)
   this.handleHover = this.handleHover.bind(this)
   this.showPortfolio = this.showPortfolio.bind(this)
+  this.handleError = this.handleError.bind(this)
+  this.errorLister = this.errorLister.bind(this)
 }
-
-
-
 
   showPortfolio(event){
     event.preventDefault()
     this.setState({showPortfolio:!this.state.showPortfolio})
-    console.log(this.state.showPortfolio)
   }
 
+  handleError(field){
+    return errorDictionary(field).conditional(this.state[field])
+  }
+
+  errorLister(){
+
+    let errors = Object.keys(this.state).map((key)=> {
+      if (key !== 'errorList' &&
+      key !== 'showPortfolio' &&
+      key !== 'hoverShow' &&
+      key !== 'errors'){
+        if (this.handleError(key)) {
+          return errorDictionary(key).message
+          }
+        }
+      })
+    return errors.filter(key => key !== undefined)
+    // let newErrors = errors.filter(key => key !== undefined)
+    // this.setState({errorList:newErrors})
+    // return newErrors
+}
   handleFormSubmit(event){
     event.preventDefault();
+
+    let errorList = this.errorLister()
+
+    if (errorList.length === 0){
     let formPayload = {
       wager_amount: this.state.wager_amount,
       length: this.state.length,
@@ -43,15 +71,23 @@ class CompetitionForm extends Component{
     this.props.addCompetition(formPayload)
 
     this.handleClearForm(event);
+  } else{
+    alert('Please fill out entire form!')
+    // this.setState({errors:true})
   }
+}
 
   handleClearForm(event){
     event.preventDefault();
     this.setState({
       length: "",
       wager_amount:"",
+      portfolio_name:"",
       competitor:0,
-      hoverShow:0
+      showPortfolio: false,
+      hoverShow:0,
+      errorList:[],
+      errors:false
     })
   }
 
@@ -110,6 +146,7 @@ class CompetitionForm extends Component{
       )
     })
 
+    let errorMessage
     let portfolioForm;
     let tradeButton;
     let portfolioButton = <Button
@@ -136,6 +173,10 @@ class CompetitionForm extends Component{
       portfolioButton = ""
     }
 
+    if (this.state.errors){
+      errorMessage = <h1>Please fill in entire form </h1>
+    }
+
 
     // <input type="submit" value="Submit" />
     //
@@ -159,6 +200,7 @@ class CompetitionForm extends Component{
         />
         {portfolioButton}
         {portfolioForm}
+        {errorMessage}
         {tradeButton}
       </form>
     )
