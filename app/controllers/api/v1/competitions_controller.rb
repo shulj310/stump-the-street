@@ -2,7 +2,12 @@ class Api::V1::CompetitionsController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def index
-    render json: current_user.competitions, include: ["portfolios"]
+
+    current_user.competitions.each do |comp|
+      comp.touch
+    end
+
+    render json: current_user.competitions.order(:deadline), include: ["portfolios"]
   end
 
   def create
