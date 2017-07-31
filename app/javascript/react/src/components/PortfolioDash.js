@@ -5,6 +5,7 @@ const PortfolioDash = (props) => {
 
   let deadline;
   let portReturn;
+  let date;
 
   if (props.portfolio.return){
     portReturn = numeral(props.portfolio.value/1000000).format('0.00%')
@@ -12,13 +13,14 @@ const PortfolioDash = (props) => {
 
   if (props.portfolio.competition){
     deadline = (props.portfolio.competition.deadline)
-    deadline = Date(deadline).split(" ").slice(0,4).join(" ")
+    deadline = new Date(deadline)
+    date = String(deadline).split(" ").slice(0,4).join(" ")
   }
   return(
 
     <div>
       <h4>Strategy Name: {props.portfolio.name}</h4>
-      <h5>Deadline: {deadline}</h5>
+      <h5>Deadline: {date}</h5>
       <table className="striped centered">
       <tbody>
       <tr>

@@ -21,7 +21,7 @@ class Portfolio extends Component{
   this.newStocks = this.newStocks.bind(this)
 }
     newStocks(){
-      fetch('/api/v1/competitions/1/portfolios/1/stocks',{
+      fetch(`/api/v1/competitions/${this.props.match.params.comp_id}/portfolios/${this.props.match.params.port_id}/stocks`,{
         credentials: "same-origin"
       })
       .then(response => response.json())
@@ -41,7 +41,7 @@ class Portfolio extends Component{
         let chartLength = portfolio.length
         this.setState({ stocks: portfolio, chartLength: chartLength })
       })
-      fetch('/api/v1/competitions/1/portfolios/1',{
+      fetch(`/api/v1/competitions/show/portfolios/${this.props.match.params.port_id}`,{
         credentials: 'same-origin'
       })
       .then(response => response.json())
@@ -63,7 +63,7 @@ class Portfolio extends Component{
 
   makeTrade(payLoad){
     this.setState({last_trade: payLoad.side,shares_traded: payLoad.share_amount})
-    fetch('/api/v1/portfolios/1/stocks', {
+    fetch(`/api/v1/competitions/trade/portfolios/${this.props.match.params.port_id}/stocks`, {
       method: "POST",
       body: JSON.stringify(payLoad)
     }).then(response =>{

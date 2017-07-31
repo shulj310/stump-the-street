@@ -39,7 +39,7 @@ class Competitions extends Component{
   }
 
   redirect(id){
-    window.location.replace(`portfolios/${id}`)
+    window.location.replace(`/competitions/show/portfolios/${id}`)
     return false
   }
 
@@ -69,7 +69,7 @@ class Competitions extends Component{
         columns: [{
           Header: 'Competition ID',
           accessor: 'id',
-          Cell: props => <span><Link to={`portfolios/${props.value}`}>{props.value}</Link></span>
+          Cell: props => <span><Link to={`/competitions/show/portfolios/${props.value}`}>{props.value}</Link></span>
         }, {
           Header: 'Strategy Name',
           accessor: 'name',

@@ -14,7 +14,7 @@ const App = props =>{
       <Switch>
         <Route exact path="/" component={Competitions}/>
         <Route exact path="/competitions" component={Competitions}/>
-        <Route exact path="/portfolios/:id" component={Portfolio}/>
+        <Route exact path="/competitions/:comp_id/portfolios/:port_id" component={Portfolio}/>
       </Switch>
     </BrowserRouter>
     </div>
