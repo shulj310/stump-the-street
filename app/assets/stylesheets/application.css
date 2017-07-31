@@ -16,7 +16,7 @@
  */
 
  @import "materialize";
- @import 'react-table/react-table.css';
+ /*@import 'react-table/react-table.css';*/
  @import url('https://fonts.googleapis.com/css?family=Source+Code+Pro|Ubuntu');
  @import url("https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css");
  @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
@@ -28,6 +28,15 @@
 
 #app{
   background-color: black
+}
+
+img{
+  padding: 2%
+}
+
+.img-selected{
+  border: 10px solid red;
+  border-radius: 4px;
 }
 
  .body{

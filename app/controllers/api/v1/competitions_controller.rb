@@ -2,7 +2,7 @@ class Api::V1::CompetitionsController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def index
-    render json: Competition.all
+    render json: current_user.competitions, include: ["portfolios"]
   end
 
   def create
@@ -14,10 +14,18 @@ class Api::V1::CompetitionsController < ApplicationController
       odds_calculated: 1,
       current_value: data["wager_amount"].to_f*0.95,
       competitor_id: 1,
-      user_id: 1
+      user_id: current_user.id
     )
 
-    render json: new_competition
+    Portfolio.create(
+      name: data["strategy"],
+      value: 1000000,
+      cash: 1000000,
+      return: 0,
+      competition_id: new_competition.id
+    )
+
+    render json: new_competition, include: ["portfolios"]
   end
 
 end
