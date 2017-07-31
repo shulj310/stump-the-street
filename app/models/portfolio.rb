@@ -15,6 +15,7 @@ class Portfolio < ApplicationRecord
   def calc_value
     self.positions.each {|pos| pos.touch}
     self.value = self.positions.pluck(:value).inject(0) {|sum,x| sum + x} + self.cash
+    self.return = self.value/1000000-1
     self.save
   end
 end

@@ -1,5 +1,4 @@
 import React from 'react';
-import NavBar from '../components/NavBar';
 import Competitions from './Competitions'
 import Portfolio from './Portfolio'
 import { Route, Switch } from 'react-router';
@@ -13,9 +12,9 @@ const App = props =>{
     <div>
     <BrowserRouter history={history}>
       <Switch>
-        <Route exact path='/' component={NavBar} />
-        <Route path="/competitions" component={Competitions}/>
-        <Route path="/portfolios/:id" component={Portfolio}/>
+        <Route exact path="/" component={Competitions}/>
+        <Route exact path="/competitions" component={Competitions}/>
+        <Route exact path="/portfolios/:id" component={Portfolio}/>
       </Switch>
     </BrowserRouter>
     </div>

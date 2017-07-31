@@ -2,7 +2,7 @@ class Api::V1::StocksController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def index
-
+    
     ######## current_user.competitions.find(Portfolio.find(params[:portfolio_id]))
 
     Portfolio.find(params[:portfolio_id]).positions.each do |position|

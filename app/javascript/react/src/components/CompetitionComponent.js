@@ -1,6 +1,7 @@
 import React from "react";
 
 const CompetitionComponent = (props) =>{
+  debugger;
   return(
     <div>
     <h2> Competition Details </h2>

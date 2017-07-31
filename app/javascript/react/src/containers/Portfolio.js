@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Icon } from 'react-materialize'
+import { Icon, Link } from 'react-materialize'
 import StockComponenet from '../components/StockComponent';
 import TradeForm from './TradeForm';
 import PortfolioDash from '../components/PortfolioDash';
@@ -14,13 +14,14 @@ class Portfolio extends Component{
     portfolio: {},
     chartLength: 3,
     last_trade: false,
-    shares_traded: 0
+    shares_traded: 0,
+    loading:false
   }
   this.makeTrade = this.makeTrade.bind(this)
   this.newStocks = this.newStocks.bind(this)
 }
     newStocks(){
-      fetch('/api/v1/portfolios/1/stocks',{
+      fetch('/api/v1/competitions/1/portfolios/1/stocks',{
         credentials: "same-origin"
       })
       .then(response => response.json())
@@ -40,48 +41,22 @@ class Portfolio extends Component{
         let chartLength = portfolio.length
         this.setState({ stocks: portfolio, chartLength: chartLength })
       })
-      fetch('/api/v1/portfolios/1',{
+      fetch('/api/v1/competitions/1/portfolios/1',{
         credentials: 'same-origin'
       })
       .then(response => response.json())
       .then(body=>{
-        this.setState({ portfolio: body })
+        this.setState({ portfolio: body, loading: false })
       })
     }
 
     refreshButton(){
+      this.setState({loading:true})
       this.newStocks()
     }
 
   componentDidMount(){
     this.newStocks()
-    // fetch('/api/v1/portfolios/1/stocks',{
-    //   credentials: "same-origin"
-    // })
-    // .then(response => response.json())
-    // .then(body =>{
-    //
-    //
-    //   function filterByShares(object){
-    //     return object.shares > 0
-    //   }
-    //
-    //   let portfolio = body.filter(filterByShares)
-    //
-    //   let newPortfolio = portfolio.map((position)=>{
-    //     position["return"] = position["price"]/position["cost"]-1
-    //   })
-    //
-    //   let chartLength = portfolio.length
-    //   this.setState({ stocks: portfolio, chartLength: chartLength })
-    // })
-    // fetch('/api/v1/portfolios/1',{
-    //   credentials: 'same-origin'
-    // })
-    // .then(response => response.json())
-    // .then(body=>{
-    //   this.setState({ portfolio: body })
-    // })
   }
 
 
@@ -180,7 +155,7 @@ class Portfolio extends Component{
           columns={columns}
           minRows={this.state.chartLength}
           defaultPageSize={20}
-
+          loading={this.state.loading}
         />
         </div>
     )
