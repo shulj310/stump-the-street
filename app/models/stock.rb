@@ -3,9 +3,6 @@ class Stock < ApplicationRecord
   has_many :positions
 
   after_touch do |stock|
-
-    puts "You have touched #{stock.ticker}"
-
     stock.get_price
   end
 

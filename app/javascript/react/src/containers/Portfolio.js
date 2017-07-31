@@ -149,6 +149,7 @@ class Portfolio extends Component{
           />
           <TradeForm
           makeTrade = {this.makeTrade}
+          stocks = {this.state.stocks}
           />
         <ReactTable
           data={this.state.stocks}
