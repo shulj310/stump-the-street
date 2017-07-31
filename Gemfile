@@ -13,6 +13,10 @@ gem 'materialize-sass'
 gem 'material_icons'
 gem 'stock_quote'
 
+group :test do
+  gem 'database_cleaner'
+end
+
 group :development do
   gem 'listen', '~> 3.0.5'
   gem 'spring'
