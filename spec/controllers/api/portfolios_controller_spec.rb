@@ -36,8 +36,8 @@ RSpec.describe Api::V1::PortfoliosController, type: :controller do
     let!(:portfolio) {
       Portfolio.create(
         name:"Test Port",
-        value: 100,
-        cash: 100,
+        value: 1000000,
+        cash: 1000000,
         return: 0,
         competition_id:competition.id
       )
@@ -60,15 +60,6 @@ RSpec.describe Api::V1::PortfoliosController, type: :controller do
       )
     }
 
-    let!(:position){
-      Position.create(
-        portfolio_id: portfolio.id,
-        shares:100,
-        stock_id:stock.id,
-        value:100,
-        cost:95
-      )
-    }
 
     describe 'GET#show' do
     it ('should return all pertinent portfolio information for specific portfolio') do
@@ -82,7 +73,7 @@ RSpec.describe Api::V1::PortfoliosController, type: :controller do
 
       expect(returned_json.length).to eq 9
 
-      expect(returned_json['cash']).to eq 100
+      expect(returned_json['cash']).to eq 990000
       expect(returned_json['name']).to eq "Test Port"
       expect(returned_json['competition']['id']).to eq competition.id
     end
