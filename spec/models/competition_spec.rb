@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Trade, :type => :model do
+RSpec.describe Competition, :type => :model do
 
   let!(:user) {
     User.create(
@@ -21,8 +21,8 @@ RSpec.describe Trade, :type => :model do
     )
   }
 
-  let!(:competition) {
-    Competition.create(
+  subject {
+    described_class.new(
       length:4,
       deadline:Date.new(2017,8,8),
       wager_amount:100,
@@ -33,32 +33,6 @@ RSpec.describe Trade, :type => :model do
     )
   }
 
-  let!(:portfolio) {
-    Portfolio.create(
-      name:"Test Port",
-      value: 100,
-      cash: 100,
-      return: 0,
-      competition_id:competition.id
-    )
-  }
-
-  let!(:stock) {
-    Stock.create(
-    ticker:"AAPL",
-    name:"Apple",
-    price:100)
-  }
-
-  subject {
-    described_class.new(
-    portfolio_id:portfolio.id,
-    stock_id:stock.id,
-    transaction_price:stock.price,
-    shares:100,
-    side:true
-    )
-  }
 
   it "is valid with valid attributes" do
     expect(subject).to be_valid

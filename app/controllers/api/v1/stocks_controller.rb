@@ -3,11 +3,11 @@ class Api::V1::StocksController < ApplicationController
 
   def index
 
-    pId = current_user.competitions.map {|comp| comp.portfolios[0].id}
+    port = Portfolio.find(params[:portfolio_id])
 
-    if pId.include?(params[:portfolio_id].to_i)
+    if port.competition.user == current_user
 
-      Portfolio.find(params[:portfolio_id]).positions.each do |position|
+      port.positions.each do |position|
         if position.shares > 0
           position.stock.touch
         end
@@ -27,30 +27,37 @@ class Api::V1::StocksController < ApplicationController
 
   def create
 
-    ticker,shares,side = trade_params
+    port = Portfolio.find(params[:portfolio_id])
 
-    stock = Stock.find_by(ticker:ticker)
+    if port.competition.user == current_user
 
-    if stock.nil?
-      stock = new_stock(ticker)
+      ticker,shares,side = trade_params
+
+      stock = Stock.find_by(ticker:ticker)
+
+      if stock.nil?
+        stock = new_stock(ticker)
+      end
+
+      stock.touch
+
+      Trade.create(
+        portfolio_id: params[:portfolio_id],
+        stock_id: stock.id,
+        transaction_price: stock.price,
+        shares: shares,
+        side: side
+      )
+
+      position = Position.find_by(
+        stock_id:stock.id,portfolio_id:params[:portfolio_id])
+
+      port.touch
+
+      render json: position, include: ["stock"]
+    else
+      render json: {auth:false}
     end
-
-    stock.touch
-
-    Trade.create(
-      portfolio_id: params[:portfolio_id],
-      stock_id: stock.id,
-      transaction_price: stock.price,
-      shares: shares,
-      side: side
-    )
-
-    position = Position.find_by(
-      stock_id:stock.id,portfolio_id:params[:portfolio_id])
-
-    Portfolio.find(params[:portfolio_id]).touch
-
-    render json: position, include: ["stock"]
   end
 
 
