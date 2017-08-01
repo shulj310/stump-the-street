@@ -1,0 +1,11 @@
+{
+  "application.js": "/packs-test/application.js",
+  "bull.png": "/packs-test/bull.png",
+  "bullHover.png": "/packs-test/bullHover.png",
+  "cramer.png": "/packs-test/cramer.png",
+  "cramerHover.png": "/packs-test/cramerHover.png",
+  "hello_react.js": "/packs-test/hello_react.js",
+  "main.js": "/packs-test/main.js",
+  "street.png": "/packs-test/street.png",
+  "streetHover.png": "/packs-test/streetHover.png"
+}
