@@ -39,12 +39,11 @@ class Competitions extends Component{
   }
 
   redirect(id){
-    window.location.replace(`/competitions/show/portfolios/${id}`)
-    return false
+    document.location.replace(`/competitions/show/portfolios/${id}`)
   }
 
   addCompetition(payLoad){
-    fetch('/api/v1/competitions', {
+    fetch('/api/v1/competitions/', {
       method: "POST",
       body: JSON.stringify(payLoad),
       credentials: 'same-origin'
@@ -77,7 +76,7 @@ class Competitions extends Component{
         }, {
           Header: 'Deadline',
           accessor: 'deadline',
-          Cell: props=> <span>{new Date(props.value)}</span>
+          Cell: props=> <span>{props.value}</span>
         }]
       }, {
         Header: 'Portfolio',
