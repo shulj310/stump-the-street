@@ -60,16 +60,6 @@ RSpec.describe Api::V1::StocksController, type: :controller do
       )
     }
 
-    let!(:position){
-      Position.create(
-        portfolio_id: portfolio.id,
-        shares:100,
-        stock_id:stock.id,
-        value:100,
-        cost:95
-      )
-    }
-
     describe 'GET#index' do
     it ('should return all the stocks') do
       sign_in user
@@ -79,6 +69,7 @@ RSpec.describe Api::V1::StocksController, type: :controller do
 
       expect(response.status).to eq 200
       expect(response.content_type).to eq("application/json")
+
 
       expect(returned_json.length).to eq 1
       expect(returned_json[0]['stock_id']).to eq stock.id
@@ -98,17 +89,17 @@ RSpec.describe Api::V1::StocksController, type: :controller do
       }.to_json
       sign_in user
 
+
       post(:create, params: { portfolio_id:portfolio.id, competition_id:'trade'}, body:post_json)
 
       returned_json = JSON.parse(response.body)
       expect(response.status).to eq 200
-
-
+      
       expect(returned_json).to be_kind_of(Hash)
       expect(returned_json).to_not be_kind_of(Array)
       expect(returned_json['stock']['id']).to eq stock.id
       expect(returned_json['stock']['ticker']).to eq stock.ticker
-      expect(returned_json['shares']).to eq position.shares
+      expect(returned_json['shares']).to eq portfolio.positions.first.shares
     end
   end
     describe "POST#create" do
