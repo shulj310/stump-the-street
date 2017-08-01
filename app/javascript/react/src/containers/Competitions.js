@@ -5,7 +5,7 @@ import CompetitionForm from './CompetitionForm'
 import ReactTable from 'react-table';
 import { Link } from 'react-router-dom';
 import numeral from 'numeral'
-import dateFormat from 'dateFormat'
+// import dateFormat from 'dateFormat'
 
 class Competitions extends Component{
   constructor(props){
@@ -77,7 +77,7 @@ class Competitions extends Component{
         }, {
           Header: 'Deadline',
           accessor: 'deadline',
-          Cell: props=> <span>{dateFormat(props.value,"shortDate")}</span>
+          Cell: props=> <span>{new Date(props.value)}</span>
         }]
       }, {
         Header: 'Portfolio',
