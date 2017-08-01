@@ -97,12 +97,13 @@ class Competitions extends Component{
           <div className="centered">
           <Modal
           	header='Build Your Competition'
-          	trigger={<Button waves='light'>Add Competition<Icon right>insert_chart</Icon></Button>}>
+          	trigger={<Button waves='light'>Add Competition</Button>}>
             <CompetitionForm
             addCompetition = {this.addCompetition}
             />
 
           </Modal>
+
           </div>
           <ReactTable
             className='-centered -highlight'
