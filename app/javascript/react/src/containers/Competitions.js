@@ -101,7 +101,6 @@ class Competitions extends Component{
             <CompetitionForm
             addCompetition = {this.addCompetition}
             />
-
           </Modal>
 
           </div>

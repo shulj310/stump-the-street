@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>StumpTheStreet</title>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/icon?family=Material+Icons">
     <%= stylesheet_link_tag    'application', media: 'all' %>
     <%= javascript_include_tag 'application' %>
     <%= javascript_pack_tag 'main' %>
@@ -26,6 +28,7 @@
       </ul>
       <ul class="side-nav" id="mobile-demo">
         <% if current_user %>
+          <li><%= link_to "My Competitions", competitions_path %></li>
           <li><%= link_to "Sign out", destroy_user_session_path, :method => :delete %></li>
           <%else%>
           <li><%=link_to "Sign In", new_user_session_path %></li>

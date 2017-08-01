@@ -11,20 +11,14 @@
  * It is generally better to create a new file per style scope.
  *
 
+ *= require react-table
+ *= require materialize
  *= require_tree .
  *= require_self
  */
 
- /*@import "materialize";*/
- /*@import 'react-table/react-table.css';*/
- @import url('https://fonts.googleapis.com/css?family=Source+Code+Pro|Ubuntu');
- @import url("https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css");
- @import url("https://unpkg.com/react-table@latest/react-table.css");
+ @import "materialize";
 
-
- h2{
-   font-family: "Ubuntu"
- }
 
 img{
   padding: 2%
