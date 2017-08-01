@@ -15,20 +15,16 @@
  *= require_self
  */
 
- @import "materialize";
+ /*@import "materialize";*/
  /*@import 'react-table/react-table.css';*/
  @import url('https://fonts.googleapis.com/css?family=Source+Code+Pro|Ubuntu');
  @import url("https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.0/css/materialize.min.css");
- @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
  @import url("https://unpkg.com/react-table@latest/react-table.css");
+
 
  h2{
    font-family: "Ubuntu"
  }
-
-#app{
-  background-color: black
-}
 
 img{
   padding: 2%

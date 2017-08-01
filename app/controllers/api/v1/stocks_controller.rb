@@ -29,6 +29,7 @@ class Api::V1::StocksController < ApplicationController
 
     port = Portfolio.find(params[:portfolio_id])
 
+
     if port.competition.user == current_user
 
       ticker,shares,side = trade_params

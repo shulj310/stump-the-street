@@ -65,7 +65,8 @@ class Portfolio extends Component{
     this.setState({last_trade: payLoad.side,shares_traded: payLoad.share_amount})
     fetch(`/api/v1/competitions/trade/portfolios/${this.props.match.params.port_id}/stocks`, {
       method: "POST",
-      body: JSON.stringify(payLoad)
+      body: JSON.stringify(payLoad),
+      credentials: 'same-origin'
     }).then(response =>{
       let body = response.json()
       return body
