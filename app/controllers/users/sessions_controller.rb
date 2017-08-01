@@ -5,7 +5,6 @@ class Users::SessionsController < Devise::SessionsController
   def new
     super do |resource|
       @competitions = Competition.all.limit(3)
-      binding.pry
     end
   end
 
