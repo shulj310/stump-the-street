@@ -16,7 +16,6 @@ class Trade < ApplicationRecord
       else
         position.shares -= trade.shares
       end
-
       position.save
     else
 
@@ -47,7 +46,6 @@ class Trade < ApplicationRecord
     else
       portfolio.cash += self.transaction_price*self.shares
     end
-    portfolio.calc_value
     portfolio.save
   end
 end

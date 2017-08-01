@@ -53,7 +53,7 @@ class Api::V1::StocksController < ApplicationController
       position = Position.find_by(
         stock_id:stock.id,portfolio_id:params[:portfolio_id])
 
-      port.touch
+      Portfolio.find(params[:portfolio_id])
 
       render json: position, include: ["stock"]
     else
