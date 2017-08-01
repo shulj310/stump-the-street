@@ -1,6 +1,8 @@
 class Trade < ApplicationRecord
   belongs_to :portfolio
   belongs_to :stock
+  
+  validates :shares, presence: true, numericality:
 
   after_create do |trade|
 

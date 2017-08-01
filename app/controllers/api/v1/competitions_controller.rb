@@ -11,6 +11,9 @@ class Api::V1::CompetitionsController < ApplicationController
   end
 
   def create
+
+    if current_user
+
     data = JSON.parse(request.body.read)
     new_competition = Competition.create(
       length: data["length"],
@@ -31,6 +34,10 @@ class Api::V1::CompetitionsController < ApplicationController
     )
 
     render json: new_competition, include: ["portfolios"]
+
+    else
+      render json: {auth:false}
+    end
   end
 
 end
