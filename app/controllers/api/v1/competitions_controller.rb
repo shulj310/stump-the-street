@@ -7,7 +7,15 @@ class Api::V1::CompetitionsController < ApplicationController
       comp.touch
     end
 
-    render json: current_user.competitions.order(:deadline), include: ["portfolio"]
+    competitions = Competition.select(:'portfolios.id',:'portfolios.name',:deadline,
+      :'portfolios.return',:diff,'competitor_portfolios.return AS comp_return'
+        ).joins(:portfolio,:competitor_portfolio).where(
+          "portfolios.competition_id = competitions.id AND competitor_portfolios.competition_id = competitions.id AND competitions.user_id = #{current_user.id}").order(
+            :deadline)
+    #
+    # render json: current_user.competitions.order(:deadline), include: ["portfolio"]
+
+    render json: competitions
   end
 
   def create
@@ -40,6 +48,7 @@ class Api::V1::CompetitionsController < ApplicationController
       cost: 1000000,
       return: 0
     )
+
 
     render json: new_competition, include: ["portfolio"]
 

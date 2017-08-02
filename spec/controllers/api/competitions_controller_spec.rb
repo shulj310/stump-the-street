@@ -21,23 +21,40 @@ RSpec.describe Api::V1::CompetitionsController, type: :controller do
       )
     }
 
+    let!(:spy) {
+      Stock.create(
+        ticker:"SPY",
+        name: "S&P 500",
+        price: 100
+      )
+    }
+
     let!(:competition) {
       Competition.create(
-        length:4,
-        deadline:Date.new(2017,8,8),
-        wager_amount:100,
-        odds_calculated:1,
-        current_value:95,
-        user_id:user.id,
-        competitor_id:competitor.id
+      length:4,
+      deadline:Date.new(2017,8,8),
+      wager_amount:100,
+      odds_calculated:1,
+      current_value:95,
+      user_id:user.id,
+      competitor_id:competitor.id
+      )
+    }
+
+    let!(:competitor_portfolio) {
+      CompetitorPortfolio.create(
+      competition_id:competition.id,
+      value:1000,
+      cost:1000,
+      return:0
       )
     }
 
     let!(:portfolio) {
       Portfolio.create(
         name:"Test Port",
-        value: 100,
-        cash: 100,
+        value: 1000000,
+        cash: 1000000,
         return: 0,
         competition_id:competition.id
       )
@@ -53,11 +70,11 @@ RSpec.describe Api::V1::CompetitionsController, type: :controller do
       expect(response.status).to eq 200
       expect(response.content_type).to eq("application/json")
 
+
       expect(returned_json.length).to eq 1
       expect(returned_json[0]['id']).to eq competition.id
-      expect(returned_json[0]['wager_amount']).to eq competition.wager_amount
-      expect(returned_json[0]['user_id']).to eq user.id
-      expect(returned_json[0]['portfolio']['name']).to eq portfolio.name
+      expect(returned_json[0]['name']).to eq portfolio.name
+      expect(returned_json[0]['diff']).to eq (portfolio.return - competitor_portfolio.return)
     end
   end
     describe "POST#create" do
@@ -78,7 +95,7 @@ RSpec.describe Api::V1::CompetitionsController, type: :controller do
 
       expect(returned_json).to be_kind_of(Hash)
       expect(returned_json).to_not be_kind_of(Array)
-      expect(returned_json['wager_amount']).to eq 5000
+      expect(returned_json['length']).to eq 8
       expect(returned_json['user_id']).to eq user.id
     end
   end

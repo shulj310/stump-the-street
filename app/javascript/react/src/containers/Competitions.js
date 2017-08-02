@@ -26,15 +26,16 @@ class Competitions extends Component{
     .then(response => response.json())
     .then(body =>{
 
-    let competitions = body.map( (competition,index) =>{
-      let details = {}
-      details["id"] = competition.portfolio.id
-      details["name"] = competition.portfolio.name
-      details["deadline"] = competition.deadline
-      details["return"] = competition.portfolio.return
-      return details
-    })
-    this.setState({competitions:competitions})
+    // let competitions = body.map( (competition,index) =>{
+    //   let details = {}
+    //   details["id"] = competition.portfolio.id
+    //   details["name"] = competition.portfolio.name
+    //   details["deadline"] = competition.deadline
+    //   details["return"] = competition.portfolio.return
+    //   details["diff"] = competition.diff
+    //   return details
+    // })
+    this.setState({competitions:body})
     })
   }
 
@@ -89,9 +90,14 @@ class Competitions extends Component{
           Cell: props => <span className='number'>
             {numeral(props.value).format('0.00%')}</span>},{
           Header: 'Competition Return',
-          accessor: "comp_return"},{
+          accessor: "comp_return",
+          Cell: props=> <span className='number'>
+          {numeral(props.value).format('0.00%')}</span>
+          },{
           Header: '+/-',
-          accessor: 'diff'}]
+          accessor: 'diff',
+          Cell: props=> <span className='number'>
+          {numeral(props.value).format('0.00%')}</span>}]
       }]
 
 

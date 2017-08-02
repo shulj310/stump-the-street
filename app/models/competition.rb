@@ -5,7 +5,6 @@ class Competition < ApplicationRecord
   has_one :portfolio
 
   after_touch do |comp|
-
     comp.portfolio.touch
     comp.competitor_portfolio.touch
     comp.diff = comp.portfolio.return - comp.competitor_portfolio.return
