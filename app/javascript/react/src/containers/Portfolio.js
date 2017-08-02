@@ -158,7 +158,9 @@ class Portfolio extends Component{
           minRows={this.state.chartLength}
           defaultPageSize={20}
           loading={this.state.loading}
+          showPagination={false}
         />
+        <br/>
         </div>
     )
   }
