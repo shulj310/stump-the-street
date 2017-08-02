@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170725114432) do
+ActiveRecord::Schema.define(version: 20170802013601) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 20170725114432) do
     t.datetime "updated_at",      null: false
     t.integer  "user_id",         null: false
     t.integer  "competitor_id",   null: false
+    t.float    "diff"
   end
 
   create_table "competitor_portfolios", force: :cascade do |t|

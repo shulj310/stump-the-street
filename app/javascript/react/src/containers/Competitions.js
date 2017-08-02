@@ -26,15 +26,16 @@ class Competitions extends Component{
     .then(response => response.json())
     .then(body =>{
 
-    let competitions = body.map( (competition,index) =>{
-      let details = {}
-      details["id"] = competition.portfolios[0].id
-      details["name"] = competition.portfolios[0].name
-      details["deadline"] = competition.deadline
-      details["return"] = competition.portfolios[0].return
-      return details
-    })
-    this.setState({competitions:competitions})
+    // let competitions = body.map( (competition,index) =>{
+    //   let details = {}
+    //   details["id"] = competition.portfolio.id
+    //   details["name"] = competition.portfolio.name
+    //   details["deadline"] = competition.deadline
+    //   details["return"] = competition.portfolio.return
+    //   details["diff"] = competition.diff
+    //   return details
+    // })
+    this.setState({competitions:body})
     })
   }
 
@@ -51,7 +52,7 @@ class Competitions extends Component{
       let body = response.json()
       return body
     }).then(body=>{
-      this.redirect(body.portfolios[0].id)
+      this.redirect(body.portfolio.id)
     })
   }
 
@@ -68,7 +69,9 @@ class Competitions extends Component{
         columns: [{
           Header: 'Competition ID',
           accessor: 'id',
-          Cell: props => <span><Link to={`/competitions/show/portfolios/${props.value}`}>{props.value}</Link></span>
+          Cell: props => <span>
+            <Link to={`/competitions/show/portfolios/${props.value}`}>
+            {props.value}</Link></span>
         }, {
           Header: 'Strategy Name',
           accessor: 'name',
@@ -76,18 +79,25 @@ class Competitions extends Component{
         }, {
           Header: 'Deadline',
           accessor: 'deadline',
-          Cell: props=> <span>{props.value}</span>
+          Cell: props=> <span>{String(new Date(
+              props.value)).split(" ").slice(0,4).join(" ")}</span>
         }]
       }, {
         Header: 'Portfolio',
         columns: [{
           Header: 'Current Return',
           accessor: 'return',
-          Cell: props => <span className='number'>{numeral(props.value).format('0.00%')}</span>},{
+          Cell: props => <span className='number'>
+            {numeral(props.value).format('0.00%')}</span>},{
           Header: 'Competition Return',
-          accessor: "comp_return"},{
+          accessor: "comp_return",
+          Cell: props=> <span className='number'>
+          {numeral(props.value).format('0.00%')}</span>
+          },{
           Header: '+/-',
-          accessor: 'diff'}]
+          accessor: 'diff',
+          Cell: props=> <span className='number'>
+          {numeral(props.value).format('0.00%')}</span>}]
       }]
 
 
