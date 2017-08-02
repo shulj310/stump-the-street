@@ -119,11 +119,11 @@ class CompetitionForm extends Component{
     let imageTiles = images.map((image,index)=>{
 
       let id = index +1
-      let selected;
+      let selected = "competitors"
       let text;
 
       if (id == this.state.competitor) {
-        selected = "img-selected"
+        selected = "img-selected competitors"
         text = "Stump the" + image
       }
 
@@ -182,7 +182,7 @@ class CompetitionForm extends Component{
     //
     return(
       <form className="form" onSubmit={this.handleFormSubmit}>
-        <Row>
+        <Row className="center-align">
           {imageTiles}
         </Row>
         <SelectField

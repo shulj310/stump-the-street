@@ -103,7 +103,7 @@ class Competitions extends Component{
 
     return(
         <div className="body">
-          <div className="centered">
+          <div className="center-align comp-button">
           <Modal
           	header='Build Your Competition'
           	trigger={<Button waves='light'>Add Competition</Button>}>

@@ -29,7 +29,7 @@ class Api::V1::CompetitionsController < ApplicationController
       wager_amount: data["wager_amount"].to_i,
       odds_calculated: 1,
       current_value: data["wager_amount"].to_f*0.95,
-      competitor_id: 1,
+      competitor_id: data["competitor"].to_i,
       user_id: current_user.id
     )
 

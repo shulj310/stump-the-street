@@ -13,7 +13,7 @@
 
  *= require react-table
  *= require materialize
- *= require material_icons 
+ *= require material_icons
  *= require_tree .
  *= require_self
  */
@@ -22,20 +22,31 @@
  @import "materialize";
 
 
-img{
-  padding: 2%
+ body {
+   display: flex;
+   min-height: 100vh;
+   flex-direction: column;
+ }
+
+ main {
+   flex: 1 0 auto;
+ }
+
+//
+img.competitors{
+  padding: 1%
+}
+
+
+
+.comp-button{
+  padding: 1%
 }
 
 .img-selected{
   border: 10px solid red;
   border-radius: 4px;
 }
-
- .body{
-   padding: 1% 1%;
-   background-color: white;
- }
-
  .form-div {
    padding: 1% 10%
  }

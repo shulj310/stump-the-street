@@ -1,43 +1,146 @@
-<h2>Edit <%= resource_name.to_s.humanize %></h2>
-
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
-  <%= devise_error_messages! %>
-
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true %>
+<div><h3>Welcome, <%= resource_name.to_s.humanize %></h3><div>
+  <div class="right-align">
+    <a class="waves-effect waves-light btn modal-trigger cyan" href="#modal1">Add to Wallet</a>
   </div>
 
-  <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
-    <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
-  <% end %>
+  <ul class="collection with-header">
+        <li class="collection-header">
+          <h4><%= @current_user.first_name %> <%=@current_user.last_name%></h4></li>
+    <li class="collection-item avatar">
+      <img src="http://images.performgroup.com/di/library/sporting_news/1a/15/david-ortiz-ftr-gettyjpg_oh4ib9mfw5zt1p650uelmda6a.jpg?t=384939425" alt="papi" class="circle">
+      <span class="title">Total Competitions: <%= @current_user.competitions.length %></span>
+      <p>Total Wins: (Comes from Competition History Database)<br>
+         Total Losses: ("^^^")
+      </p>
+      <a href="#" class="secondary-content btn-floating tooltipped"
+      data-position="bottom"
+      data-delay="50"
+      data-tooltip="Competition History Coming Soon!">
+      <i class="material-icons">dashboard</i></a>
+    </li>
+    <li class="collection-item avatar">
+      <i class="material-icons circle green">account_balance_wallet</i>
+      <span class="title">Wallet</span>
+      <p>Current Balance: <%= number_to_currency(@current_user.wallet, precision: 2) %>
+      </p>
+      <a href="#modal1"
+      class="waves-effect waves-circle waves-light btn-floating secondary-content btn tooltipped"
+      data-position="bottom"
+      data-delay="50"
+      data-tooltip="Add to Wallet">
+    <i class="material-icons">add</i></a>
+    </li>
+    <li class="collection-item avatar">
+      <i class="material-icons circle blue">insert_chart</i>
+      <span class="title">Current Competitions</span>
+      <p>Current Outstanding Wagers: <%= @current_user.competitions.pluck(:wager_amount).inject(0) {|sum,x| sum+x} %><br>
+      </p>
+      <a href="#comp-view" class="secondary-content btn-floating tooltipped"
+      data-position="bottom"
+      data-delay="50"
+      data-tooltip="See Competition info">
+    <i class="material-icons">timeline</i></a>
+    </li>
+  </ul>
 
-  <div class="field">
-    <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
-    <%= f.password_field :password, autocomplete: "off" %>
-    <% if @minimum_password_length %>
-      <br />
-      <em><%= @minimum_password_length %> characters minimum</em>
-    <% end %>
+  <div id="modal1" class="modal">
+  <div class="modal-content">
+    <h4>Add Payment</h4>
+    <p>Credit Card Form:  </p>
   </div>
-
-  <div class="field">
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation, autocomplete: "off" %>
+  <div class="modal-footer">
+    <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
   </div>
+</div>
 
-  <div class="field">
-    <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
-    <%= f.password_field :current_password, autocomplete: "off" %>
-  </div>
 
-  <div class="actions">
-    <%= f.submit "Update" %>
-  </div>
-<% end %>
+<table class="centered bordered highlight" id="comp-view">
+  <thead>
+    <tr>
+      <h5 class="center-align">Top 5 Competitions</h5>
+        <th>Portfolio Name</th>
+        <th>Competitor</th>
+        <th>Deadline</th>
+        <th>Wager Amount</th>
+        <th>+/-</th>
+    </tr>
+  </thead>
 
-<h3>Cancel my account</h3>
+  <tbody>
+    <% @current_user.competitions.order(:deadline).limit(5).each do |comp| %>
+    <tr>
+      <td><%= link_to "#{comp.portfolio.name}",competition_portfolio_path('show',comp.portfolio.id) %></td>
+      <td><%= comp.competitor.name %></td>
+      <td><%= comp.deadline.strftime("%b %e, %Y") %></td>
+      <td><%= number_to_currency(comp.wager_amount, precision: 2) %></td>
+      <% if comp.diff %>
+      <td><%= number_to_percentage(comp.diff*100,precision: 2) %></td>
+      <% else %>
+      <td><%=number_to_percentage(0,precision: 2) %></td>
+      <% end %>
+    </tr>
+    <%end%>
+  </tbody>
+</table>
+</br>
+<div class="right-align"><%= link_to "All Competitions", competitions_path, class:"waves-effect waves-light btn"%></div>
 
-<p>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete %></p>
+<ul class="collapsible" data-collapsible="accordion">
+  <li>
+    <div class="collapsible-header"><i class="material-icons">create</i>Edit Your Profile</div>
+    <div class="collapsible-body">
+      <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+      <p><%= devise_error_messages! %></p>
 
-<%= link_to "Back", :back %>
+      <div><p> Placeholder for image!</p></div>
+
+
+      <div class="field">
+        <%= f.label :email %><br />
+        <%= f.email_field :email, autofocus: true %>
+      </div>
+
+      <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+      <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
+      <% end %>
+
+      <div class="field">
+        <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
+        <%= f.password_field :password, autocomplete: "off" %>
+        <% if @minimum_password_length %>
+        <br />
+        <em><%= @minimum_password_length %> characters minimum</em>
+        <% end %>
+      </div>
+
+      <div class="field">
+        <%= f.label :password_confirmation %><br />
+        <%= f.password_field :password_confirmation, autocomplete: "off" %>
+      </div>
+
+      <div class="field">
+        <%= f.label :current_password %> <i>(we need your current password to confirm your changes)</i><br />
+        <%= f.password_field :current_password, autocomplete: "off" %>
+      </div>
+
+      <div class="actions">
+        <%= f.submit "Update", class: "waves-effect waves-light btn" %>
+      </div>
+      <% end %>
+    </div>
+  </li>
+  <li>
+    <div class="collapsible-header"><i class="material-icons">delete_sweep</i>Delete My Account</div>
+    <div class="collapsible-body">
+    <h6>We are sorry to see you go and hope you come back soon.</h6>
+    <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete, class: "waves-effect waves-light btn red" %>
+    </div>
+  </li>
+  <li>
+    <div class="collapsible-header"><i class="material-icons">place</i>Stump the Street</div>
+    <div class="collapsible-body"><span>Spump the Street is an interactive, competitive stock
+       trading game that allows investors of all types enjoy the fun of the market, without failing victim to<tbody>
+         the greed of Wall Street. Continue....
+       </tbody></span></div>
+  </li>
+</ul>
