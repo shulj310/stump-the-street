@@ -7,7 +7,7 @@ class Api::V1::CompetitionsController < ApplicationController
       comp.touch
     end
 
-    render json: current_user.competitions.order(:deadline), include: ["portfolios"]
+    render json: current_user.competitions.order(:deadline), include: ["portfolio"]
   end
 
   def create
@@ -33,7 +33,15 @@ class Api::V1::CompetitionsController < ApplicationController
       competition_id: new_competition.id
     )
 
-    render json: new_competition, include: ["portfolios"]
+
+    CompetitorPortfolio.create(
+      competition_id: new_competition.id,
+      value: 1000000,
+      cost: 1000000,
+      return: 0
+    )
+
+    render json: new_competition, include: ["portfolio"]
 
     else
       render json: {auth:false}

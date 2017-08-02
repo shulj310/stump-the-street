@@ -57,7 +57,7 @@ RSpec.describe Api::V1::CompetitionsController, type: :controller do
       expect(returned_json[0]['id']).to eq competition.id
       expect(returned_json[0]['wager_amount']).to eq competition.wager_amount
       expect(returned_json[0]['user_id']).to eq user.id
-      expect(returned_json[0]['portfolios'][0]['name']).to eq portfolio.name
+      expect(returned_json[0]['portfolio']['name']).to eq portfolio.name
     end
   end
     describe "POST#create" do
