@@ -33,7 +33,7 @@
     <li class="collection-item avatar">
       <i class="material-icons circle blue">insert_chart</i>
       <span class="title">Current Competitions</span>
-      <p>Current Outstanding Wagers: <%= @current_user.competitions.pluck(:wager_amount).inject(0) {|sum,x| sum+x} %><br>
+      <p>Current Outstanding Wagers: <%= number_to_currency( @current_user.competitions.pluck(:wager_amount).inject(0) {|sum,x| sum+x} ,precision: 2)%><br>
       </p>
       <a href="#comp-view" class="secondary-content btn-floating tooltipped"
       data-position="bottom"

@@ -37,7 +37,25 @@ img.competitors{
   padding: 1%
 }
 
+.comp-text:first-letter{
+  text-transform: capitalize;
+}
 
+.text-days{
+  font-size: 80%
+}
+
+.gain-value {
+  font-size: 100%
+}
+
+.v-green {
+  color: green
+}
+
+.v-red {
+  color: red
+}
 
 .comp-button{
   padding: 1%

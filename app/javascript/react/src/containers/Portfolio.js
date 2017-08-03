@@ -46,7 +46,8 @@ class Portfolio extends Component{
       })
       .then(response => response.json())
       .then(body=>{
-        this.setState({ portfolio: body, loading: false })
+        let portfolio = body[0]
+        this.setState({ portfolio: portfolio, loading: false })
       })
     }
 
@@ -160,6 +161,8 @@ class Portfolio extends Component{
           loading={this.state.loading}
           showPagination={false}
         />
+        <br/>
+        <br/>
         <br/>
         </div>
     )
