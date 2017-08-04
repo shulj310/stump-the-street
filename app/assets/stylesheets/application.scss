@@ -21,7 +21,6 @@
 
  @import "materialize";
 
-
  body {
    display: flex;
    min-height: 100vh;
@@ -32,7 +31,144 @@
    flex: 1 0 auto;
  }
 
+ .no-sec{
+   display: inline-block;
+   position: relative;
+   left: 10px;
+ }
+
+ .trade-container {
+    width: 400px;
+    overflow: auto;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #E5E5E5;
+    position: relative;
+    overflow: visible;
+}
+
+.modal-more {
+  position: absolute;
+  top: -20px;
+  right: -20px;
+}
+.upper {
+  background-color: #F7F7F7;
+}
+
+.middle {
+  background-color: #FFFFFF;
+  box-shadow: 0px 1px 1px #E7E7E7;
+}
+
+.lower {
+  position:relative;
+  z-index:-1;
+  background-color: #FEFEFE;
+}
+
+.trade-input-ticker {
+  width: 75px;
+  display: inline-block;
+  position:relative;
+  left: 20px;
+  bottom: 5px;
+}
+
+.show-data{
+  width: 125px;
+  display: inline-block;
+  position: relative;
+  left:25px;
+}
+
+.price-data {
+  font-size: 125%;
+  display: inline-block;
+  position:relative;
+  left:10px;
+}
+
+.value-data {
+  max-width: 150px;
+  font-size: 125%;
+  display: inline-block;
+  position:relative;
+  left:7px;
+}
+
+.ticker-data {
+  font-size: 125%;
+  display: inline-block;
+  position:relative;
+  left:5px;
+}
+
+.name-data{
+  max-width: 250px;
+  width: 250px;
+  font-size: 150%;
+  display: inline-block;
+  position:relative;
+  left: 5px;
+}
+
+// .trade-input-shares {
+//   width: 100px;
+//   border-style: solid;
+//   border-width: 1px;
+//   border-color: grey;
+//   display: inline-block;
+//   position:relative;
+//   left: 40px;
+//   bottom: 5px;
+// }
 //
+// .trade-dropdown {
+//   width: 50px;
+//   border-style: solid;
+//   border-width: 1px;
+//   border-color: grey;
+//   display: inline-block;
+//   position:relative;
+//   left: 60px;
+//   bottom: 5px;
+// }
+
+// .trade-input-notes {
+//   width: 350px;
+//   border-style: solid;
+//   border-width: 1px;
+//   border-color: grey;
+//   display: inline-block;
+//   position:relative;
+//   left: 80px;
+//   bottom: 5px;
+// }
+//
+// .buy-button {
+//   width: 50px;
+//   display: inline-block;
+//   position:relative;
+//   left: 110px;
+//   bottom: 5px;
+//   background-color: green;
+//   color: white;
+//   radius: 2px
+// }
+//
+// .sell-button {
+//   width: 50px;
+//   display: inline-block;
+//   position:relative;
+//   left: 115px;
+//   bottom: 5px;
+//   background-color: red;
+//   color: white;
+//   radius: 2px
+// }
+
+
 img.competitors{
   padding: 1%
 }

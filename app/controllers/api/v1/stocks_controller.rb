@@ -61,6 +61,20 @@ class Api::V1::StocksController < ApplicationController
     end
   end
 
+  def show
+    url = "http://marketdata.websol.barchart.com/getQuote.json?key=b153d00b85faee7d352be6b91df7ec46&symbols=#{params[:id]}"
+
+    response = RestClient.get(url)
+
+    data = JSON.parse(response)
+
+    if data["status"]["code"] == 200
+      render json: data
+    else
+      render json: {data:nil}
+    end
+  end
+
 
   def trade_params
     data = JSON.parse(request.body.read)

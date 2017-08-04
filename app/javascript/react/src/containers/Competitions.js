@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal, Button, Icon } from 'react-materialize'
+import { Modal, Button, Icon, Col, Preloader } from 'react-materialize'
 import CompetitionComponent from '../components/CompetitionComponent'
 import CompetitionForm from './CompetitionForm'
 import ReactTable from 'react-table';
@@ -13,7 +13,9 @@ class Competitions extends Component{
   this.state = {
     competitions: [],
     user_id: 0,
-    newPort:0
+    newPort:0,
+    loading: true,
+    auth: true
   }
   this.addCompetition = this.addCompetition.bind(this)
   this.redirect = this.redirect.bind(this)
@@ -23,19 +25,18 @@ class Competitions extends Component{
     fetch('/api/v1/competitions',{
       credentials: 'same-origin'
     })
-    .then(response => response.json())
+    .then(response => {
+      if (response.ok){
+        return response.json() }
+      else {
+        document.location.replace(`/users/sign_in`)
+      }
+    })
     .then(body =>{
-
-    // let competitions = body.map( (competition,index) =>{
-    //   let details = {}
-    //   details["id"] = competition.portfolio.id
-    //   details["name"] = competition.portfolio.name
-    //   details["deadline"] = competition.deadline
-    //   details["return"] = competition.portfolio.return
-    //   details["diff"] = competition.diff
-    //   return details
-    // })
-    this.setState({competitions:body})
+    if (body.auth === false) {
+      document.location.replace(`/users/sign_in`)
+    }
+    this.setState({competitions:body, loading:false})
     })
   }
 
@@ -100,6 +101,25 @@ class Competitions extends Component{
           {numeral(props.value).format('0.00%')}</span>}]
       }]
 
+      let table;
+
+      if (this.state.loading){
+        table = <div className="center-align">
+                  <Col s={4}>
+                    <Preloader
+                      size='big'
+                      flashing/>
+                  </Col>
+                </div>
+        } else {
+        table =  <ReactTable
+                    className='-centered -highlight'
+                    data={this.state.competitions}
+                    columns={columns}
+                    minRows={this.state.competitions.length}
+                    showPagination={false}
+                  />
+      }
 
     return(
         <div className="body">
@@ -111,15 +131,8 @@ class Competitions extends Component{
             addCompetition = {this.addCompetition}
             />
           </Modal>
-
-          </div>
-          <ReactTable
-            className='-centered -highlight'
-            data={this.state.competitions}
-            columns={columns}
-            minRows={this.state.competitions.length}
-            showPagination={false}
-            />
+        </div>
+          {table}
         </div>
     )
   }

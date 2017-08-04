@@ -2,6 +2,13 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::PortfoliosController, type: :controller do
 
+    let!(:spy) {Stock.create(
+      ticker:"SPY",
+      name:"S&P 500",
+      price:100
+    )
+  }
+
     let!(:user) {
       User.create(
       first_name: "David",
@@ -30,6 +37,15 @@ RSpec.describe Api::V1::PortfoliosController, type: :controller do
         current_value:95,
         user_id:user.id,
         competitor_id:competitor.id
+      )
+    }
+
+    let!(:competitor_portfolio) {
+      CompetitorPortfolio.create(
+        value:100,
+        cost:100,
+        return:0,
+        competition_id:competition.id
       )
     }
 
@@ -71,11 +87,12 @@ RSpec.describe Api::V1::PortfoliosController, type: :controller do
       expect(response.status).to eq 200
       expect(response.content_type).to eq("application/json")
 
-      expect(returned_json.length).to eq 9
+      expect(returned_json.length).to eq 1
 
-      expect(returned_json['cash']).to eq 990000
-      expect(returned_json['name']).to eq "Test Port"
-      expect(returned_json['competition']['id']).to eq competition.id
+      expect(returned_json[0]['id']).to eq portfolio.id
+      expect(returned_json[0]['name']).to eq portfolio.name
+      expect(returned_json[0]['wager_amount']).to eq competition.wager_amount
+      expect(returned_json[0]["return"]).to eq portfolio.return
     end
   end
 end

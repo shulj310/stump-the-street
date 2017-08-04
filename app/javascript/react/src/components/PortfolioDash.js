@@ -36,14 +36,6 @@ const PortfolioDash = (props) => {
     className="circle z-depth-5"
   />
 
-    user = <img
-      src="http://images.performgroup.com/di/library/sporting_news/1a/15/david-ortiz-ftr-gettyjpg_oh4ib9mfw5zt1p650uelmda6a.jpg?t=384939425"
-      width={75}
-      height={75}
-      alt="My Pic"
-      className="circle z-depth-5"
-    />
-
   }
 
 
@@ -79,6 +71,13 @@ const PortfolioDash = (props) => {
         <Col s={4}>
 
           <h4>{numeral(props.portfolio.value).format('$0,0.00')}</h4>
+          <div className="left-align">
+            <p className="gain-value">Total Cash<br/>
+            <span className="gain-value">
+              {numeral(props.portfolio.cash).format('$0,0.00')}
+              </span>
+            </p>
+          </div>
         </Col>
         <Col s={3}>
           <div className="left-align">
@@ -93,7 +92,7 @@ const PortfolioDash = (props) => {
         <Col s={2}>
           <div className="left-align">
             <p className="gain-value comp-text">{name} Gain<br/>
-            <span className={gainClass}>
+            <span className={compClass}>
               ({numeral(props.portfolio.comp_return).format('0.00%')})
               </span>
             </p>
@@ -102,7 +101,7 @@ const PortfolioDash = (props) => {
         <Col s={2}>
           <div className="left-align">
             <p className="gain-value center-align">+/-<br/>
-            <span className={gainClass}>
+            <span className={diffClass}>
               ({numeral(props.portfolio.diff).format('0.00%')})
               </span>
             </p>
@@ -114,16 +113,14 @@ const PortfolioDash = (props) => {
     <Col s={1}>
     <span>
     <Modal
-      header='Modal Header'
+      header='Competition Details'
       trigger={
         <a
-        className="light-blue darken-1 text-days btn-floating btn-large tooltipped"
-        waves='light'
-        data-position="bottom"
-        data-delay="50"
-        data-tooltip="I am a tooltip"><Icon>dashboard</Icon></a>
+        className="indigo darken-3 btn-floating btn-large">
+        <Icon
+          large={true}>assignment</Icon></a>
       }>
-      <p>This competition will end on {date}<hr/>You have {daysLeft} until the competition is complete!</p>
+      <p>This competition will end on {date}</p><hr/><p>You have {daysLeft} until the competition is complete!</p>
     </Modal>
     </span>
     </Col>
