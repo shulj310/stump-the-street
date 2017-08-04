@@ -33,5 +33,4 @@ class Stock < ApplicationRecord
       self.save
     end
   end
-
 end

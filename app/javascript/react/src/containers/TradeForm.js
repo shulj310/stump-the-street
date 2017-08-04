@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import TextField from '../components/TextField'
-import {Button, Icon} from 'react-materialize'
+import {Button, Icon, Row, Col} from 'react-materialize'
 import { errorDictionary } from '../utils/tradingErrorDictionary'
+import PreTradeContainer from './PreTradeContainer'
 
 
 class TradeForm extends Component{
@@ -10,7 +11,8 @@ class TradeForm extends Component{
   this.state = {
     ticker: "",
     share_amount: "",
-    side: null
+    side: null,
+    stockData: {}
   }
   this.handleChange = this.handleChange.bind(this)
   this.handleBuySubmit = this.handleBuySubmit.bind(this)
@@ -18,6 +20,7 @@ class TradeForm extends Component{
   this.handleClearForm = this.handleClearForm.bind(this)
   this.handleError = this.handleError.bind(this)
   this.errorLister = this.errorLister.bind(this)
+  this.handleTicker = this.handleTicker.bind(this)
 }
 
 
@@ -28,7 +31,7 @@ handleError(field){
 errorLister(){
 
   let errors = Object.keys(this.state).map((key)=> {
-    if (key !== 'side'){
+    if ((key !== 'side') && (key !== 'stockData')){
       if (this.handleError(key)) {
         return errorDictionary(key).message
         }
@@ -89,7 +92,8 @@ handleClearForm(event){
   this.setState({
     share_amount: "",
     ticker:"",
-    side: null
+    side: null,
+    stockData:{}
   })
 }
 
@@ -97,47 +101,82 @@ handleClearForm(event){
     this.setState({[event.target.name]:event.target.value})
   }
 
+  handleTicker(event){
+    let ticker = event.target.value
+    this.setState({ticker:ticker})
+    if (event.target.value !== ""){
+
+    fetch(`/api/v1/stocks/${ticker}`,{
+      credentials: 'same-origin'
+    })
+    .then(response => {
+      if (response.ok){
+        return response; }
+        else {
+            let errorMessage = `${response.status} (${response.statusText})`,
+                error = new Error(errorMessage);
+            throw(error);
+          }
+      })
+      .then(response=> response.json())
+      .then(body=>{
+        if (body){
+        let data = body["results"][0]
+        this.setState({stockData:data})}
+      })
+      .catch(error=> console.error(`Ticker does not exist: ${error.message}`))
+    } else {
+      this.setState({stockData:{}})
+    }
+  }
   render(){
 
     return(
-    <div className="row">
-      <div className="col s12">
-        <form className="col 2">
-        <div className="row">
-          <div className="col s12">
-            <div className="row">
-            <TextField
-              content={this.state.ticker}
-              label= "Ticker"
-              name="ticker"
-              handlerFunction={this.handleChange}
-              />
+
+      <div className="row">
+        <div className="col s12">
+          <form className="col 2">
+          <div className="row">
+            <div className="col s12">
+              <div className="row">
               <TextField
-                content={this.state.share_amount}
-                label= "Shares"
-                name="share_amount"
-                handlerFunction={this.handleChange}
-              />
-              <div>
-                <a
-                  className="waves-effect waves-light btn buy btn-small"
-                  onClick={this.handleBuySubmit}>
-                  Buy
-                </a>
-                <a
-                  className="waves-effect waves-light btn sell btn-small"
-                  onClick={this.handleSellSubmit}>
-                  Sell
-                </a>
+                content={this.state.ticker}
+                label= "Ticker"
+                name="ticker"
+                handlerFunction={this.handleTicker}
+                />
+                <TextField
+                  content={this.state.share_amount}
+                  label= "Shares"
+                  name="share_amount"
+                  handlerFunction={this.handleChange}
+                />
+                <div>
+                  <a
+                    className="waves-effect waves-light btn buy btn-small"
+                    onClick={this.handleBuySubmit}>
+                    Buy
+                  </a>
+                  <a
+                    className="waves-effect waves-light btn sell btn-small"
+                    onClick={this.handleSellSubmit}>
+                    Sell
+                  </a>
+                </div>
               </div>
             </div>
           </div>
+          </form>
+          <div className="col 10">
+            <PreTradeContainer
+              ticker={this.state.ticker}
+              shares={this.state.share_amount}
+              stockData = {this.state.stockData}
+            />
+          </div>
         </div>
-        <div>
-        </div>
-        </form>
       </div>
-    </div>
+
     )
   }
 }

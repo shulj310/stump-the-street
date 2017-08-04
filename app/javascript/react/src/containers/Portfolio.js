@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Icon, Link } from 'react-materialize'
+import { Icon, Link, Preloader, Col } from 'react-materialize'
 import StockComponenet from '../components/StockComponent';
 import TradeForm from './TradeForm';
 import PortfolioDash from '../components/PortfolioDash';
@@ -15,7 +15,8 @@ class Portfolio extends Component{
     chartLength: 3,
     last_trade: false,
     shares_traded: 0,
-    loading:false
+    loading:true,
+    auth: true
   }
   this.makeTrade = this.makeTrade.bind(this)
   this.newStocks = this.newStocks.bind(this)
@@ -24,9 +25,18 @@ class Portfolio extends Component{
       fetch(`/api/v1/competitions/${this.props.match.params.comp_id}/portfolios/${this.props.match.params.port_id}/stocks`,{
         credentials: "same-origin"
       })
-      .then(response => response.json())
+      .then(response => {
+        if (response.ok){
+          return response.json() }
+        else {
+          document.location.replace(`/users/sign_in`)
+        }
+      })
       .then(body =>{
 
+        if (body.auth === false) {
+          document.location.replace(`/users/sign_in`)
+        }
 
         function filterByShares(object){
           return object.shares > 0
@@ -46,7 +56,8 @@ class Portfolio extends Component{
       })
       .then(response => response.json())
       .then(body=>{
-        this.setState({ portfolio: body, loading: false })
+        let portfolio = body[0]
+        this.setState({ portfolio: portfolio, loading: false })
       })
     }
 
@@ -108,7 +119,6 @@ class Portfolio extends Component{
   }
 
   render (){
-
     const columns = [{
         Header: 'Stock Info',
         columns: [{
@@ -140,8 +150,27 @@ class Portfolio extends Component{
         }]
       }]
 
+    let table;
 
+    if (this.state.loading){
+      table = <div className="center-align">
+                <Col s={4}>
+                  <Preloader
+                    size='big'
+                    flashing/>
+                </Col>
+              </div>
 
+    }else{
+      table = <ReactTable
+                data={this.state.stocks}
+                columns={columns}
+                minRows={this.state.chartLength}
+                defaultPageSize={20}
+                loading={this.state.loading}
+                showPagination={false}
+              />
+    }
 
     return(
         <div className="body">
@@ -152,14 +181,9 @@ class Portfolio extends Component{
           makeTrade = {this.makeTrade}
           stocks = {this.state.stocks}
           />
-        <ReactTable
-          data={this.state.stocks}
-          columns={columns}
-          minRows={this.state.chartLength}
-          defaultPageSize={20}
-          loading={this.state.loading}
-          showPagination={false}
-        />
+          {table}
+        <br/>
+        <br/>
         <br/>
         </div>
     )
