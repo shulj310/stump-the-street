@@ -38,9 +38,6 @@ errorLister(){
       }
     })
   return errors.filter(key => key !== undefined)
-  // let newErrors = errors.filter(key => key !== undefined)
-  // this.setState({errorList:newErrors})
-  // return newErrors
 }
 
 
@@ -49,42 +46,62 @@ handleBuySubmit(event){
 
   let errorList = this.errorLister()
 
-  if (errorList.length === 0){
+  let futureCash = (this.props.portfolio.cash) > (this.state.share_amount * this.state.stockData.lastPrice)
+
+  if (errorList.length === 0 && futureCash){
 
   let formPayload = {
     ticker: this.state.ticker,
-    share_amount: this.state.share_amount,
+    share_amount: Math.floor(this.state.share_amount),
     side: true
   }
   this.props.makeTrade(formPayload)
   this.handleClearForm(event);
-} else {
-  alert('Can only trade stock w/ in Russell 1000!')
 }
+  if (errorList.length > 1){
+    alert(errorList.join(" \n\n"))
+  }
+  if (errorList.length == 1){
+    alert(errorList.join(" "))
+  }
+  if (!futureCash && this.state.stockData.lastPrice) {
+    alert('Not enough cash for this trade!')
+  }
 }
 
 handleSellSubmit(event){
-  event.preventDefault();
+    event.preventDefault();
 
-  let errorList = this.errorLister()
+    let errorList = this.errorLister()
 
-  let currentHoldings = this.props.stocks.map((stock)=>{
-      return (stock.ticker)
-    })
+    let a = {}
 
-  if (errorList.length === 0 && currentHoldings.includes(this.state.ticker.toUpperCase())
-    ){
-  let formPayload = {
-    ticker: this.state.ticker,
-    share_amount: this.state.share_amount,
-    side:false
+    this.props.stocks.forEach((stock)=>{
+        a[stock.ticker] = stock.shares
+      })
+
+    let ticker = this.state.ticker.toUpperCase()
+
+    if (errorList.length === 0 && Object.keys(a).includes(ticker) && this.state.share_amount < a[ticker])
+      {
+    let formPayload = {
+      ticker: this.state.ticker,
+      share_amount: this.state.share_amount,
+      side:false
+    }
+    this.props.makeTrade(formPayload)
+    this.handleClearForm(event)
+      }
+    if (this.state.share_amount > a[ticker]){
+        alert('Cannot short sell positions!')
+      }
+    if (errorList.length > 1){
+          alert(errorList.join(" \n\n"))
+      }
+    if (errorList.length == 1){
+      alert(errorList.join(" "))
+    }
   }
-  this.props.makeTrade(formPayload)
-  this.handleClearForm(event)
-} else{
-    alert('Can only sell stock that you own!')
-  }
-}
 
 
 handleClearForm(event){
@@ -120,13 +137,16 @@ handleClearForm(event){
       })
       .then(response=> response.json())
       .then(body=>{
-        if (body){
+        if (body["results"][0]){
         let data = body["results"][0]
         this.setState({stockData:data})}
-      })
-      .catch(error=> console.error(`Ticker does not exist: ${error.message}`))
-    } else {
-      this.setState({stockData:{}})
+      else{
+        this.setState({stockData:{}})
+      }})
+      .catch(error=> {
+        this.setState({stockData:{}})
+        console.error(`Ticker does not exist: ${error.message}`)
+    })
     }
   }
   render(){

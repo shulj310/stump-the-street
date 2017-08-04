@@ -46,7 +46,7 @@ class Api::V1::StocksController < ApplicationController
         portfolio_id: params[:portfolio_id],
         stock_id: stock.id,
         transaction_price: stock.price,
-        shares: shares,
+        shares: shares.floor,
         side: side
       )
 

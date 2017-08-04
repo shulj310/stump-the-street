@@ -180,6 +180,7 @@ class Portfolio extends Component{
           <TradeForm
           makeTrade = {this.makeTrade}
           stocks = {this.state.stocks}
+          portfolio = {this.state.portfolio}
           />
           {table}
         <br/>

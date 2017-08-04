@@ -9,7 +9,7 @@ export const errorDictionary = (fieldCategory) => {
           ((value === "")||(!stockList.includes(value.toUpperCase())))
         )
       },
-      message: "you must select a stock within the Russell 1000"
+      message: "You must select a stock within the Russell 1000 index! \n These are typically larger, liquid securities like AAPL, DIS, & GE"
     };
     case 'share_amount':
     return {
@@ -18,7 +18,7 @@ export const errorDictionary = (fieldCategory) => {
           (value.trim() === "")
         )
       },
-      message: "you must select an appropriate share amount"
+      message: "You must select a real, whole number of shares. If not, the shares will be rounded down."
     };
   }
 }
