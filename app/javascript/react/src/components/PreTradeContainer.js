@@ -1,6 +1,6 @@
 import React from 'react';
 import {CardPanel, Modal, Icon, Row} from 'react-materialize'
-import MoreData from '../components/MoreData'
+import MoreData from './MoreData'
 import numeral from 'numeral'
 // import MarketData from '../utils/MarketData'
 
@@ -83,15 +83,22 @@ const PreTradeContainer = props => {
     return(
       <div className="trade-container">
         <div className="modal-more">
+          <div onClick = {props.fundDataHandler}>
           <Modal
           header='More Data'
-          trigger={
-          <a className="indigo darken-1 text-days btn-floating btn tooltipped">
-          <Icon>assessment</Icon></a>}>
-          <p>here is where more data goes!</p>
-          </Modal>
-        </div>
 
+          trigger={
+
+
+          <a className="indigo darken-1 text-days btn-floating btn tooltipped">
+
+          <Icon>assessment</Icon></a>}>
+          <MoreData
+            data = {props.fundData}
+          />
+          </Modal>
+          </div>
+        </div>
         {data}
       </div>
     )

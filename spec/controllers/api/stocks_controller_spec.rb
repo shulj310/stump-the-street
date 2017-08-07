@@ -94,7 +94,7 @@ RSpec.describe Api::V1::StocksController, type: :controller do
 
       returned_json = JSON.parse(response.body)
       expect(response.status).to eq 200
-      
+
       expect(returned_json).to be_kind_of(Hash)
       expect(returned_json).to_not be_kind_of(Array)
       expect(returned_json['stock']['id']).to eq stock.id
@@ -123,5 +123,20 @@ RSpec.describe Api::V1::StocksController, type: :controller do
       expect(returned_json).to_not be_kind_of(Array)
       expect(returned_json['auth']).to eq false
     end
+  end
+  describe "GET#fund_data"
+  it "should get the fund data for a certain stock" do
+    sign_in user
+    get :fund_data, params: { stock_id:"AAPL"}
+
+    returned_json = JSON.parse(response.body)
+
+    expect(response.status).to eq 200
+    expect(response.content_type).to eq("application/json")
+
+    expect(returned_json).to be_kind_of(Hash)
+    expect(returned_json).to_not be_kind_of(Array)
+    expect(returned_json['symbol']).to eq "AAPL"
+
   end
 end

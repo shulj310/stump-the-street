@@ -7,7 +7,7 @@ export const errorDictionary = (fieldCategory) => {
           (value.trim() === "")
         )
       },
-      message: "you must select a competition length"
+      message: "You Must Select a Competition Length"
     };
     case 'competitor':
     return {
@@ -16,7 +16,7 @@ export const errorDictionary = (fieldCategory) => {
           (value === 0)
         )
       },
-      message: "you must select an competitor"
+      message: "You Must Select a Competitor"
     };
     case 'wager_amount':
     return {
@@ -25,7 +25,7 @@ export const errorDictionary = (fieldCategory) => {
           (value.trim() === "")
         )
       },
-      message: "you must enter an appropriate wager_amount"
+      message: "You Must Enter an Appropriate Wager Amount"
     };
     case 'portfolio_name':
     return {
@@ -34,7 +34,7 @@ export const errorDictionary = (fieldCategory) => {
           (value.trim() === "")
         )
       },
-      message: "you must enter a portfolio name"
+      message: "You Must Enter a Portfolio Name"
     };
   }
 }

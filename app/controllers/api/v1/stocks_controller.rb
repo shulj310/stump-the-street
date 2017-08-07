@@ -46,7 +46,7 @@ class Api::V1::StocksController < ApplicationController
         portfolio_id: params[:portfolio_id],
         stock_id: stock.id,
         transaction_price: stock.price,
-        shares: shares,
+        shares: shares.floor,
         side: side
       )
 
@@ -69,6 +69,17 @@ class Api::V1::StocksController < ApplicationController
     data = JSON.parse(response)
 
     if data["status"]["code"] == 200
+      render json: data
+    else
+      render json: {data:nil}
+    end
+  end
+
+  def fund_data
+
+    data = StockQuote::Stock.quote(params[:stock_id].downcase)
+
+    if data.response_code == 200
       render json: data
     else
       render json: {data:nil}

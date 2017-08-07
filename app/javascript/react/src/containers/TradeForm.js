@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import TextField from '../components/TextField'
 import {Button, Icon, Row, Col} from 'react-materialize'
 import { errorDictionary } from '../utils/tradingErrorDictionary'
-import PreTradeContainer from './PreTradeContainer'
+import PreTradeContainer from '../components/PreTradeContainer'
 
 
 class TradeForm extends Component{
@@ -12,7 +12,8 @@ class TradeForm extends Component{
     ticker: "",
     share_amount: "",
     side: null,
-    stockData: {}
+    stockData: {},
+    fundData: {}
   }
   this.handleChange = this.handleChange.bind(this)
   this.handleBuySubmit = this.handleBuySubmit.bind(this)
@@ -21,6 +22,7 @@ class TradeForm extends Component{
   this.handleError = this.handleError.bind(this)
   this.errorLister = this.errorLister.bind(this)
   this.handleTicker = this.handleTicker.bind(this)
+  this.handFundData = this.handFundData.bind(this)
 }
 
 
@@ -31,16 +33,15 @@ handleError(field){
 errorLister(){
 
   let errors = Object.keys(this.state).map((key)=> {
-    if ((key !== 'side') && (key !== 'stockData')){
+    if ((key !== 'side') && (key !== 'stockData') && (
+        key !=='fundData')
+    ){
       if (this.handleError(key)) {
         return errorDictionary(key).message
         }
       }
     })
   return errors.filter(key => key !== undefined)
-  // let newErrors = errors.filter(key => key !== undefined)
-  // this.setState({errorList:newErrors})
-  // return newErrors
 }
 
 
@@ -49,42 +50,62 @@ handleBuySubmit(event){
 
   let errorList = this.errorLister()
 
-  if (errorList.length === 0){
+  let futureCash = (this.props.portfolio.cash) > (this.state.share_amount * this.state.stockData.lastPrice)
+
+  if (errorList.length === 0 && futureCash){
 
   let formPayload = {
     ticker: this.state.ticker,
-    share_amount: this.state.share_amount,
+    share_amount: Math.floor(this.state.share_amount),
     side: true
   }
   this.props.makeTrade(formPayload)
   this.handleClearForm(event);
-} else {
-  alert('Can only trade stock w/ in Russell 1000!')
 }
+  if (errorList.length > 1){
+    alert(errorList.join(" \n\n"))
+  }
+  if (errorList.length == 1){
+    alert(errorList.join(" "))
+  }
+  if (!futureCash && this.state.stockData.lastPrice) {
+    alert('Not enough cash for this trade!')
+  }
 }
 
 handleSellSubmit(event){
-  event.preventDefault();
+    event.preventDefault();
 
-  let errorList = this.errorLister()
+    let errorList = this.errorLister()
 
-  let currentHoldings = this.props.stocks.map((stock)=>{
-      return (stock.ticker)
-    })
+    let a = {}
 
-  if (errorList.length === 0 && currentHoldings.includes(this.state.ticker.toUpperCase())
-    ){
-  let formPayload = {
-    ticker: this.state.ticker,
-    share_amount: this.state.share_amount,
-    side:false
+    this.props.stocks.forEach((stock)=>{
+        a[stock.ticker] = stock.shares
+      })
+
+    let ticker = this.state.ticker.toUpperCase()
+
+    if (errorList.length === 0 && Object.keys(a).includes(ticker) && this.state.share_amount < a[ticker])
+      {
+    let formPayload = {
+      ticker: this.state.ticker,
+      share_amount: this.state.share_amount,
+      side:false
+    }
+    this.props.makeTrade(formPayload)
+    this.handleClearForm(event)
+      }
+    if (this.state.share_amount > a[ticker]){
+        alert('Cannot short sell positions!')
+      }
+    if (errorList.length > 1){
+          alert(errorList.join(" \n\n"))
+      }
+    if (errorList.length == 1){
+      alert(errorList.join(" "))
+    }
   }
-  this.props.makeTrade(formPayload)
-  this.handleClearForm(event)
-} else{
-    alert('Can only sell stock that you own!')
-  }
-}
 
 
 handleClearForm(event){
@@ -120,15 +141,45 @@ handleClearForm(event){
       })
       .then(response=> response.json())
       .then(body=>{
-        if (body){
+        if (body["results"][0]){
         let data = body["results"][0]
         this.setState({stockData:data})}
-      })
-      .catch(error=> console.error(`Ticker does not exist: ${error.message}`))
-    } else {
-      this.setState({stockData:{}})
+      else{
+        this.setState({stockData:{}})
+      }})
+      .catch(error=> {
+        this.setState({stockData:{}})
+        console.error(`Ticker does not exist: ${error.message}`)
+    })
     }
   }
+handFundData(event){
+  fetch(`/api/v1/stocks/${this.state.ticker}/fund_data`,{
+    credentials: 'same-origin'
+  })
+  .then(response => {
+    if (response.ok){
+      return response; }
+      else {
+          let errorMessage = `${response.status} (${response.statusText})`,
+              error = new Error(errorMessage);
+          throw(error);
+        }
+    })
+    .then(response=> response.json())
+    .then(body=>{
+    if (body["data"] !== null){
+      this.setState({fundData:body})}
+    else{
+      this.setState({stockData:{}})
+    }})
+    .catch(error=> {
+      this.setState({stockData:{}})
+      console.error(`Ticker does not exist: ${error.message}`)
+  })
+  }
+
+
   render(){
 
     return(
@@ -172,6 +223,8 @@ handleClearForm(event){
               ticker={this.state.ticker}
               shares={this.state.share_amount}
               stockData = {this.state.stockData}
+              fundData = {this.state.fundData}
+              fundDataHandler = {this.handFundData}
             />
           </div>
         </div>

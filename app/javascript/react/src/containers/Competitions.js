@@ -133,6 +133,7 @@ class Competitions extends Component{
           </Modal>
         </div>
           {table}
+          <br/>
         </div>
     )
   }
