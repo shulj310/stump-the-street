@@ -9,6 +9,9 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :stocks, only: [:show]
+      resources "stocks" do
+        get "fund_data"
+      end
       resources :competitions, only: [:index,:create] do
         resources :portfolios, only: [:show,:create] do
           resources :stocks, only: [:index, :create]

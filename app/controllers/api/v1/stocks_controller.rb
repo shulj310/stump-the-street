@@ -75,6 +75,17 @@ class Api::V1::StocksController < ApplicationController
     end
   end
 
+  def fund_data
+
+    data = StockQuote::Stock.quote(params[:stock_id].downcase)
+
+    if data.response_code == 200
+      render json: data
+    else
+      render json: {data:nil}
+    end
+  end
+
 
   def trade_params
     data = JSON.parse(request.body.read)

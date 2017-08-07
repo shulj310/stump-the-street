@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import TextField from '../components/TextField'
 import {Button, Icon, Row, Col} from 'react-materialize'
 import { errorDictionary } from '../utils/tradingErrorDictionary'
-import PreTradeContainer from './PreTradeContainer'
+import PreTradeContainer from '../components/PreTradeContainer'
 
 
 class TradeForm extends Component{
@@ -12,7 +12,8 @@ class TradeForm extends Component{
     ticker: "",
     share_amount: "",
     side: null,
-    stockData: {}
+    stockData: {},
+    fundData: {}
   }
   this.handleChange = this.handleChange.bind(this)
   this.handleBuySubmit = this.handleBuySubmit.bind(this)
@@ -21,6 +22,7 @@ class TradeForm extends Component{
   this.handleError = this.handleError.bind(this)
   this.errorLister = this.errorLister.bind(this)
   this.handleTicker = this.handleTicker.bind(this)
+  this.handFundData = this.handFundData.bind(this)
 }
 
 
@@ -31,7 +33,9 @@ handleError(field){
 errorLister(){
 
   let errors = Object.keys(this.state).map((key)=> {
-    if ((key !== 'side') && (key !== 'stockData')){
+    if ((key !== 'side') && (key !== 'stockData') && (
+        key !=='fundData')
+    ){
       if (this.handleError(key)) {
         return errorDictionary(key).message
         }
@@ -149,6 +153,33 @@ handleClearForm(event){
     })
     }
   }
+handFundData(event){
+  fetch(`/api/v1/stocks/${this.state.ticker}/fund_data`,{
+    credentials: 'same-origin'
+  })
+  .then(response => {
+    if (response.ok){
+      return response; }
+      else {
+          let errorMessage = `${response.status} (${response.statusText})`,
+              error = new Error(errorMessage);
+          throw(error);
+        }
+    })
+    .then(response=> response.json())
+    .then(body=>{
+    if (body["data"] !== null){
+      this.setState({fundData:body})}
+    else{
+      this.setState({stockData:{}})
+    }})
+    .catch(error=> {
+      this.setState({stockData:{}})
+      console.error(`Ticker does not exist: ${error.message}`)
+  })
+  }
+
+
   render(){
 
     return(
@@ -192,6 +223,8 @@ handleClearForm(event){
               ticker={this.state.ticker}
               shares={this.state.share_amount}
               stockData = {this.state.stockData}
+              fundData = {this.state.fundData}
+              fundDataHandler = {this.handFundData}
             />
           </div>
         </div>
