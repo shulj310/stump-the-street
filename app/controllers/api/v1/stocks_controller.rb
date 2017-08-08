@@ -87,7 +87,7 @@ class Api::V1::StocksController < ApplicationController
   end
 
   def hist_price
-    start = DateTime.now-365
+    start = (DateTime.now-365).strftime("%Y%m%d")
     puts start
     url = "http://marketdata.websol.barchart.com/getHistory.json?key=b153d00b85faee7d352be6b91df7ec46&symbol=#{params[:stock_id]}&type=daily&startDate=#{start}"
 
