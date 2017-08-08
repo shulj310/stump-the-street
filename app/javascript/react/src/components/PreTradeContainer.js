@@ -10,6 +10,7 @@ const PreTradeContainer = props => {
     <div className="no-sec">
       <p>No Security Loaded</p>
     </div>
+
   let ticker,
   shares,
   price,
@@ -20,7 +21,9 @@ const PreTradeContainer = props => {
   value,
   name,
   open,
-  close
+  close,
+  header,
+  moreDataModal
 
     if (props.stockData){
       price = numeral(props.stockData.lastPrice).format('$0,0.00')
@@ -36,13 +39,15 @@ const PreTradeContainer = props => {
         close = ""
       }
       name = props.stockData.name
+      header = `${name} (${props.ticker.toUpperCase()})`
 
     }
 
     if (props.ticker === ""){
       ticker = "Ticker"
+      header = "Please Enter Ticker!"
     } else{
-      ticker = props.ticker
+      ticker = props.ticker.toUpperCase()
     }
 
     if (props.shares === ""){
@@ -55,7 +60,22 @@ const PreTradeContainer = props => {
       value = numeral(props.stockData.lastPrice * props.shares).format('$0,0.00')
     }
 
-
+    if ((props.ticker !== "") && (props.tickerLoaded)){
+    moreDataModal =  <div className="modal-more">
+        <div onClick = {props.fundDataHandler}>
+        <Modal
+        header= {header}
+        trigger={
+        <a className="indigo darken-1 text-days btn-floating btn tooltipped pulse">
+        <Icon>assessment</Icon></a>}>
+        <MoreData
+          data = {props.fundData}
+          histPrice = {props.histPrice}
+        />
+        </Modal>
+        </div>
+      </div>
+    }
 
     if (props.ticker !== "") {
       data = (
@@ -82,23 +102,7 @@ const PreTradeContainer = props => {
 
     return(
       <div className="trade-container">
-        <div className="modal-more">
-          <div onClick = {props.fundDataHandler}>
-          <Modal
-          header='More Data'
-
-          trigger={
-
-
-          <a className="indigo darken-1 text-days btn-floating btn tooltipped">
-
-          <Icon>assessment</Icon></a>}>
-          <MoreData
-            data = {props.fundData}
-          />
-          </Modal>
-          </div>
-        </div>
+        {moreDataModal}
         {data}
       </div>
     )

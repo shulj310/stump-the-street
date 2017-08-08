@@ -86,6 +86,21 @@ class Api::V1::StocksController < ApplicationController
     end
   end
 
+  def hist_price
+    start = DateTime.now-365
+    url = "http://marketdata.websol.barchart.com/getHistory.json?key=b153d00b85faee7d352be6b91df7ec46&symbol=#{params[:stock_id]}&type=daily&startDate=#{start}"
+
+    response = RestClient.get(url)
+
+    data = JSON.parse(response)
+
+    if data["status"]["code"] == 200
+      render json: data
+    else
+      render json: {data:nil}
+    end
+  end
+
 
   def trade_params
     data = JSON.parse(request.body.read)
