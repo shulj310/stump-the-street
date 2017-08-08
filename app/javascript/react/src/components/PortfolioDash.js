@@ -3,6 +3,7 @@ import { Table, Col, Row, CardPanel, Modal, Button, Icon } from 'react-materiali
 import numeral from 'numeral'
 import {competitorDictionary} from '../utils/competitorDictionary'
 import { Link } from 'react-router-dom';
+import CompetitionComponent from "./CompetitionComponent"
 
 const PortfolioDash = (props) => {
 
@@ -13,8 +14,15 @@ const PortfolioDash = (props) => {
   name,
   daysLeft,
   msDay = 60*60*24*1000,
-  colorClass
+  colorClass,
+  gainClass,
+  compClass,
+  diffClass,
+  properName
 
+  String.prototype.capitalize = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+  }
   if (props.portfolio.deadline)
 
   {d = new Date(props.portfolio.deadline)
@@ -27,21 +35,10 @@ const PortfolioDash = (props) => {
   date = String(d).split(" ").slice(0,4).join(" ")
 
   name = competitorDictionary[props.portfolio.competitor_id]
-
-  comp = <img
-    src={require(`./../../../../assets/images/${name}.png`)}
-    width={75}
-    height={75}
-    alt={name}
-    className="circle z-depth-5"
-  />
-
+  if (name != undefined){
+    properName = name.capitalize()
   }
-
-
-  let gainClass;
-  let compClass;
-  let diffClass
+  }
 
   if (props.portfolio.return > 0)
     {gainClass = " gain-value v-green"} else {
@@ -113,14 +110,20 @@ const PortfolioDash = (props) => {
     <Col s={1}>
     <span>
     <Modal
-      header='Competition Details'
+      header={"Competition vs. "+ properName}
       trigger={
         <a
         className="indigo darken-3 btn-floating btn-large">
         <Icon
           large={true}>assignment</Icon></a>
       }>
-      <p>This competition will end on {date}</p><hr/><p>You have {daysLeft} until the competition is complete!</p>
+      <CompetitionComponent
+        name = {name}
+        deadline = {date}
+        daysLeft = {daysLeft}
+        diff = {props.portfolio.diff}
+        wager_amount = {props.portfolio.wager_amount}
+      />
     </Modal>
     </span>
     </Col>

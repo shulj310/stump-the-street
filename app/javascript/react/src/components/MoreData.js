@@ -52,24 +52,11 @@ const MoreData = props =>{
     {"PEG Ratio":peg_ratio}]
   }
 
-  // let dataEntry = dataArray.map((field)=>{
-  //   return(
-  //     <div className="data-table detailed" key={Object.keys(field)}>
-  //       <div className="data-table label">
-  //         {Object.keys(field)}
-  //       </div>
-  //       <div>
-  //         {Object.values(field)}
-  //       </div>
-  //     </div>
-  //   )
-  //
-  // })
 
   let dataEntry =
       <div>
           <Row>
-            <Col s={4}>
+          <div className="data-box left-align">
               <StockFund
                 label="Dividend Yield"
                 value = {dividend_yield}
@@ -82,10 +69,15 @@ const MoreData = props =>{
                 label="One Year Target"
                 value = {one_yr_target}
               />
-            </Col>
+              <StockFund
+                label="PEG Ratio"
+                value = {peg_ratio}
+              />
+          </div>
           </Row>
           <Row>
-            <Col s={4}>
+            <div className="data-box left-align">
+
               <StockFund
                 label="P/E Ratio"
                 value = {pe_ratio}
@@ -98,10 +90,14 @@ const MoreData = props =>{
                 label="Price to Book"
                 value = {price_book}
               />
-            </Col>
+              <StockFund
+                label="Price to Sales"
+                value={price_sales}
+              />
+            </div>
           </Row>
           <Row>
-            <Col s={4}>
+          <div className="data-box left-align">
               <StockFund
                 label="50 Day MVA"
                 value = {fifty_day}
@@ -114,7 +110,11 @@ const MoreData = props =>{
                 label="52 Wk Lo"
                 value = {year_low}
               />
-            </Col>
+              <StockFund
+                label="Short Ratio"
+                value = {short_ratio}
+              />
+            </div>
           </Row>
       </div>
 
