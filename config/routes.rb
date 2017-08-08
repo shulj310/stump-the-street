@@ -11,6 +11,7 @@ Rails.application.routes.draw do
       resources :stocks, only: [:show]
       resources "stocks" do
         get "fund_data"
+        get "hist_price"
       end
       resources :competitions, only: [:index,:create] do
         resources :portfolios, only: [:show,:create] do

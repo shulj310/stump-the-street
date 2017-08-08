@@ -1,9 +1,12 @@
 import React from 'react'
+import {Col, Row} from 'react-materialize'
+import StockChart from './StockChart'
+import StockFund from './StockFund'
 
 const MoreData = props =>{
 
   let ticker,
-  dividend_yield,
+  dividend_yield = "N/A",
   fifty_day,
   one_yr_target,
   pe_ratio,
@@ -14,14 +17,15 @@ const MoreData = props =>{
   year_high,
   year_low,
   market_cap,
-  peg_ratio
+  peg_ratio,
+  dataArray
 
   let data = props.data
 
   if (data !== {}){
     ticker = props.data.symbol
-    dividend_yield = props.data.dividend_yield
-    fifty_day = props.data.fifty_day_moving_average
+    dividend_yield = (props.data.dividend_yield == null ? "N/A" : props.data.dividend_yield)
+    fifty_day = props.data.fiftyday_moving_average
     one_yr_target = props.data.oneyr_target_price
     pe_ratio = props.data.pe_ratio
     peg_ratio = props.data.peg_ratio
@@ -32,18 +36,97 @@ const MoreData = props =>{
     year_high = props.data.year_high
     year_low = props.data.year_low,
     market_cap = props.data.market_capitalization
+
+    dataArray = [
+    {"Dividend Yield":dividend_yield},
+    {"50 Day Average":fifty_day},
+    {"One Year Target":one_yr_target},
+    {"P/E Ratio":pe_ratio},
+    {"Price to Book":price_book},
+    {"FWD P/E Ratio":fwd_pe},
+    {"Price to Sales":price_sales},
+    {"Short Ratio":short_ratio},
+    {"One Year High":year_high},
+    {"One Year Low":year_low},
+    {"Market Capitalization":market_cap},
+    {"PEG Ratio":peg_ratio}]
   }
+
+
+  let dataEntry =
+      <div>
+          <Row>
+          <div className="data-box left-align">
+              <StockFund
+                label="Dividend Yield"
+                value = {dividend_yield}
+              />
+              <StockFund
+                label="Market Capitalization"
+                value = {market_cap}
+              />
+              <StockFund
+                label="One Year Target"
+                value = {one_yr_target}
+              />
+              <StockFund
+                label="PEG Ratio"
+                value = {peg_ratio}
+              />
+          </div>
+          </Row>
+          <Row>
+            <div className="data-box left-align">
+
+              <StockFund
+                label="P/E Ratio"
+                value = {pe_ratio}
+              />
+              <StockFund
+                label="FWD P/E Ratio"
+                value = {fwd_pe}
+              />
+              <StockFund
+                label="Price to Book"
+                value = {price_book}
+              />
+              <StockFund
+                label="Price to Sales"
+                value={price_sales}
+              />
+            </div>
+          </Row>
+          <Row>
+          <div className="data-box left-align">
+              <StockFund
+                label="50 Day MVA"
+                value = {fifty_day}
+              />
+              <StockFund
+                label="52 Wk Hi"
+                value = {year_high}
+              />
+              <StockFund
+                label="52 Wk Lo"
+                value = {year_low}
+              />
+              <StockFund
+                label="Short Ratio"
+                value = {short_ratio}
+              />
+            </div>
+          </Row>
+      </div>
 
 
   return(
     <div>
-      <h5>
-        Ticker: {ticker}
-        Dividend Yield: {dividend_yield}
-        Market Cap: {market_cap}
-      </h5>
-    </div>
+    <StockChart
+      data = {props.histPrice}
+      ticker = {ticker}
+      />
+    {dataEntry}
+  </div>
   )
 }
-
 export default MoreData;

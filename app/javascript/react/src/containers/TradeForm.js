@@ -13,7 +13,9 @@ class TradeForm extends Component{
     share_amount: "",
     side: null,
     stockData: {},
-    fundData: {}
+    fundData: {},
+    tickerLoaded: false,
+    histPrice: {}
   }
   this.handleChange = this.handleChange.bind(this)
   this.handleBuySubmit = this.handleBuySubmit.bind(this)
@@ -34,7 +36,8 @@ errorLister(){
 
   let errors = Object.keys(this.state).map((key)=> {
     if ((key !== 'side') && (key !== 'stockData') && (
-        key !=='fundData')
+        key !=='fundData') && (key !== 'tickerLoaded')
+        && (key !== 'histPrice')
     ){
       if (this.handleError(key)) {
         return errorDictionary(key).message
@@ -86,11 +89,11 @@ handleSellSubmit(event){
 
     let ticker = this.state.ticker.toUpperCase()
 
-    if (errorList.length === 0 && Object.keys(a).includes(ticker) && this.state.share_amount < a[ticker])
+    if (errorList.length === 0 && Object.keys(a).includes(ticker) && Math.floor(this.state.share_amount) <= a[ticker])
       {
     let formPayload = {
       ticker: this.state.ticker,
-      share_amount: this.state.share_amount,
+      share_amount: Math.floor(this.state.share_amount),
       side:false
     }
     this.props.makeTrade(formPayload)
@@ -104,6 +107,9 @@ handleSellSubmit(event){
       }
     if (errorList.length == 1){
       alert(errorList.join(" "))
+    }
+    if (!Object.keys(a).includes(ticker)){
+      alert('Cannot short sell positions!')
     }
   }
 
@@ -143,12 +149,12 @@ handleClearForm(event){
       .then(body=>{
         if (body["results"][0]){
         let data = body["results"][0]
-        this.setState({stockData:data})}
+        this.setState({stockData:data,tickerLoaded:true})}
       else{
-        this.setState({stockData:{}})
+        this.setState({stockData:{},tickerLoaded:false})
       }})
       .catch(error=> {
-        this.setState({stockData:{}})
+        this.setState({stockData:{},tickerLoaded:false})
         console.error(`Ticker does not exist: ${error.message}`)
     })
     }
@@ -171,11 +177,32 @@ handFundData(event){
     if (body["data"] !== null){
       this.setState({fundData:body})}
     else{
-      this.setState({stockData:{}})
+      this.setState({fundData:{}})
     }})
     .catch(error=> {
-      this.setState({stockData:{}})
-      console.error(`Ticker does not exist: ${error.message}`)
+      this.setState({fundData:{}})
+  })
+  fetch(`/api/v1/stocks/${this.state.ticker}/hist_price`,{
+    credentials: 'same-origin'
+  })
+  .then(response => {
+    if (response.ok){
+      return response; }
+      else {
+          let errorMessage = `${response.status} (${response.statusText})`,
+              error = new Error(errorMessage);
+          throw(error);
+        }
+    })
+    .then(response=> response.json())
+    .then(body=>{
+    if (body["data"] !== null){
+      this.setState({histPrice:body})}
+    else{
+      this.setState({histPrice:{}})
+    }})
+    .catch(error=> {
+      this.setState({histPrice:{}})
   })
   }
 
@@ -225,6 +252,8 @@ handFundData(event){
               stockData = {this.state.stockData}
               fundData = {this.state.fundData}
               fundDataHandler = {this.handFundData}
+              tickerLoaded = {this.state.tickerLoaded}
+              histPrice = {this.state.histPrice}
             />
           </div>
         </div>
