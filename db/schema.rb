@@ -10,10 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170802013601) do
+ActiveRecord::Schema.define(version: 20170809014238) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "competition_histories", force: :cascade do |t|
+    t.integer  "user_id"
+    t.boolean  "win",               null: false
+    t.float    "wager_amount",      null: false
+    t.integer  "competitor_id",     null: false
+    t.float    "return",            null: false
+    t.float    "competitor_return", null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
+    t.float    "winnings"
+    t.index ["user_id"], name: "index_competition_histories_on_user_id", using: :btree
+  end
 
   create_table "competitions", force: :cascade do |t|
     t.integer  "length",          null: false
