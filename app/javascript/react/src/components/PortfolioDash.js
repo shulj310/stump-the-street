@@ -14,11 +14,12 @@ const PortfolioDash = (props) => {
   name,
   daysLeft,
   msDay = 60*60*24*1000,
-  colorClass,
+  colorClass = "light-blue darken-1 text-days",
   gainClass,
   compClass,
   diffClass,
-  properName
+  properName,
+  pulseClass
 
   String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
@@ -26,11 +27,12 @@ const PortfolioDash = (props) => {
   if (props.portfolio.deadline)
 
   {d = new Date(props.portfolio.deadline)
-  daysLeft = (Math.floor((d - new Date()) / msDay))
+  daysLeft = (Math.floor((d - new Date()) / msDay)+1)
+  if (daysLeft < 1){
+    colorClass = "red darken-4 text-days pulse"
+  }
   if (daysLeft < 5){
     colorClass="red darken-4 text-days"
-  } else {
-    colorClass="light-blue darken-1 text-days"
   }
   date = String(d).split(" ").slice(0,4).join(" ")
 
@@ -113,7 +115,7 @@ const PortfolioDash = (props) => {
       header={"Competition vs. "+ properName}
       trigger={
         <a
-        className="indigo darken-3 btn-floating btn-large">
+        className={colorClass + " btn-floating btn-large"}>
         <Icon
           large={true}>assignment</Icon></a>
       }>

@@ -1,0 +1,57 @@
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" href="http://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/css/materialize.min.css">
+  </head>
+  <header>
+
+
+  </header>
+  <main>
+    <div class="container">
+      <p>
+        Hey <%= @user.first_name %>,
+        <br/>
+        Here is your daily dashboard for today!
+      </p>
+
+      <p><strong>You currently have <%= @competitions.length %> competitions active</strong></p>
+      <p>That's <%= number_to_currency(@value, precision: 0) %> worth of wagers</p>
+
+      <h5>Here is a breakdown of your competitions by performance</h5>
+      <table class="striped highlight">
+        <thead>
+          <tr>
+            <th>Strategy Name</th>
+            <th>Current Market Value</th>
+            <th>Total Wagered</th>
+            <th>Deadline</th>
+            <th>Your Return</th>
+            <th>Competitor Return</th>
+            <th>Differential</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @competitions.each do |comp| %>
+          <tr>
+            <td><a href="https://stump-the-street.herokuapp.com/competitions/show/portfolios/<%=comp.id%>"><%=comp.portfolio.name %></td>
+            <td><%=number_to_currency(comp.portfolio.value,precision: 2) %></td>
+            <td><%=number_to_currency(comp.wager_amount,precision: 2) %></td>
+            <td><%=comp.deadline.strftime("%b %e, %Y") %></td>
+            <td><%= number_to_percentage(comp.portfolio.return*100, precision: 2) %></td>
+            <td><%=number_to_percentage(comp.competitor_portfolio.return* 100, precision: 2) %></td>
+            <td><%=number_to_percentage(comp.diff* 100, precision: 2) %></td>
+          </tr>
+          <%end%>
+        </tbody>
+      </table>
+    </div>
+  </main>
+  <footer>
+    <a class="waves-effect waves-light btn" href="https://stump-the-street.herokuapp.com">Stump the Street</a>
+  </footer>
+  <body>
+  </body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.1/js/materialize.min.js"></script>
+  </html>

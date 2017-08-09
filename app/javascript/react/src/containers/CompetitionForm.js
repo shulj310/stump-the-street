@@ -108,10 +108,10 @@ class CompetitionForm extends Component{
 
     let options = [
       {"": "Select Timeline"},
-      {"4": "1 Month"},
-      {"8": "2 Months"},
-      {"12": "3 Months"},
-      {"24": "6 Months"}
+      {"7": "1 Week"},
+      {"14": "2 Weeks"},
+      {"21": "3 Weeks"},
+      {"28": "4 Weeks"}
     ]
 
     let images = ['cramer','bull','street']

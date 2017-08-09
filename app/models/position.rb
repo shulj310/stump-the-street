@@ -6,4 +6,8 @@ class Position < ApplicationRecord
     self.value = self.stock.price * self.shares
     self.save
   end
+
+  def return
+    return ((self.stock.price / self.cost) -1) 
+  end
 end

@@ -23,10 +23,15 @@ class Api::V1::CompetitionsController < ApplicationController
     if current_user
 
     data = JSON.parse(request.body.read)
+
+    date = DateTime.now + data["length"].to_i
+
+    new_date = date_change(date)
+
     new_competition = Competition.create(
       length: data["length"],
-      deadline: DateTime.now + data["length"].to_i,
-      wager_amount: data["wager_amount"].to_i,
+      deadline: new_date,
+      wager_amount: data["wager_amount"],
       odds_calculated: 1,
       current_value: data["wager_amount"].to_f*0.95,
       competitor_id: data["competitor"].to_i,
@@ -57,4 +62,14 @@ class Api::V1::CompetitionsController < ApplicationController
     end
   end
 
+  def date_change(date)
+    if date.wday == 6
+      date -= 1
+      puts date
+    elsif date.wday == 0
+      date += 1
+      puts date
+    end
+    return date.change({hour:16,min:0,sec:0})
+  end
 end

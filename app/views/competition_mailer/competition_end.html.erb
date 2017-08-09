@@ -1,0 +1,13 @@
+<p>Hello <%= @user.first_name %>,</p>
+<% if @win %>
+<p>Congratulations! You have stumped the street and added <%= number_to_currency(@competition.current_value, precision: 2) %> to your wallet. Not too shabby!</p>
+<% else %>
+<p>Sorry to say, but this time around you have been stumped!</p>
+<% end %>
+<p>The Breakdown:</p>
+<p> "<%= @competition.portfolio.name %>": <%= number_to_percentage(@competition.portfolio.return,precision: 2) %></p>
+<p>"<%= @competition.competitor.name %>": <%= number_to_percentage(@competition.competitor_portfolio.return,precision: 2) %></p><br/>
+<span>Take another crack at <%= @competition.competitor.name %> with a new <a href="https://stump-the-street.herokuapp.com/competitions">competition now!</a></span>
+<span>For a more detailed review on your competition, checkout your <a href="https://stump-the-street.herokuapp.com/competition_history">competition history</a></span>
+<br/>
+<p>Happy Trading!</p>
