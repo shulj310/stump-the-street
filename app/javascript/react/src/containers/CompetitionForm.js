@@ -149,11 +149,12 @@ class CompetitionForm extends Component{
     let errorMessage
     let portfolioForm;
     let tradeButton;
-    let portfolioButton = <Button
-              waves='light'
+    let portfolioButton = <button
+              type='button'
+              className= "btn waves-effect waves-light blue-grey darken-2"
               onClick={this.showPortfolio}>
               Create Portfolio
-            </Button>
+            </button>
 
     if (this.state.showPortfolio) {
 
@@ -164,11 +165,11 @@ class CompetitionForm extends Component{
         label= "Portfolio's Name"
         />
 
-      tradeButton = <Button
-        waves='light'
+      tradeButton = <button
+        className= "btn waves-effect waves-light blue-grey darken-2"
         type="submit">
         Start Trading
-        </Button>
+        </button>
 
       portfolioButton = ""
     }

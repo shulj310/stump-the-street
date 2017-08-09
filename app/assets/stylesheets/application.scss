@@ -20,6 +20,13 @@
 
 
  @import "materialize";
+ @import url('https://fonts.googleapis.com/css?family=Exo+2|Raleway');
+
+ $primary-color: color("materialize-red", "lighten-2") !default;
+
+ html{
+   font-family: "Exo 2"
+ }
 
  body {
    display: flex;
@@ -29,6 +36,10 @@
 
  main {
    flex: 1 0 auto;
+ }
+
+ .img-form {
+   display: inline-block;
  }
 
  .comp-data{
