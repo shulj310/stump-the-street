@@ -125,8 +125,8 @@ class Competitions extends Component{
         <div className="body">
           <div className="center-align comp-button">
           <Modal
-          	header='Build Your Competition'
-          	trigger={<Button waves='light'>Add Competition</Button>}>
+          	header='Select Your Competitor'
+          	trigger={<button type='button' className= "btn waves-effect waves-light blue-grey darken-2">Add Competition</button>}>
             <CompetitionForm
             addCompetition = {this.addCompetition}
             />
