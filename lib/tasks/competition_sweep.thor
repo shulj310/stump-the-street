@@ -30,32 +30,26 @@ class CompetitionSweep < Thor
 
   def win_loss
     User.all.each do |user|
-      competitions = user.competitions
-
-      competitions.each do |comp|
-
-        if comp.competitor_portfolio.nil?
-          comp.destroy
-        else
-          win = (comp.diff > 0)
-          winnings = 0
-          if comp.deadline < Time.now
-            if win
-              winnings = comp.current_value
-              user.wallet += winnings
-              user.save
-            end
-            CompetitionHistory.create(
-              user_id: user.id,
-              win: win,
-              wager_amount: comp.wager_amount,
-              competitor_id: comp.competitor_id,
-              return: comp.portfolio.return,
-              competitor_return: comp.competitor_portfolio.return,
-              winnings: winnings
-            )
-            comp.destroy
+      user.competitions.each do |comp|
+        win = (comp.diff > 0)
+        winnings = 0
+        if comp.deadline < Time.now
+          CompetitionMailer.competition_end(comp,win).deliver
+          if win
+            winnings = comp.current_value
+            user.wallet += winnings
+            user.save
           end
+          CompetitionHistory.create(
+            user_id: user.id,
+            win: win,
+            wager_amount: comp.wager_amount,
+            competitor_id: comp.competitor_id,
+            return: comp.portfolio.return,
+            competitor_return: comp.competitor_portfolio.return,
+            winnings: winnings
+          )
+          comp.destroy
         end
       end
     end

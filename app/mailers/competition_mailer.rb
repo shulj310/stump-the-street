@@ -13,4 +13,20 @@ class CompetitionMailer < ApplicationMailer
 
   end
 
+  def competition_end(competition,win)
+    @competition = competition
+    @user = @competition.user
+    @win = win
+
+    if @win
+      subject = "Ding, ding, ding, we have a winner..."
+    else
+      subject = "Your competition has ended!"
+    end
+
+    mail(
+      to: @user.email,
+      subject: subject
+    )
+  end
 end

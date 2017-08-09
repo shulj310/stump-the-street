@@ -9,7 +9,8 @@ const CompetitionComponent = (props) =>{
   performance,
   a_b,
   diff,
-  wager_amount
+  wager_amount,
+  days
 
   if (props.name != undefined){
     comp = <img
