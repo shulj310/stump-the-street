@@ -19,5 +19,4 @@ $(document).ready(function() {
   $(".button-collapse").sideNav();
   $('.collapsible').collapsible();
   $('.modal').modal();
-  $('.tooltipped').tooltip({delay: 50});
 });

@@ -4,16 +4,16 @@ const ImageTile = props =>{
 
   let label;
 
-  if (props.name != undefined){
+  if (props.name != undefined && props.label != false){
 
-  if (props.name.startsWith('cramer')){
+  if (props.name.includes('ramer')){
     label = "Stump Jim Cramer!"
   }
-  if (props.name.startsWith('bull')){
+  if (props.name.includes('ull')){
     label = "Stump Pro Investors!"
   }
 
-  if (props.name.startsWith("street")){
+  if (props.name.includes("treet")){
     label = "Stump the Market!"
   }
 
@@ -23,14 +23,14 @@ const ImageTile = props =>{
   return(
     <div className="img-form">
     <img
-    src={require(`./../../../../assets/images/${props.name}.png`)}
+    src={require(`./../../../../assets/images/${props.name}.${props.end}`)}
     alt={props.name}
     name={props.name}
     onClick={props.handlerFunction}
     onMouseOver={props.hoverFunction}
     id={props.id}
-    width={200}
-    height={200}
+    width={props.width}
+    height={props.height}
     className={props.selected}
     />
     <div className="center-align">

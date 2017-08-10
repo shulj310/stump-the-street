@@ -11,6 +11,7 @@
  * It is generally better to create a new file per style scope.
  *
 
+
  *= require react-table
  *= require materialize
  *= require material_icons
@@ -32,10 +33,44 @@
    display: flex;
    min-height: 100vh;
    flex-direction: column;
+   background: repeating-linear-gradient(
+  45deg,
+  #ffeeff,
+  #ffffff 5px,
+  #fafafa 5px,
+  #fcfcfc 10px
+  );
  }
 
  main {
    flex: 1 0 auto;
+ }
+
+ .img-block{
+   display: inline-block;
+   position: relative;
+   margin: 0% 1%
+ }
+
+ .description {
+  position: absolute;
+  top: -30px;
+  left: -30px;
+  max-width: 150px;
+  z-index: 1;
+  background-color:rgba(255, 255, 0, 0.9);
+  color: rgba(0, 0, 0, 0.9);
+  padding: 0% 1%;
+  border-width: 1px;
+  border-radius: 3px;
+  box-shadow: 2px 2px 2px 1px rgba(0, 0, 0, 0.2);
+
+ }
+
+ .home-image {
+   display: inline-block;
+   border-radius: 50%;
+   background-color: #132731;
  }
 
  .img-form {
