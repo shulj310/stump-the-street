@@ -140,8 +140,12 @@ class CompetitionForm extends Component{
         handlerFunction = {this.handleCompClick}
         hoverFunction = {this.handleHover}
         id={index+1}
+        width={200}
+        width={200}
         selected={selected}
         text={text}
+        label={true}
+        end="png"
       />
       )
     })

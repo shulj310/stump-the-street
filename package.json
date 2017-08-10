@@ -53,6 +53,7 @@
     "react-router-dom": "^4.1.2",
     "react-table": "^6.5.1",
     "react-table-sorter": "^2.0.0",
+    "react-tooltip": "^3.3.0",
     "resolve-url-loader": "^2.1.0",
     "webpack-manifest-plugin": "^1.2.1",
     "webpack-merge": "^4.1.0",
