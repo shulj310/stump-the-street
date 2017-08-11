@@ -7,22 +7,23 @@ class Api::V1::UsersController < ApplicationController
   end
 
   def update
+
     if current_user
 
       data = JSON.parse(request.body.read)
 
-      coupon,dollar_added = data["coupon"],dollar_added["dollarAdded"]
+      coupon = data["couponCode"]
 
       if coupon == "LAUNCHTHESTREET"
         user = User.find(current_user)
-        user.wallet += dollar_added
+        user.wallet += 100
         user.save
         render json: user
       else
-        render json: {message:"There was an error processing your order"}
+        render json: {auth:false}
       end
     else
-        render json: {message:"You must be an authorized user to add to your wallet"}
+        render json: {auth:false}
     end
   end
 

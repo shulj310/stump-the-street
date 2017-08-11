@@ -1,15 +1,12 @@
 import React, { Component } from 'react'
+import TextField from '../components/TextField'
+import { Row, Col } from 'react-materialize'
 
 class CreditForm extends Component {
   constructor(props){
     super(props)
     this.state = {
-      creditNumber:"",
-      name:"",
-      zipCode:"",
-      expirationDate:"",
       couponCode:"",
-      dollarAdded:0
     }
 
     this.handleCreditImport = this.handleCreditImport.bind(this)
@@ -21,10 +18,6 @@ class CreditForm extends Component {
     event.preventDefault();
 
     let formPayload = {
-      creditNumber:this.state.creditNumber,
-      name:this.state.name,
-      zipCode:this.state.zipCode,
-      expirationDate:this.state.expirationDate,
       couponCode:this.state.couponCode,
       dollarAdded:this.state.dollarAdded
     }
@@ -35,12 +28,7 @@ class CreditForm extends Component {
   clearForm(event){
     event.preventDefault();
     this.setState({
-      creditNumber:"",
-      name:"",
-      zipCode:"",
-      expirationDate:"",
       couponCode:"",
-      dollarAdded:0
     })
   }
 
@@ -54,7 +42,31 @@ class CreditForm extends Component {
   render(){
 
     return(
-      <h1>Hello from CC Form</h1>
+    <div>
+    <Row>
+      <Col s={4}>
+      <label style={{fontSize:"120%"}}>Credit Card functionality coming soon.
+      For now, please use authorized Coupon Code to
+      receive $100 on us!</label>
+      </Col>
+      <Col s={1}>
+      </Col>
+      <Col s={7}>
+        <TextField
+          content={this.state.couponCode}
+          label= "Coupon Code"
+          name="couponCode"
+          handlerFunction={this.handleChange}
+        />
+        <a
+          className="waves-effect waves-light btn btn-small"
+          onClick={this.handleCreditImport}>
+          Checkout
+        </a>
+      </Col>
+    </Row>
+
+    </div>
     )
   }
 }

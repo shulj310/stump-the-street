@@ -14,9 +14,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # GET /resource/edit
   def edit
-    super
-    @current_user.competitions.each {|comp| comp.touch}
-    @competitions = @current_user.competitions.order(:deadline).limit(5)
+    super do |resource|
+      @competitions = @current_user.competitions.order(:deadline).limit(5)
+      @wins = @current_user.competition_histories.pluck(:win).select {|comp| comp == true}
+    end
   end
 
   # PUT /resource

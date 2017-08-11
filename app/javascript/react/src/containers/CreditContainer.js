@@ -11,15 +11,18 @@ class CreditContainer extends Component {
   }
 
   addToWallet(payLoad){
-    fetch('/api/v1/users/', {
-      method: "POST",
+    fetch('/api/v1/users/wallet', {
+      method: "PATCH",
       body: JSON.stringify(payLoad),
       credentials: 'same-origin'
     }).then(response =>{
       let body = response.json()
       return body
     }).then(body=>{
-      this.redirect('/users/edit')
+      if (body["auth"] == false)
+        {alert('Please enter a correct Coupon Code')}
+      else{
+      document.location.replace('/users/edit')}
     })
   }
 

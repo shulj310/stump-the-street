@@ -7,10 +7,10 @@
         <li class="collection-header">
           <h4><%= @current_user.first_name %> <%=@current_user.last_name%></h4></li>
     <li class="collection-item avatar">
-      <img src="http://images.performgroup.com/di/library/sporting_news/1a/15/david-ortiz-ftr-gettyjpg_oh4ib9mfw5zt1p650uelmda6a.jpg?t=384939425" alt="papi" class="circle">
+      <i class="material-icons circle orange">business</i>
       <span class="title">Total Competitions: <%= @current_user.competitions.length %></span>
-      <p>Total Wins: (Comes from Competition History Database)<br>
-         Total Losses: ("^^^")
+      <p>Total Wins: <%=@current_user.competition_histories.pluck(:win).select {|comp| comp ==true}.length%> <br>
+         Total Losses: <%=@current_user.competition_histories.pluck(:win).select {|comp| comp !=true}.length%>
       </p>
       <a href="#" class="secondary-content btn-floating tooltipped"
       data-position="bottom"
@@ -93,7 +93,7 @@
       <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
       <p><%= devise_error_messages! %></p>
 
-      <div><p> Placeholder for image!</p></div>
+      <div><h6>Please enter your password and email to change your infomation!</h6></div>
 
 
       <div class="field">
