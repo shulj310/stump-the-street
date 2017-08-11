@@ -8,7 +8,8 @@ class CreditForm extends Component {
       name:"",
       zipCode:"",
       expirationDate:"",
-      couponCode:""
+      couponCode:"",
+      dollarAdded:0
     }
 
     this.handleCreditImport = this.handleCreditImport.bind(this)
@@ -21,10 +22,11 @@ class CreditForm extends Component {
 
     let formPayload = {
       creditNumber:this.state.creditNumber,
-      name:this.state.name
-      zipCode:this.state.zipCode
-      expirationDate:this.state.expirationDate
-      couponCode:this.state.couponCode
+      name:this.state.name,
+      zipCode:this.state.zipCode,
+      expirationDate:this.state.expirationDate,
+      couponCode:this.state.couponCode,
+      dollarAdded:this.state.dollarAdded
     }
     this.props.addToWallet(formPayload)
     this.clearForm(event);
@@ -37,7 +39,8 @@ class CreditForm extends Component {
       name:"",
       zipCode:"",
       expirationDate:"",
-      couponCode:""
+      couponCode:"",
+      dollarAdded:0
     })
   }
 

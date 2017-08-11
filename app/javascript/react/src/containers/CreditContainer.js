@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import CreditContainer from './CreditForm'
+import CreditForm from './CreditForm'
 
 class CreditContainer extends Component {
   constructor(props){
