@@ -1,6 +1,6 @@
 export function howToPlayScroll(height,shift){
 
-  if (height>50){
+  if (height>100){
   let pos = this.state.howToPlayStyle.top - shift*.75
   this.setState({howToPlayStyle:{
     position:"absolute",
@@ -9,7 +9,7 @@ export function howToPlayScroll(height,shift){
 
   }})
 }
-if(height<50){
+if(height<100){
   this.setState({howToPlayStyle:{
     position:"absolute",
     top:600,
