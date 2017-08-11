@@ -68,9 +68,10 @@ const HowToPlay = props => {
               <i className="small material-icons">account_balance_wallet</i>Collect Your Winnings!
               </h4>
               <img
-                src={require(`./../../../../assets/images/buyStock.png`)}
-                width={"100%"}
-                height={"100%"}
+                src={require(`./../../../../assets/images/showWinner.png`)}
+                width={"80%"}
+                height={"80%"}
+                style={{ boxShadow:"0px 0px 3px #888888", borderRadius:"5px"}}
               />
             </div>
             <label style={{fontSize:"150%",color:"white"}}>
