@@ -46,6 +46,10 @@
    flex: 1 0 auto;
  }
 
+ .trans {
+   position: absolute;
+ }
+
  .img-block{
    display: inline-block;
    position: relative;
@@ -71,6 +75,7 @@
    display: inline-block;
    border-radius: 50%;
    background-color: #132731;
+   margin: 0% 1%;
  }
 
  .img-form {
