@@ -47,6 +47,7 @@
     "rails-erb-loader": "^5.1.0",
     "react": "^15.6.1",
     "react-chartjs-2": "^2.5.6",
+    "react-credit-card": "^0.20.0",
     "react-dom": "^15.6.1",
     "react-materialize": "^1.0.6",
     "react-router": "^4.1.2",

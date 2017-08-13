@@ -189,9 +189,3 @@ class HomePage extends Component{
 }
 
 export default HomePage
-// <div style={this.state.moneyStyle}>
-// <MoneyPile />
-// </div>
-
-// <div style={{position:"absolute",top:400}}>
-// </div>
