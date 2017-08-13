@@ -19,6 +19,9 @@ class CreditContainer extends Component {
       let body = response.json()
       return body
     }).then(body=>{
+      if (body["auth"] == "coupon"){
+        alert('You may only enter Coupon Code once!')
+      }
       if (body["auth"] == false)
         {alert('Please enter a correct Coupon Code')}
       else{

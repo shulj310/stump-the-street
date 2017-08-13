@@ -53,7 +53,15 @@ class Competitions extends Component{
       let body = response.json()
       return body
     }).then(body=>{
-      this.redirect(body.portfolio.id)
+      if (body["auth"] == false){
+        alert('There was an error in building your competition, please try again')
+      }
+      if (body["auth"] == "not enough cash"){
+        alert ("You do not have enough money in your wallet. Please add more to your account or enter a wager for a lower amount")
+      }
+      else{
+
+      this.redirect(body.portfolio.id)}
     })
   }
 

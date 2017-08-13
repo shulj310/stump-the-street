@@ -158,7 +158,7 @@ class HomePage extends Component{
     return(
     <div>
       <div id="stump-text" className="center-align">
-        <h1>Do you have what it takes to Stump the Street?</h1>
+        <h1>Do you have what it takes to <br/> Stump the Street?</h1>
       </div>
       <div id="button-join" className={joinStyleClass} style={joinStyle}>
       <button

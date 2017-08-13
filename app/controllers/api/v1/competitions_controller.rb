@@ -24,38 +24,43 @@ class Api::V1::CompetitionsController < ApplicationController
 
     data = JSON.parse(request.body.read)
 
-    date = DateTime.now + data["length"].to_i
+      if current_user.wallet >= data["wager_amount"].to_i
 
-    new_date = date_change(date)
+        date = DateTime.now + data["length"].to_i
 
-    new_competition = Competition.create(
-      length: data["length"],
-      deadline: new_date,
-      wager_amount: data["wager_amount"],
-      odds_calculated: 1,
-      current_value: data["wager_amount"].to_f*0.95,
-      competitor_id: data["competitor"].to_i,
-      user_id: current_user.id
-    )
+        new_date = date_change(date)
 
-    Portfolio.create(
-      name: data["strategy"],
-      value: 1000000,
-      cash: 1000000,
-      return: 0,
-      competition_id: new_competition.id
-    )
+        new_competition = Competition.create(
+          length: data["length"],
+          deadline: new_date,
+          wager_amount: data["wager_amount"].to_i,
+          odds_calculated: 1,
+          current_value: data["wager_amount"].to_f*0.95,
+          competitor_id: data["competitor"].to_i,
+          user_id: current_user.id
+        )
 
-
-    CompetitorPortfolio.create(
-      competition_id: new_competition.id,
-      value: 1000000,
-      cost: 1000000,
-      return: 0
-    )
+        Portfolio.create(
+          name: data["strategy"],
+          value: 1000000,
+          cash: 1000000,
+          return: 0,
+          competition_id: new_competition.id
+        )
 
 
-    render json: new_competition, include: ["portfolio"]
+        CompetitorPortfolio.create(
+          competition_id: new_competition.id,
+          value: 1000000,
+          cost: 1000000,
+          return: 0
+        )
+
+
+        render json: new_competition, include: ["portfolio"]
+      else
+        render json: {auth:"not enough cash"}
+      end
 
     else
       render json: {auth:false}
