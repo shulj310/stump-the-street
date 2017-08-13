@@ -13,12 +13,18 @@ class Api::V1::UsersController < ApplicationController
       data = JSON.parse(request.body.read)
 
       coupon = data["couponCode"]
+      user = User.find(current_user)
 
-      if coupon == "LAUNCHTHESTREET"
-        user = User.find(current_user)
+      if coupon == "LAUNCHTHESTREET" && user.used_code == false
         user.wallet += 100
+        user.used_code = true
         user.save
+
         render json: user
+
+      elsif user.used_code == true
+
+        render json: {auth:"coupon"}
       else
         render json: {auth:false}
       end
