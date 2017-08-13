@@ -2,7 +2,6 @@ import React from 'react'
 import {Col,Card,Row,Icon} from 'react-materialize'
 
 const WinnerCard = props =>{
-  console.log("hello!")
   return(
     <Row>
       <Col s={6}>

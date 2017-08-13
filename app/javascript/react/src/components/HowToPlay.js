@@ -53,7 +53,7 @@ const HowToPlay = props => {
               />
             </div>
             <label style={{fontSize:"150%",color:"white"}}>
-              Buy and sell stocks live and grow your $1,000,000 paper portfolio! You have until the end of the competition to best your oppoenent.
+              Buy and sell stocks live and grow your $1,000,000 paper portfolio! You have until the end of the competition to best your opponent.
             </label>
           </Card>
         </Col>

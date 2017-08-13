@@ -19,7 +19,8 @@ class HomePage extends Component{
       joinStyle:{
         position:"absolute",
         top:100,
-        left:0
+        left:0,
+        zIndex:100
       },
       showImg:false,
       imgStyle:{
@@ -74,7 +75,6 @@ class HomePage extends Component{
 
   handleScroll(){
     let height = window.scrollY
-    console.log(`height: ${height}`)
     let shift = (height-this.state.lastScroll)*1
     joinScroll.call(this,height,shift)
     imagesShift.call(this,height,shift)
@@ -108,6 +108,7 @@ class HomePage extends Component{
 
     if (this.state.showJoin){
       joinStyle = this.state.joinStyle
+      joinStyle["zIndex"] = 100
       joinStyleClass = ""
     }
 

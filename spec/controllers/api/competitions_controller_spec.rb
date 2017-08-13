@@ -10,7 +10,8 @@ RSpec.describe Api::V1::CompetitionsController, type: :controller do
       password: "12345678",
       dob: "03/10/1990",
       zip: "02111",
-      country: "USA"
+      country: "USA",
+      wallet:100
       )
     }
 
@@ -79,9 +80,12 @@ RSpec.describe Api::V1::CompetitionsController, type: :controller do
     describe "POST#create" do
     it "should create a new competition if signed in" do
 
+      user.wallet += 100
+      user.save
+
       post_json = {
         length: 8,
-        wager_amount: 5000,
+        wager_amount: 50,
         competitor_id: competitor.id,
         name: "Port Test Two"
       }.to_json
