@@ -12,7 +12,7 @@ The following trades have been executed:<br/>
     <% else %>
       Sell
     <% end %>
-    <%= trade.stock.ticker %> @ <%= number_to_currency(trade.stock.price,precision: 2) %>
+    <%= trade.stock.ticker %> x <%= trade.shares %> @ <%= number_to_currency(trade.stock.price,precision: 2) %>
 
     Market Value: <%= number_to_currency(trade.stock.price * trade.shares, precision:2) %> <br/>
 
