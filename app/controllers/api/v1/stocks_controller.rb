@@ -27,37 +27,54 @@ class Api::V1::StocksController < ApplicationController
 
   def create
 
-    port = Portfolio.find(params[:portfolio_id])
+    portfolio = Portfolio.find(params[:portfolio_id])
 
+    ticker,shares,side = trade_params
 
-    if port.competition.user == current_user
+    stock = Stock.find_by(ticker:ticker)
 
-      ticker,shares,side = trade_params
+    if stock.nil?
+      stock = new_stock(ticker)
+    end
 
-      stock = Stock.find_by(ticker:ticker)
+    stock.touch
 
-      if stock.nil?
-        stock = new_stock(ticker)
+    current_time = Time.now.utc
+    beg_time = Time.new(1000,1,1,9,30,0).utc
+    end_time = Time.new(1000,1,1,16,0,0).utc
+
+    puts current_time
+    puts beg_time
+    puts end_time
+
+    if (beg_time.utc.strftime("%H%M%S%N") <= current_time.utc.strftime("%H%M%S%N") && current_time.utc.strftime("%H%M%S%N") <= end_time.utc.strftime("%H%M%S%N") && !current_time.saturday? && !current_time.sunday?)
+
+      if portfolio.competition.user == current_user
+
+        if (stock.price * shares <= portfolio.cash) || !side
+
+          Trade.create(
+            portfolio_id: params[:portfolio_id],
+            stock_id: stock.id,
+            transaction_price: stock.price,
+            shares: shares.floor,
+            side: side
+          )
+
+          position = Position.find_by(
+            stock_id:stock.id,portfolio_id:params[:portfolio_id])
+
+          render json: position, include: ["stock"]
+        else
+          render json: {auth:"no-cash"}
+        end
+      else
+        ## user is not authorized
+        render json: {auth:false}
       end
-
-      stock.touch
-
-      Trade.create(
-        portfolio_id: params[:portfolio_id],
-        stock_id: stock.id,
-        transaction_price: stock.price,
-        shares: shares.floor,
-        side: side
-      )
-
-      position = Position.find_by(
-        stock_id:stock.id,portfolio_id:params[:portfolio_id])
-
-      Portfolio.find(params[:portfolio_id])
-
-      render json: position, include: ["stock"]
     else
-      render json: {auth:false}
+      after_hours(portfolio,stock,shares,side)
+      render json: {auth:"after-hours"}
     end
   end
 
@@ -116,6 +133,15 @@ class Api::V1::StocksController < ApplicationController
     stock.get_price_and_name
 
     return stock
+  end
+
+  def after_hours(portfolio,stock,shares,side)
+    TradeQueue.create(
+      portfolio_id:portfolio.id,
+      stock_id:stock.id,
+      shares:shares,
+      side:side
+    )
   end
 
 end

@@ -36,8 +36,8 @@ RSpec.describe Api::V1::StocksController, type: :controller do
     let!(:portfolio) {
       Portfolio.create(
         name:"Test Port",
-        value: 100,
-        cash: 100,
+        value: 100000,
+        cash: 100000,
         return: 0,
         competition_id:competition.id
       )

@@ -83,38 +83,48 @@ class Portfolio extends Component{
       return body
     }).then(body=>{
 
-      let newPosition = this.state.stocks.slice()
-
-      function currentlyOwns(id) {
-        return id === body.stock_id
+      if (body["auth"]=='after-hours'){
+        alert('Your trade will be executed when the market opens!')
       }
 
-      function filterById(object) {
-        if (currentlyOwns(object.stock_id)){
-          return false
+      if (body["auth"]=='no-cash'){
+        alert('Not enough cash to make trade!')
+      } else{
+
+        let newPosition = this.state.stocks.slice()
+
+        function currentlyOwns(id) {
+          return id === body.stock_id
         }
-        else{
-          return true
+
+        function filterById(object) {
+          if (currentlyOwns(object.stock_id)){
+            return false
+          }
+          else{
+            return true
+          }
         }
+
+        let filteredPositions = newPosition.filter(filterById)
+
+
+        body["ticker"] = body.stock.ticker
+        body["price"] = body.stock.price
+        body["value"] = body.stock.price * body.shares
+        body["return"] = body["price"]/body["cost"]-1
+
+        let updateValue = body.stock.price * this.state.shares_traded
+
+        let new_portfolio = this.state.portfolio
+        if (this.state.last_trade)
+        {new_portfolio["cash"] -= updateValue} else {
+          {new_portfolio["cash"] += updateValue}
+        }
+
+        filteredPositions.unshift(body)
+        this.setState({stocks: filteredPositions,portfolio:new_portfolio,chartLength: filteredPositions.length})
       }
-
-      let filteredPositions = newPosition.filter(filterById)
-
-      body["ticker"] = body.stock.ticker
-      body["price"] = body.stock.price
-      body["value"] = body.stock.price * body.shares
-      body["return"] = body["price"]/body["cost"]-1
-
-      let updateValue = body.stock.price * this.state.shares_traded
-
-      let new_portfolio = this.state.portfolio
-      if (this.state.last_trade)
-      {new_portfolio["cash"] -= updateValue} else {
-        {new_portfolio["cash"] += updateValue}
-      }
-
-      filteredPositions.unshift(body)
-      this.setState({stocks: filteredPositions,portfolio:new_portfolio,chartLength: filteredPositions.length})
     })
   }
 

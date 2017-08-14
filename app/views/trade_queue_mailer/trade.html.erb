@@ -1,0 +1,38 @@
+Your Trades for <%= DateTime.now.strftime("%b %e, %Y") %> have been processed.<br/>
+
+<% if @trades.length > 0 %>
+The following trades have been executed:<br/>
+
+  <% @trades.each do |trade| %>
+
+    <a href="https://stump-the-street.herokuapp.com/competitions/show/portfolios/<%= trade.portfolio.id %>"><%= trade.portfolio.name %></a>
+
+    <% if trade.side %>
+      Buy
+    <% else %>
+      Sell
+    <% end %>
+    <%= trade.stock.ticker %> @ <%= number_to_currency(trade.stock.price,precision: 2) %>
+
+    Market Value: <%= number_to_currency(trade.stock.price * trade.shares, precision:2) %> <br/>
+
+  <% end %>
+
+<% end %>
+<br/>
+<br/>
+
+  <% if @trade_errors.length > 0 %>
+  The following trades were not executed due insufficient funds/shares: <br/>
+    <% @trade_errors.each do |trade| %>
+
+      Portfolio: <%=trade.portfolio.name%>
+      Ticker: <%= trade.stock.ticker %> <br/>
+
+    <% end %>
+
+  <% end %>
+<br/>
+Happy Trading!
+<br/>
+<a href="https://stump-the-street.herokuapp.com/competitions">Stump the Street</a>
