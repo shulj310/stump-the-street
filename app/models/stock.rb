@@ -1,6 +1,7 @@
 class Stock < ApplicationRecord
   has_many :trades
   has_many :positions
+  has_many :trade_queues
 
   after_touch do |stock|
     stock.get_price

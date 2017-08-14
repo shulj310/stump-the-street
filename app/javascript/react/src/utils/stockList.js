@@ -419,6 +419,7 @@ export const stockList =
 'ALK',
 'LEN',
 'ALLY',
+'SNAP',
 'DRI',
 'WYNN',
 'FMC',
