@@ -73,9 +73,6 @@ class Api::V1::StocksController < ApplicationController
         render json: {auth:false}
       end
     else
-
-      binding.pry
-
       after_hours(portfolio,stock,shares,side)
       render json: {auth:"after-hours"}
     end
