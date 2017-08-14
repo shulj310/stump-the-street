@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Icon, Link, Preloader, Col } from 'react-materialize'
+import { Icon, Link, Preloader, Col, Modal } from 'react-materialize'
 import StockComponenet from '../components/StockComponent';
 import TradeForm from './TradeForm';
 import PortfolioDash from '../components/PortfolioDash';
 import ReactTable from 'react-table';
-import numeral from 'numeral'
+import numeral from 'numeral';
+import TradeQueue from '../components/TradeQueue'
 
 class Portfolio extends Component{
   constructor(props){
@@ -16,10 +17,13 @@ class Portfolio extends Component{
     last_trade: false,
     shares_traded: 0,
     loading:true,
-    auth: true
+    auth: true,
+    tradeQueue:[],
+    showTradeQueue:false
   }
   this.makeTrade = this.makeTrade.bind(this)
   this.newStocks = this.newStocks.bind(this)
+  this.cancelTrade = this.cancelTrade.bind(this)
 }
     newStocks(){
       fetch(`/api/v1/competitions/${this.props.match.params.comp_id}/portfolios/${this.props.match.params.port_id}/stocks`,{
@@ -59,6 +63,14 @@ class Portfolio extends Component{
         let portfolio = body[0]
         this.setState({ portfolio: portfolio, loading: false })
       })
+      fetch(`/api/v1/trade_queues/${this.props.match.params.port_id}`,{
+        credentials: 'same-origin'
+      })
+      .then(response=> response.json())
+      .then(body=>{
+        debugger;
+        this.setState({tradeQueue:body})
+      })
     }
 
     refreshButton(){
@@ -70,6 +82,20 @@ class Portfolio extends Component{
     this.newStocks()
   }
 
+  cancelTrade(payLoad){
+    fetch(`/api/v1/trade_queues/${this.props.match.params.port_id}`,{
+      credentials: 'same-origin',
+      method: 'DELETE',
+      body: JSON.stringify(payLoad)
+    })
+    .then(response=>{
+      let body = response.json()
+      return body
+    })
+    .then(body=>{
+      this.setState({tradeQueue:body})
+    })
+  }
 
 
   makeTrade(payLoad){
@@ -129,6 +155,7 @@ class Portfolio extends Component{
   }
 
   render (){
+
     const columns = [{
         Header: 'Stock Info',
         columns: [{
@@ -160,6 +187,26 @@ class Portfolio extends Component{
         }]
       }]
 
+    let queueButton;
+    if (this.state.tradeQueue !== null){
+
+      if (this.state.tradeQueue.size > 0 ){
+        queueButton =
+            <div style={{position:"relative",left:-20,bottom:-25}}>
+              <Modal
+              header= "Open Orders"
+              trigger={
+                <a className="orange darken-1 text-days btn-floating btn tooltipped">
+                <Icon>assessment</Icon></a>}>
+                <TradeQueue
+                  tradeQueue = {this.state.tradeQueue}
+                  cancelTrade = {this.cancelTrade}
+                />
+              </Modal>
+            </div>
+      }
+    }
+
     let table;
 
     if (this.state.loading){
@@ -172,7 +219,12 @@ class Portfolio extends Component{
               </div>
 
     }else{
-      table = <ReactTable
+      table =
+
+        <div>
+          {queueButton}
+          <div>
+            <ReactTable
                 data={this.state.stocks}
                 columns={columns}
                 minRows={this.state.chartLength}
@@ -180,6 +232,8 @@ class Portfolio extends Component{
                 loading={this.state.loading}
                 showPagination={false}
               />
+          </div>
+        </div>
     }
 
     return(

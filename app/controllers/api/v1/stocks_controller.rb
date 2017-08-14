@@ -39,14 +39,20 @@ class Api::V1::StocksController < ApplicationController
 
     stock.touch
 
-    current_time = Time.now.utc
-    beg_time = Time.new(1000,1,1,13,30,0).utc
-    end_time = Time.new(1000,1,1,20,0,0).utc
+    if Rails.env.production?
 
-    puts current_time
-    puts beg_time
-    puts end_time
+      current_time = Time.now.utc
+      beg_time = Time.new(1000,1,1,13,30,0).utc
+      end_time = Time.new(1000,1,1,20,0,0).utc
 
+    else
+
+      current_time = Time.now.utc
+      beg_time = Time.new(1000,1,1,9,30,0).utc
+      end_time = Time.new(1000,1,1,16,0,0).utc
+
+    end
+    
     if (beg_time.utc.strftime("%H%M%S%N") <= current_time.utc.strftime("%H%M%S%N") && current_time.utc.strftime("%H%M%S%N") <= end_time.utc.strftime("%H%M%S%N") && !current_time.saturday? && !current_time.sunday?)
 
       if portfolio.competition.user == current_user
