@@ -40,8 +40,8 @@ class Api::V1::StocksController < ApplicationController
     stock.touch
 
     current_time = Time.now.utc
-    beg_time = Time.new(1000,1,1,9,30,0).utc
-    end_time = Time.new(1000,1,1,16,0,0).utc
+    beg_time = Time.new(1000,1,1,13,30,0).utc
+    end_time = Time.new(1000,1,1,20,0,0).utc
 
     puts current_time
     puts beg_time
