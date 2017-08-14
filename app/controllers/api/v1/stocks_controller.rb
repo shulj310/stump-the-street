@@ -43,6 +43,10 @@ class Api::V1::StocksController < ApplicationController
     beg_time = Time.new(1000,1,1,9,30,0).utc
     end_time = Time.new(1000,1,1,16,0,0).utc
 
+    puts current_time
+    puts beg_time
+    puts end_time
+
     if (beg_time.utc.strftime("%H%M%S%N") <= current_time.utc.strftime("%H%M%S%N") && current_time.utc.strftime("%H%M%S%N") <= end_time.utc.strftime("%H%M%S%N") && !current_time.saturday? && !current_time.sunday?)
 
       if portfolio.competition.user == current_user
