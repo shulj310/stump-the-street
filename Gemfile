@@ -1,4 +1,5 @@
 source 'https://rubygems.org/'
+ruby "2.3.3"
 
 gem 'rails', '~> 5.0.0'
 gem 'pg', '~> 0.18'
@@ -12,6 +13,7 @@ gem "webpacker"
 gem 'materialize-sass'
 gem 'material_icons'
 gem 'stock_quote'
+gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 group :test do
   gem 'database_cleaner'
@@ -36,5 +38,3 @@ end
 group :production do
   gem 'rails_12factor'
 end
-
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
