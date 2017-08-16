@@ -19,12 +19,40 @@ class Portfolio extends Component{
     loading:true,
     auth: true,
     tradeQueue:[],
-    showTradeQueue:false
+    showTradeQueue:false,
+    netCashQueue:0
   }
   this.makeTrade = this.makeTrade.bind(this)
   this.newStocks = this.newStocks.bind(this)
   this.cancelTrade = this.cancelTrade.bind(this)
+  this.getTradeQueue = this.getTradeQueue.bind(this)
+  this.handleCancelTrade = this.handleCancelTrade.bind(this)
 }
+
+    getTradeQueue(){
+      fetch(`/api/v1/trade_queues/${this.props.match.params.port_id}`,{
+        credentials: 'same-origin'
+      })
+      .then(response=> response.json())
+      .then(body=>{
+        if (body.length > 0){
+        let netCash = 0
+          body.forEach((trade)=>{
+            if (trade.side){
+              netCash -= (trade.shares * trade.stock.price)
+            } else{
+              netCash += (trade.shares * trade.stock.price)
+            }
+          })
+          this.setState({showTradeQueue:true,netCashQueue:netCash})
+        }
+        else{
+          this.setState({showTradeQueue:false,netCashQueue:0})
+        }
+        this.setState({tradeQueue:body})
+      })
+    }
+
     newStocks(){
       fetch(`/api/v1/competitions/${this.props.match.params.comp_id}/portfolios/${this.props.match.params.port_id}/stocks`,{
         credentials: "same-origin"
@@ -63,14 +91,7 @@ class Portfolio extends Component{
         let portfolio = body[0]
         this.setState({ portfolio: portfolio, loading: false })
       })
-      fetch(`/api/v1/trade_queues/${this.props.match.params.port_id}`,{
-        credentials: 'same-origin'
-      })
-      .then(response=> response.json())
-      .then(body=>{
-        debugger;
-        this.setState({tradeQueue:body})
-      })
+      this.getTradeQueue()
     }
 
     refreshButton(){
@@ -93,8 +114,20 @@ class Portfolio extends Component{
       return body
     })
     .then(body=>{
+      if (body.length == 0){
+        this.setState({showTradeQueue:false})
+      }
       this.setState({tradeQueue:body})
     })
+  }
+
+  handleCancelTrade(event){
+    event.preventDefault();
+
+    let formPayload = {
+      tradeId:event.target.value
+    }
+    this.cancelTrade(formPayload)
   }
 
 
@@ -110,12 +143,13 @@ class Portfolio extends Component{
     }).then(body=>{
 
       if (body["auth"]=='after-hours'){
+        this.getTradeQueue()
         alert('Your trade will be executed when the market opens!')
       }
 
       if (body["auth"]=='no-cash'){
         alert('Not enough cash to make trade!')
-      } else{
+      } else {
 
         let newPosition = this.state.stocks.slice()
 
@@ -187,24 +221,22 @@ class Portfolio extends Component{
         }]
       }]
 
-    let queueButton;
-    if (this.state.tradeQueue !== null){
+    let queueButton
 
-      if (this.state.tradeQueue.size > 0 ){
-        queueButton =
-            <div style={{position:"relative",left:-20,bottom:-25}}>
-              <Modal
-              header= "Open Orders"
-              trigger={
-                <a className="orange darken-1 text-days btn-floating btn tooltipped">
-                <Icon>assessment</Icon></a>}>
-                <TradeQueue
-                  tradeQueue = {this.state.tradeQueue}
-                  cancelTrade = {this.cancelTrade}
-                />
-              </Modal>
-            </div>
-      }
+    if (this.state.showTradeQueue){
+      queueButton =
+          <div style={{position:"relative",left:-20,bottom:-25}}>
+            <Modal
+            header= "Open Orders"
+            trigger={
+              <a className="orange darken-1 text-days btn-floating btn tooltipped">
+              <Icon>assessment</Icon></a>}>
+              <TradeQueue
+                tradeQueue = {this.state.tradeQueue}
+                cancelTrade = {this.handleCancelTrade}
+              />
+            </Modal>
+          </div>
     }
 
     let table;
@@ -245,6 +277,7 @@ class Portfolio extends Component{
           makeTrade = {this.makeTrade}
           stocks = {this.state.stocks}
           portfolio = {this.state.portfolio}
+          netCashQueue = {this.state.netCashQueue}
           />
           {table}
         <br/>

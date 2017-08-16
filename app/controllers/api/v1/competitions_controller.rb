@@ -12,8 +12,6 @@ class Api::V1::CompetitionsController < ApplicationController
         ).joins(:portfolio,:competitor_portfolio).where(
           "portfolios.competition_id = competitions.id AND competitor_portfolios.competition_id = competitions.id AND competitions.user_id = #{current_user.id}").order(
             :deadline)
-    #
-    # render json: current_user.competitions.order(:deadline), include: ["portfolio"]
 
     render json: competitions
   end

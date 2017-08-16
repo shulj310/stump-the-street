@@ -53,7 +53,7 @@ handleBuySubmit(event){
 
   let errorList = this.errorLister()
 
-  let futureCash = (this.props.portfolio.cash) > (this.state.share_amount * this.state.stockData.lastPrice)
+  let futureCash = (this.props.portfolio.cash+this.props.netCashQueue) > (this.state.share_amount * this.state.stockData.lastPrice)
 
   if (errorList.length === 0 && futureCash){
 

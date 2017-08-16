@@ -4,7 +4,7 @@ class Api::V1::TradeQueuesController < ApplicationController
 
   def show
     
-    render json: TradeQueue.find_by(portfolio_id:params[:id]), include: ["stock"]
+    render json: TradeQueue.where(portfolio_id:params[:id]), include: ["stock"]
 
   end
 
@@ -13,6 +13,12 @@ class Api::V1::TradeQueuesController < ApplicationController
   end
 
   def destroy
+
+    data = JSON.parse(request.body.read)
+
+    TradeQueue.find(data["tradeId"]).destroy
+
+    render json: TradeQueue.where(portfolio_id:params[:id]), include: ["stock"]
 
   end
 
