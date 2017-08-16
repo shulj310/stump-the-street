@@ -44,7 +44,6 @@ class Portfolio extends Component{
               netCash += (trade.shares * trade.stock.price)
             }
           })
-          debugger;
           this.setState({showTradeQueue:true,netCashQueue:netCash})
         }
         else{
