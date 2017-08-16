@@ -33,7 +33,7 @@ class CompetitionSweep < Thor
       user.competitions.each do |comp|
         win = (comp.diff > 0)
         winnings = 0
-        if comp.deadline < Time.now
+        if comp.deadline < Time.now.utc
           CompetitionMailer.competition_end(comp,win).deliver
           if win
             winnings = comp.current_value

@@ -9,7 +9,7 @@ const WinnersTile = props => {
   <div>
     <WinnerCard
       src={"https://media.licdn.com/mpr/mpr/shrinknp_200_200/AAEAAQAAAAAAAAydAAAAJDliMDYxNTRhLTM3MTctNDZiNi05NmMzLTk1MTEyYWYyNDg3NQ.jpg"}
-      name={"Geroge G."}
+      name={"George G."}
       label={"Stumped Cramer to win $500!"}
     />
     <Row>

@@ -108,10 +108,12 @@ class CompetitionForm extends Component{
 
     let options = [
       {"": "Select Timeline"},
+      {"1":"1 Day"},
+      {"3":"3 Days"},
       {"7": "1 Week"},
       {"14": "2 Weeks"},
-      {"21": "3 Weeks"},
-      {"28": "4 Weeks"}
+      {"28": "4 Weeks"},
+      {"56": "8 Weeks"}
     ]
 
     let images = ['cramer','bull','street']
@@ -183,8 +185,7 @@ class CompetitionForm extends Component{
     }
 
 
-    // <input type="submit" value="Submit" />
-    //
+
     return(
       <form className="form" onSubmit={this.handleFormSubmit}>
         <Row className="center-align">
