@@ -18,3 +18,4 @@
 /public/packs
 /node_modules
 .env
+/config/local_env.yml
