@@ -5,6 +5,7 @@ import ImageTile from "../components/ImageTile"
 import { Row,Button } from 'react-materialize'
 import ErrorTile from '../components/ErrorTile'
 import { errorDictionary } from '../utils/competitionErrorDictionary'
+import numeral from 'numeral'
 
 
 class CompetitionForm extends Component{
@@ -197,6 +198,7 @@ class CompetitionForm extends Component{
           handlerFunction={this.handleChange}
           options={options}
         />
+        <p>Current Balance: {numeral(this.props.wallet).format('$0.00')}</p>
         <TextField
           content={this.state.wager_amount}
           label= "Wager Amount ($)"

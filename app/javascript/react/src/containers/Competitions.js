@@ -5,7 +5,7 @@ import CompetitionForm from './CompetitionForm'
 import ReactTable from 'react-table';
 import { Link } from 'react-router-dom';
 import numeral from 'numeral'
-// import dateFormat from 'dateFormat'
+import CreditContainer from './CreditContainer'
 
 class Competitions extends Component{
   constructor(props){
@@ -15,7 +15,8 @@ class Competitions extends Component{
     user_id: 0,
     newPort:0,
     loading: true,
-    auth: true
+    auth: true,
+    wallet:0
   }
   this.addCompetition = this.addCompetition.bind(this)
   this.redirect = this.redirect.bind(this)
@@ -38,6 +39,16 @@ class Competitions extends Component{
     }
     this.setState({competitions:body, loading:false})
     })
+    fetch('/api/v1/users/show',{
+      credentials: 'same-origin'
+    })
+    .then(response =>{
+      if (response.ok){
+        return response.json()
+      }})
+      .then(body => {
+        this.setState({wallet:body["wallet"]})
+      })
   }
 
   redirect(id){
@@ -66,7 +77,6 @@ class Competitions extends Component{
   }
 
   render (){
-
     let createPortfolioForm;
 
     if (this.state.showPortfolio) {
@@ -131,17 +141,34 @@ class Competitions extends Component{
                   />
       }
 
+      let walletButton
+
+      if (this.state.wallet == 0){
+        walletButton =
+          <div style={{position:"relative",left:0,top:-50}}>
+              <Modal
+                header='Add to Wallet'
+                trigger={<button type='button' className= "btn btn-floating red" style={{fontSize:"130%"}}>$</button>}>
+                <CreditContainer
+                  lastPage = {"/competitions"}
+                />
+              </Modal>
+            </div>
+      }
+
     return(
         <div className="body">
           <div className="center-align comp-button">
-          <Modal
-          	header='Select Your Competitor'
-          	trigger={<button type='button' className= "btn waves-effect waves-light blue-grey darken-2">Add Competition</button>}>
-            <CompetitionForm
-            addCompetition = {this.addCompetition}
-            />
-          </Modal>
-        </div>
+            <Modal
+            	header='Select Your Competitor'
+            	trigger={<button type='button' className= "btn waves-effect waves-light blue-grey darken-2">Add Competition</button>}>
+              <CompetitionForm
+              wallet = {this.state.wallet}
+              addCompetition = {this.addCompetition}
+              />
+            </Modal>
+          </div>
+          {walletButton}
           {table}
           <br/>
         </div>

@@ -13,6 +13,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
-    <CreditContainer />,
+    <CreditContainer
+      lastPage = {'/users/edit'}
+    />,
     document.getElementById('ccform'))
 })
