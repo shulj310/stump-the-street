@@ -85,6 +85,11 @@ class Api::V1::StocksController < ApplicationController
   end
 
   def show
+
+    api_key = ENV["BAR_CHART_API"]
+
+    puts api_key
+
     url = "http://marketdata.websol.barchart.com/getQuote.json?key=b153d00b85faee7d352be6b91df7ec46&symbols=#{params[:id]}"
 
     response = RestClient.get(url)
