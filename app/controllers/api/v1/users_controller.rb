@@ -15,7 +15,9 @@ class Api::V1::UsersController < ApplicationController
       coupon = data["couponCode"]
       user = User.find(current_user)
 
-      if coupon == "LAUNCHTHESTREET" && user.used_code == false
+      coupon_code = ENV["COUPON_CODE"]
+
+      if coupon == coupon_code && user.used_code == false
         user.wallet += 100
         user.used_code = true
         user.save
