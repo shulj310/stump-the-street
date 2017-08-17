@@ -88,7 +88,7 @@ class Competitions extends Component{
           Cell: props=> <span>{String(new Date(
               props.value)).split(" ").slice(0,4).join(" ")}</span>
         },{
-        Header: 'Value',
+        Header: 'Max Value',
         accessor: 'current_value',
         Cell: props=> <span className='number'>
         {numeral(props.value).format('$0.00')}</span>
