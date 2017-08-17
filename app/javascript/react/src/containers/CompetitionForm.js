@@ -80,7 +80,6 @@ class CompetitionForm extends Component{
   handleClearForm(event){
     event.preventDefault();
     this.setState({
-      length: "",
       wager_amount:"",
       portfolio_name:"",
       competitor:0,
