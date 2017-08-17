@@ -17,14 +17,14 @@ class Api::V1::UsersController < ApplicationController
 
       coupon_code = ENV["COUPON_CODE"]
 
-      if coupon == coupon_code && user.used_code == false
+      if coupon == coupon_code && !user.used_code
         user.wallet += 100
         user.used_code = true
         user.save
 
         render json: user
 
-      elsif user.used_code == true
+      elsif user.used_code && coupon == coupon_code
 
         render json: {auth:"coupon"}
       else

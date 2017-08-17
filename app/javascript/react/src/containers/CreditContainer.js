@@ -5,10 +5,12 @@ class CreditContainer extends Component {
   constructor(props){
     super(props)
     this.state = {
-
+      lastPage: ''
     }
     this.addToWallet = this.addToWallet.bind(this)
   }
+
+
 
   addToWallet(payLoad){
     fetch('/api/v1/users/wallet', {
@@ -25,12 +27,12 @@ class CreditContainer extends Component {
       if (body["auth"] == false)
         {alert('Please enter a correct Coupon Code')}
       else{
-      document.location.replace('/users/edit')}
+      document.location.replace(`${this.props.lastPage}`)}
     })
   }
 
   componentDidMount(){
-
+    this.setState({lastPage:this.props.lastPage})
   }
   render(){
 
