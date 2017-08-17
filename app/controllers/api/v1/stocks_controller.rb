@@ -88,9 +88,7 @@ class Api::V1::StocksController < ApplicationController
 
     api_key = ENV["BAR_CHART_API"]
 
-    puts api_key
-
-    url = "http://marketdata.websol.barchart.com/getQuote.json?key=b153d00b85faee7d352be6b91df7ec46&symbols=#{params[:id]}"
+    url = "http://marketdata.websol.barchart.com/getQuote.json?key=#{api_key}&symbols=#{params[:id]}"
 
     response = RestClient.get(url)
 
@@ -117,7 +115,10 @@ class Api::V1::StocksController < ApplicationController
   def hist_price
     start = (DateTime.now-365).strftime("%Y%m%d")
     puts start
-    url = "http://marketdata.websol.barchart.com/getHistory.json?key=b153d00b85faee7d352be6b91df7ec46&symbol=#{params[:stock_id]}&type=daily&startDate=#{start}"
+
+    api_key = ENV["BAR_CHART_API"]
+
+    url = "http://marketdata.websol.barchart.com/getHistory.json?key=#{api_key}&symbol=#{params[:stock_id]}&type=daily&startDate=#{start}"
 
     response = RestClient.get(url)
 
