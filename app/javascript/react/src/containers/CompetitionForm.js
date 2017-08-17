@@ -5,7 +5,9 @@ import ImageTile from "../components/ImageTile"
 import { Row,Button } from 'react-materialize'
 import ErrorTile from '../components/ErrorTile'
 import { errorDictionary } from '../utils/competitionErrorDictionary'
+import { oddsDictionary } from '../utils/oddsDictionary'
 import numeral from 'numeral'
+
 
 
 class CompetitionForm extends Component{
@@ -19,7 +21,8 @@ class CompetitionForm extends Component{
     portfolio_name:"",
     errorList: [],
     hoverShow:0,
-    errors:false
+    errors:false,
+    possibleWinnings:0
   }
   this.handleChange = this.handleChange.bind(this)
   this.handleFormSubmit = this.handleFormSubmit.bind(this)
@@ -29,6 +32,7 @@ class CompetitionForm extends Component{
   this.showPortfolio = this.showPortfolio.bind(this)
   this.handleError = this.handleError.bind(this)
   this.errorLister = this.errorLister.bind(this)
+  this.showPossibleWinnings = this.showPossibleWinnings.bind(this)
 }
 
   showPortfolio(event){
@@ -46,7 +50,8 @@ class CompetitionForm extends Component{
       if (key !== 'errorList' &&
       key !== 'showPortfolio' &&
       key !== 'hoverShow' &&
-      key !== 'errors'){
+      key !== 'errors' &&
+      key !== 'possibleWinnings'){
         if (this.handleError(key)) {
           return errorDictionary(key).message
           }
@@ -98,22 +103,47 @@ class CompetitionForm extends Component{
 
   handleChange(event){
     this.setState({[event.target.name]:event.target.value})
+    if (event.target.name == 'wager_amount'){
+      this.showPossibleWinnings(event.target.value,"")
+    }
+    if (event.target.name == 'length') {
+      this.showPossibleWinnings('',event.target.value)
+    }
   }
 
   handleCompClick(event){
     this.setState({competitor:event.target.id})
   }
 
+  showPossibleWinnings(value,timelength){
+
+    if (value == ''){
+      value = this.state.wager_amount
+    }
+
+    if (timelength == '') {
+      timelength = this.state.length
+    }
+
+    if (timelength != "" && value != ''){
+      let dollarReturn = oddsDictionary[timelength]
+      let payOut = dollarReturn[2]*value
+      this.setState({possibleWinnings:payOut})
+    }else{
+    this.setState({possibleWinnings:0})
+    }
+  }
+
   render(){
 
     let options = [
-      {"": "Select Timeline"},
-      {"1":"1 Day"},
-      {"3":"3 Days"},
-      {"7": "1 Week"},
-      {"14": "2 Weeks"},
-      {"28": "4 Weeks"},
-      {"56": "8 Weeks"}
+      {"": "Select Timeline (Payout on $100)"},
+      {"1":"1 Day ($33.00)"},
+      {"3":"3 Days ($47.50)"},
+      {"7": "1 Week ($71.40)"},
+      {"14": "2 Weeks ($90.50)"},
+      {"28": "4 Weeks ($95.00)"},
+      {"56": "8 Weeks ($104.50)"}
     ]
 
     let images = ['cramer','bull','street']
@@ -184,6 +214,11 @@ class CompetitionForm extends Component{
       errorMessage = <h1>Please fill in entire form </h1>
     }
 
+    let payOut;
+
+    if (this.state.possibleWinnings > 0){
+      payOut = <span style={{paddingRight:"1%",fontWeight:700}}>Payout: {numeral(this.state.possibleWinnings).format('$0.00')}</span>
+    }
 
 
     return(
@@ -198,7 +233,8 @@ class CompetitionForm extends Component{
           handlerFunction={this.handleChange}
           options={options}
         />
-        <p>Current Balance: {numeral(this.props.wallet).format('$0.00')}</p>
+        {payOut}
+        <span>Current Balance: {numeral(this.props.wallet).format('$0.00')}</span>
         <TextField
           content={this.state.wager_amount}
           label= "Wager Amount ($)"

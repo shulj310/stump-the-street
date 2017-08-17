@@ -31,7 +31,7 @@ const HowToPlay = props => {
             </div>
           </div>
           <label style={{fontSize:"150%",color:"white"}}>
-            Each competitor has a <a href="#">different strategy</a> and every deadline has a unique payout, so choose wisely!
+            Each competitor has a <a href="/competitors">different strategy</a> and every deadline has a unique payout, so choose wisely.
           </label>
         </Card>
       </Col>
@@ -53,7 +53,7 @@ const HowToPlay = props => {
               />
             </div>
             <label style={{fontSize:"150%",color:"white"}}>
-              Buy and sell stocks live and grow your $1,000,000 paper portfolio! You have until the end of the competition to best your opponent.
+              Buy and sell stocks live and grow your $1,000,000 paper portfolio. Make as many trades as you want... they are FREE!
             </label>
           </Card>
         </Col>
@@ -75,7 +75,7 @@ const HowToPlay = props => {
               />
             </div>
             <label style={{fontSize:"150%",color:"white"}}>
-              If you have a better return than your competitor after your competition ends, time to celebrate!
+              Get paid in real cash at the end of your competition. Just have a better portfolio return.
             </label>
           </Card>
         </Col>
