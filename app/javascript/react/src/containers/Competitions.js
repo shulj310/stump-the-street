@@ -76,21 +76,23 @@ class Competitions extends Component{
     const columns = [{
         Header: 'Competition Info',
         columns: [{
-          Header: 'Competition ID',
-          accessor: 'id',
-          Cell: props => <span>
-            <Link to={`/competitions/show/portfolios/${props.value}`}>
-            {props.value}</Link></span>
-        }, {
           Header: 'Strategy Name',
           accessor: 'name',
-          Cell: props => <span><strong>{props.value}</strong></span>
+          Cell: props => <span>
+          <Link to={`/competitions/show/portfolios/${props.original.id}`}>
+          <strong>{props.value}</strong></Link>
+          </span>
         }, {
           Header: 'Deadline',
           accessor: 'deadline',
           Cell: props=> <span>{String(new Date(
               props.value)).split(" ").slice(0,4).join(" ")}</span>
-        }]
+        },{
+        Header: 'Value',
+        accessor: 'current_value',
+        Cell: props=> <span className='number'>
+        {numeral(props.value).format('$0.00')}</span>
+      }]
       }, {
         Header: 'Portfolio',
         columns: [{

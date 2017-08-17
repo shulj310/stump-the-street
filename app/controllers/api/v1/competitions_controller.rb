@@ -1,3 +1,5 @@
+require_relative "./utils/odds"
+
 class Api::V1::CompetitionsController < ApplicationController
   skip_before_action :verify_authenticity_token
 
@@ -8,7 +10,7 @@ class Api::V1::CompetitionsController < ApplicationController
     end
 
     competitions = Competition.select(:'portfolios.id',:'portfolios.name',:deadline,
-      :'portfolios.return',:diff,'competitor_portfolios.return AS comp_return'
+      :'portfolios.return',:current_value,:diff,'competitor_portfolios.return AS comp_return'
         ).joins(:portfolio,:competitor_portfolio).where(
           "portfolios.competition_id = competitions.id AND competitor_portfolios.competition_id = competitions.id AND competitions.user_id = #{current_user.id}").order(
             :deadline)
@@ -28,12 +30,18 @@ class Api::V1::CompetitionsController < ApplicationController
 
         new_date = date_change(date)
 
+        odds = Odds.new(data["length"],data["competitor"])
+
+        odds_calculated = odds.calc_odds
+
+        binding.pry
+
         new_competition = Competition.create(
           length: data["length"],
           deadline: new_date,
           wager_amount: data["wager_amount"].to_i,
-          odds_calculated: 1,
-          current_value: data["wager_amount"].to_f*0.95,
+          odds_calculated: odds_calculated,
+          current_value: data["wager_amount"].to_f*odds_calculated,
           competitor_id: data["competitor"].to_i,
           user_id: current_user.id
         )
