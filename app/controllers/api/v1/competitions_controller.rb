@@ -34,8 +34,6 @@ class Api::V1::CompetitionsController < ApplicationController
 
         odds_calculated = odds.calc_odds
 
-        binding.pry
-
         new_competition = Competition.create(
           length: data["length"],
           deadline: new_date,

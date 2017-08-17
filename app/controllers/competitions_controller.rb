@@ -8,7 +8,6 @@ class CompetitionsController < ApplicationController
   end
 
   def create
-    binding.pry
     # @competition = Competition.create(competition_params)
 
   end
@@ -16,7 +15,6 @@ class CompetitionsController < ApplicationController
   private
 
   def competition_params
-    binding.pry
     local_params = params.require(:competition
               ).permit(:length,:wager_amount)
     local_params[:user_id] = session["warden.user.user.key"][0][0]
