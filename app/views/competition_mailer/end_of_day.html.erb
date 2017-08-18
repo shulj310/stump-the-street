@@ -16,15 +16,13 @@
         Here is your daily dashboard for today!
       </p>
 
-      <p><strong>You currently have <%= @competitions.length %> competitions active</strong></p>
-      <p>That's <%= number_to_currency(@value, precision: 0) %> worth of wagers</p>
+      <p><strong>Let's take a look at your <%= @competitions.length %> active competitions</strong></p>
 
-      <h5>Here is a breakdown of your competitions by performance</h5>
       <table class="striped highlight">
         <thead>
           <tr>
             <th>Strategy Name</th>
-            <th>Current Market Value</th>
+            <th>Potential Payout</th>
             <th>Total Wagered</th>
             <th>Deadline</th>
             <th>Your Return</th>
@@ -35,21 +33,47 @@
         <tbody>
           <% @competitions.each do |comp| %>
           <tr>
-            <td><a href="https://stump-the-street.herokuapp.com/competitions/show/portfolios/<%=comp.id%>"><%=comp.portfolio.name %></td>
-            <td><%=number_to_currency(comp.portfolio.value,precision: 2) %></td>
-            <td><%=number_to_currency(comp.wager_amount,precision: 2) %></td>
-            <td><%=comp.deadline.strftime("%b %e, %Y") %></td>
-            <td><%= number_to_percentage(comp.portfolio.return*100, precision: 2) %></td>
-            <td><%=number_to_percentage(comp.competitor_portfolio.return* 100, precision: 2) %></td>
-            <td><%=number_to_percentage(comp.diff* 100, precision: 2) %></td>
+            <td><a href="http://www.stumpthestreet.com/competitions/show/portfolios/<%=comp.competition.portfolio.id%>"><%=comp.competition.portfolio.name %></td>
+            <td><%=number_to_currency(comp.competition.current_value,precision: 2) %></td>
+            <td><%=number_to_currency(comp.competition.wager_amount,precision: 2) %></td>
+            <td><%=comp.competition.deadline.strftime("%b %e, %Y") %></td>
+            <td><%= number_to_percentage(comp.competition.portfolio.return*100, precision: 2) %></td>
+            <td><%=number_to_percentage(comp.competition.competitor_portfolio.return* 100, precision: 2) %></td>
+            <td><%=number_to_percentage(comp.competition.diff* 100, precision: 2) %></td>
           </tr>
           <%end%>
         </tbody>
       </table>
+
+      <br/>
+
+      <% @competitions.each do |comp| %>
+        <div style="background:#eceff1;padding:2%;box-shadow:2px 2px 2px 1px rgba(0, 0, 0, 0.2)">
+          <h5> <%= comp.competition.portfolio.name %> <label>Potential Payout: <%=number_to_currency(comp.competition.current_value,precision:2) %></label></h5>
+          <hr/>
+          <p><strong>Current Market Value:</strong> <%= number_to_currency(comp.competition.portfolio.value, precision:2) %></p>
+          <p><span><strong>Current Cash Position:</strong> <%= number_to_currency(comp.competition.portfolio.cash,precision: 2) %> (<%= number_to_percentage(comp.cash_drag*100,precision: 2) %>)</span><% if comp.cash_drag > 0.25%><span>
+            <i class="material-icons">flag</i> <a href="http://www.strumpthestreet.com/competitions/show/portfolios/<%=comp.competition.portfolio.id%>"><strong>Get trading!</strong></a></span><%end%></p>
+          <p><strong>Day Return:</strong> <%= number_to_currency(comp.day_return_cash,precision: 2)%> (<%=number_to_percentage(comp.day_return_pct*100, precision:2)%>) vs. <%=comp.competition.competitor.name%>: <%= number_to_percentage(comp.comp_return,precision: 2)%></p>
+          <h6><u>Full Trading Analysis Coming Soon</u></h6>
+          <span><i>Trades to Date: <%= comp.total_trades_to_date %></i></span>
+          <span><i>Trades Today: <%= comp.total_trades_today %></i></span>
+          <p><strong>Biggest stock:</strong> <%= comp.biggest_weight.stock.ticker %>: <%= number_to_currency(comp.biggest_weight.value,precision: 2) %> <%= number_to_percentage(comp.biggest_weight.return*100,precision: 2) %></p>
+          <p><strong>Best stock:</strong> <%= comp.best_stock.stock.ticker %>: <%= number_to_currency(comp.best_stock.value, precision: 2) %> <%= number_to_percentage(comp.best_stock.return*100, precision: 2) %></p>
+          <p><strong>Worst stock:</strong> <%= comp.worst_stock.stock.ticker %>: <%= number_to_currency(comp.worst_stock.value, precision: 2) %> <%= number_to_percentage(comp.worst_stock.return*100, precision: 2) %></p>
+
+        </div>
+      </br>
+      <%end%>
+      <label>For any specific trading information that <u>you</u> would like to see, email Jared @ shulman.jared@gmail.com</label>
+      <br/>
     </div>
   </main>
   <footer>
-    <a class="waves-effect waves-light btn" href="https://stump-the-street.herokuapp.com">Stump the Street</a>
+    <div class= "center-align">
+    <a class="waves-effect waves-light btn blue-grey darken-4" href="http://www.stumpthestreet.com">Stump the Street</a>
+  </div>
+  <br/>
   </footer>
   <body>
   </body>

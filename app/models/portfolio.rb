@@ -6,6 +6,7 @@ class Portfolio < ApplicationRecord
     through: :positions
   accepts_nested_attributes_for :stocks
   has_many :trade_queues
+  has_many :portfolio_histories
 
   after_touch do |port|
     port.positions.each {|pos| pos.touch}
