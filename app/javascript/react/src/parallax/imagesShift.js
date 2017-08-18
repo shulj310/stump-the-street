@@ -21,5 +21,3 @@ export function imagesShift(height,shift){
     }
 
 }
-
-    // console.log

@@ -74,10 +74,8 @@ class Api::V1::CompetitionsController < ApplicationController
   def date_change(date)
     if date.wday == 6
       date -= 1
-      puts date
     elsif date.wday == 0
       date += 1
-      puts date
     end
     return date.change({hour:16,min:0,sec:0})
   end

@@ -114,7 +114,6 @@ class Api::V1::StocksController < ApplicationController
 
   def hist_price
     start = (DateTime.now-365).strftime("%Y%m%d")
-    puts start
 
     api_key = ENV["BAR_CHART_API"]
 
