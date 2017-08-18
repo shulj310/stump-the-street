@@ -8,6 +8,10 @@ class Position < ApplicationRecord
   end
 
   def return
-    return ((self.stock.price / self.cost) -1) 
+    return ((self.stock.price / self.cost) -1)
+  end
+
+  def dollar_return
+    self.value - (self.cost*self.shares)
   end
 end

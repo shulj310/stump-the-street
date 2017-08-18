@@ -33,7 +33,7 @@
     <li class="collection-item avatar">
       <i class="material-icons circle blue">insert_chart</i>
       <span class="title">Current Competitions</span>
-      <p>Current Outstanding Wagers: <%= number_to_currency( @current_user.competitions.pluck(:wager_amount).inject(0) {|sum,x| sum+x} ,precision: 2)%><br>
+      <p>Total Potential Payout: <%= number_to_currency( @current_user.competitions.pluck(:current_value).inject(0) {|sum,x| sum+x} ,precision: 2)%><br>
       </p>
       <a href="#comp-view" class="secondary-content btn-floating tooltipped"
       data-position="bottom"
@@ -62,7 +62,7 @@
         <th>Portfolio Name</th>
         <th>Competitor</th>
         <th>Deadline</th>
-        <th>Wager Amount</th>
+        <th>Payout</th>
         <th>+/-</th>
     </tr>
   </thead>
@@ -73,7 +73,7 @@
       <td><%= link_to "#{comp.portfolio.name}",competition_portfolio_path('show',comp.portfolio.id) %></td>
       <td><%= comp.competitor.name %></td>
       <td><%= comp.deadline.strftime("%b %e, %Y") %></td>
-      <td><%= number_to_currency(comp.wager_amount, precision: 2) %></td>
+      <td><%= number_to_currency(comp.current_value, precision: 2) %></td>
       <% if comp.diff %>
       <td><%= number_to_percentage(comp.diff*100,precision: 2) %></td>
       <% else %>

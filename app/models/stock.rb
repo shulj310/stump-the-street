@@ -9,7 +9,10 @@ class Stock < ApplicationRecord
 
 
   def get_price
-    url = "http://marketdata.websol.barchart.com/getQuote.json?key=b153d00b85faee7d352be6b91df7ec46&symbols=#{self.ticker}"
+
+    api_key = ENV["BAR_CHART_API"]
+
+    url = "http://marketdata.websol.barchart.com/getQuote.json?key=#{api_key}&symbols=#{self.ticker}"
 
     response = RestClient.get(url)
 
@@ -22,7 +25,10 @@ class Stock < ApplicationRecord
   end
 
   def get_price_and_name
-    url = "http://marketdata.websol.barchart.com/getQuote.json?key=b153d00b85faee7d352be6b91df7ec46&symbols=#{self.ticker}"
+
+    api_key = ENV["BAR_CHART_API"]
+
+    url = "http://marketdata.websol.barchart.com/getQuote.json?key=#{api_key}&symbols=#{self.ticker}"
 
     response = RestClient.get(url)
 
@@ -32,6 +38,22 @@ class Stock < ApplicationRecord
       self.price = data["results"][0]["lastPrice"].to_f
       self.name = data["results"][0]["name"]
       self.save
+    end
+  end
+
+  def get_daily_return
+    api_key = ENV["BAR_CHART_API"]
+
+    url = "http://marketdata.websol.barchart.com/getQuote.json?key=#{api_key}&symbols=#{self.ticker}"
+
+    response = RestClient.get(url)
+
+    data = JSON.parse(response)
+
+    if data["status"]["code"] == 200
+      return data["results"][0]["percentChange"].to_f
+    else
+      return 0
     end
   end
 end

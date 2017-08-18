@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170814133229) do
+ActiveRecord::Schema.define(version: 20170818122737) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -53,6 +53,15 @@ ActiveRecord::Schema.define(version: 20170814133229) do
   create_table "competitors", force: :cascade do |t|
     t.string "name",      null: false
     t.string "image_url", null: false
+  end
+
+  create_table "portfolio_histories", force: :cascade do |t|
+    t.integer  "portfolio_id", null: false
+    t.float    "value",        null: false
+    t.integer  "trades_made",  null: false
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.index ["portfolio_id"], name: "index_portfolio_histories_on_portfolio_id", using: :btree
   end
 
   create_table "portfolios", force: :cascade do |t|

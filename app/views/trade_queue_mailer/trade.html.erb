@@ -5,7 +5,7 @@ The following trades have been executed:<br/>
 
   <% @trades.each do |trade| %>
 
-    <a href="https://stump-the-street.herokuapp.com/competitions/show/portfolios/<%= trade.portfolio.id %>"><%= trade.portfolio.name %></a>
+    <a href="http://www.stumpthestreet.com/competitions/show/portfolios/<%= trade.portfolio.id %>"><%= trade.portfolio.name %></a>
 
     <% if trade.side %>
       Buy
@@ -35,4 +35,4 @@ The following trades have been executed:<br/>
 <br/>
 Happy Trading!
 <br/>
-<a href="https://stump-the-street.herokuapp.com/competitions">Stump the Street</a>
+<a href="http://www.stumpthestreet.com/competitions">Stump the Street</a>
