@@ -7,31 +7,43 @@ class CompetitionPrep
   end
 
   def best_stock
-    best_stock = {}
-    best_return = -1
-    @competition.portfolio.positions.each do |pos|
-      unless pos.value == 0
-        if pos.return > best_return
-          best_return = pos.return
-          best_stock = pos
+    positions = @competition.portfolio.positions
+
+    if positions.length == 0
+      return false
+    else
+      best_stock = {}
+      best_return = -1
+      @competition.portfolio.positions.each do |pos|
+        unless pos.value == 0
+          if pos.return > best_return
+            best_return = pos.return
+            best_stock = pos
+          end
         end
       end
+      return best_stock
     end
-    return best_stock
   end
 
   def worst_stock
-    worst_stock = {}
-    worst_return = 100
-    @competition.portfolio.positions.each do |pos|
-      unless pos.value == 0
-        if pos.return < worst_return
-          worst_return = pos.return
-          worst_stock = pos
+    positions = @competition.portfolio.positions
+
+    if positions.length == 0
+      return false
+    else
+      worst_stock = {}
+      worst_return = 100
+      positions.each do |pos|
+        unless pos.value == 0
+          if pos.return < worst_return
+            worst_return = pos.return
+            worst_stock = pos
+          end
         end
       end
+      return worst_stock
     end
-    return worst_stock
   end
 
   def cash_drag
@@ -39,15 +51,21 @@ class CompetitionPrep
   end
 
   def biggest_weight
-    biggest_weight = {}
-    max_weight = 0
-    @competition.portfolio.positions.each do |pos|
-      if pos.value >= max_weight
-        max_weight = pos.value
-        biggest_weight = pos
+    positions = @competition.portfolio.positions
+
+    if positions.length == 0
+      return false
+    else
+      biggest_weight = {}
+      max_weight = 0
+      positions.each do |pos|
+        if pos.value >= max_weight
+          max_weight = pos.value
+          biggest_weight = pos
+        end
       end
+      return biggest_weight
     end
-    return biggest_weight
   end
 
   def total_trades_to_date

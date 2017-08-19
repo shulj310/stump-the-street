@@ -60,8 +60,9 @@ class CreditForm extends Component {
         />
         <a
           className="waves-effect waves-light btn btn-small"
+          style={{paddingBottom:"10px"}}
           onClick={this.handleCreditImport}>
-          Checkout
+          Redeem
         </a>
       </Col>
     </Row>

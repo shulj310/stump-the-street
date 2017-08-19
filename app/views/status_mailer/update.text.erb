@@ -1,5 +1,5 @@
 Current Users: <%= @total_users %>
 Total Competitions: <%= @total_competitions %>
 
-Total Exposure: $<%= @total_exposure %>
-Current Exposure: $<%= @current_exposure %>
+Total Exposure: <%= number_to_currency(@total_exposure,precision: 2) %>
+Current Exposure: <%= number_to_currency(@current_exposure, precision: 2) %>

@@ -156,11 +156,13 @@ class Competitions extends Component{
             </div>
       }
 
+      let label = <h4>Select Competitor <label><a href="/competitors"><i className="material-icons">info</i></a></label></h4>
+
     return(
         <div className="body">
           <div className="center-align comp-button">
             <Modal
-            	header='Select Your Competitor'
+            	header={label}
             	trigger={<button type='button' className= "btn waves-effect waves-light blue-grey darken-2">Add Competition</button>}>
               <CompetitionForm
               wallet = {this.state.wallet}
