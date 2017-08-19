@@ -3,8 +3,8 @@ class Api::V1::ResearchController < ApplicationController
 
   def index
 
-    username = "0a340fb18444a2517db5a5a869ebf04e"
-    password = "4f6b78e96d048f48a6898fad777e9469"
+    username = ENV["INTRINIO_USERNAME"]
+    password = ENV["INTRINIO_PASSWORD"]
 
     request_url = "https://api.intrinio.com/companies?identifier=AAPL"
     restclient = RestClient::Resource.new(request_url,username,password)
@@ -20,8 +20,8 @@ class Api::V1::ResearchController < ApplicationController
 
     ticker = params[:stock_id].upcase
 
-    username = "0a340fb18444a2517db5a5a869ebf04e"
-    password = "4f6b78e96d048f48a6898fad777e9469"
+    username = ENV["INTRINIO_USERNAME"]
+    password = ENV["INTRINIO_PASSWORD"]
 
     request_url = "https://api.intrinio.com/securities/search?conditions=open_price~gt~10.50,pricetoearnings~gt~10"
     # request_url = "https://api.intrinio.com/data_point?identifier=#{ticker}&item=pricetoearnings"

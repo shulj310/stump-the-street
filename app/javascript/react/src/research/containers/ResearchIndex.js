@@ -21,15 +21,9 @@ class ResearchIndex extends Component{
     return(
       <div>
       <h3>
-        Stock Screener
+        Stock Screener coming soon!
       </h3>
 
-      <TextField
-        content={this.state.ticker}
-        label= "Enter Ticker"
-        name="ticker"
-        handlerFunction={this.handleChange}
-      />
 
       </div>
 
@@ -39,3 +33,11 @@ class ResearchIndex extends Component{
 }
 
 export default ResearchIndex
+
+
+// <TextField
+// content={this.state.ticker}
+// label= "Enter Ticker"
+// name="ticker"
+// handlerFunction={this.handleChange}
+// />
