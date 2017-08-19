@@ -19,6 +19,7 @@
       <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
       <ul class="right hide-on-med-and-down">
         <% if current_user %>
+          <li><%= link_to "Research", research_index_path %></li>
           <li><%= link_to "My Competitions", competitions_path %></li>
           <li><%= link_to "My Profile", edit_user_registration_path %></li>
           <li><%= link_to "Sign out", destroy_user_session_path, :method => :delete %></li>
@@ -29,6 +30,7 @@
       </ul>
       <ul class="side-nav" id="mobile-demo">
         <% if current_user %>
+          <li><%= link_to "Research", research_index_path %></span></li>
           <li><%= link_to "My Competitions", competitions_path %></li>
           <li><%= link_to "My Profile", edit_user_registration_path %></li>
           <li><%= link_to "Sign out", destroy_user_session_path, :method => :delete %></li>

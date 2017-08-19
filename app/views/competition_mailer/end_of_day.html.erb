@@ -58,9 +58,9 @@
           <h6><u>Full Trading Analysis Coming Soon</u></h6>
           <span><i>Trades to Date: <%= comp.total_trades_to_date %></i></span>
           <span><i>Trades Today: <%= comp.total_trades_today %></i></span>
-          <p><strong>Biggest stock:</strong> <%= comp.biggest_weight.stock.ticker %>: <%= number_to_currency(comp.biggest_weight.value,precision: 2) %> <%= number_to_percentage(comp.biggest_weight.return*100,precision: 2) %></p>
-          <p><strong>Best stock:</strong> <%= comp.best_stock.stock.ticker %>: <%= number_to_currency(comp.best_stock.value, precision: 2) %> <%= number_to_percentage(comp.best_stock.return*100, precision: 2) %></p>
-          <p><strong>Worst stock:</strong> <%= comp.worst_stock.stock.ticker %>: <%= number_to_currency(comp.worst_stock.value, precision: 2) %> <%= number_to_percentage(comp.worst_stock.return*100, precision: 2) %></p>
+          <p><strong>Biggest stock:</strong><%if !comp.biggest_weight %>"N/A"<%else%> <%= comp.biggest_weight.stock.ticker %>: <%= number_to_currency(comp.biggest_weight.value,precision: 2) %> <%= number_to_percentage(comp.biggest_weight.return*100,precision: 2) %><%end%></p>
+          <p><strong>Best stock:</strong> <%if !comp.best_stock %>"N/A"<%else%><%= comp.best_stock.stock.ticker %>: <%= number_to_currency(comp.best_stock.value, precision: 2) %> <%= number_to_percentage(comp.best_stock.return*100, precision: 2) %><%end%></p>
+          <p><strong>Worst stock:</strong> <%if !comp.worst_stock %>"N/A"<%else%><%= comp.worst_stock.stock.ticker %>: <%= number_to_currency(comp.worst_stock.value, precision: 2) %> <%= number_to_percentage(comp.worst_stock.return*100, precision: 2) %><%end%></p>
 
         </div>
       </br>
