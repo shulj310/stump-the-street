@@ -6,7 +6,7 @@ const TextField = props => {
     <div className="input-field col s4">
         <input type="text" id="autocomplete-input" className="autocomplete"
           name={props.name} onChange={props.handlerFunction} value={props.content} />
-        <label for="autocomplete-input">{props.label}</label>
+        <label>{props.label}</label>
       </div>
 
   );

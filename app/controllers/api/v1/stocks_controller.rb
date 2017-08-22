@@ -136,6 +136,10 @@ class Api::V1::StocksController < ApplicationController
     return [data["ticker"].upcase , data["share_amount"].to_i, data["side"]]
   end
 
+  def id
+    render json: Stock.find_by(ticker:params[:stock_id].upcase)
+  end
+
   def new_stock(ticker)
 
     stock = Stock.new
