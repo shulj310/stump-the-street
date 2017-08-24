@@ -34,7 +34,8 @@ compareData
   let industry = industryData.map((field,index)=>{
     if ((index<5)){
   return(
-      <td key={index}>{field}</td>
+      <td key={index}
+        style={{fontSize:"80%"}}>{field}</td>
     )
   }
   })

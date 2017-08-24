@@ -156,7 +156,7 @@ class Competitions extends Component{
             </div>
       }
 
-      let label = <h4>Select Competitor <label><a href="/competitors"><i className="material-icons">info</i></a></label></h4>
+      let label = <h4>Select Competitor <label><a href="/competitors" target="_blank"><i className="material-icons">info</i></a></label></h4>
 
     return(
         <div className="body">

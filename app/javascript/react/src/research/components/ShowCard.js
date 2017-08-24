@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Col,Row,Chip,Tag } from 'react-materialize'
+import { Col,Row,Chip,Tag,Modal } from 'react-materialize'
 import TextField from '../../components/TextField'
 import Table from './Table'
 import Header from './Header'
@@ -7,6 +7,7 @@ import AutosuggestInput from '../containers/AutosuggestInput'
 import { compareTickerData } from '../utils/compareData'
 import { retrieveData } from '../utils/retrieveData'
 import { headerData } from '../utils/headerData'
+import AvailableFields from './availableFields'
 
 
 const ShowCard = props =>{
@@ -48,6 +49,63 @@ const ShowCard = props =>{
         }
       })}
 
+    let searchNewField,
+    table
+
+    if (props.showTable){
+
+          searchNewField =
+
+          <Row style={{marginTop:"2px"}}>
+            <Col s={7}>
+              {chips}
+            </Col>
+            <Col s={5}
+              style={{paddingBotton:0}}>
+              <Row>
+                <Col s={2}>
+                  <Modal
+                    header="Available Fields"
+                    trigger={<a href="#"><i className="material-icons">info</i></a>}>
+                      <AvailableFields
+                        currentField = {props.newField}
+                        fillData = {props.fillData}
+                      />
+                  </Modal>
+
+                </Col>
+                <Col s={10}>
+                  <AutosuggestInput
+                    newFieldHandler={props.newFieldHandler}
+                    fillData={props.fillData}
+                    newFieldHandler={props.newFieldHandler}
+                    name="newField"
+                    value={props.newFieldContent}
+                    onChange={props.handlerFunction}
+                    placeholder=" New Field..."
+                  />
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+
+     table =
+
+          <Row>
+            <Table
+              removeTicker={props.removeTicker}
+              compareData={compareData}
+              headers={headers}
+              showData={showData}
+              industryData={industryData}
+              compare={props.compare}
+              compareContent={props.compareContent}
+              onChange={props.handlerFunction}
+            />
+          </Row>
+    }
+
+
     return(
     <div style={{boxShadow:"0px 0px 3px #888888", borderRadius:"5px",background:"white",paddingLeft:"8px"}}>
       <Row style={{margin:0}}>
@@ -81,59 +139,27 @@ const ShowCard = props =>{
           </div>
         </Col>
       </Row>
-      <Row style={{marginTop:"2px"}}>
-        <Col s={7}>
-          {chips}
-        </Col>
-        <Col s={1}>
-        <button style={{height:"20px",borderRadius:"5px",background:"transparent",
-          border:"transparent"}}
-          onClick={props.newFieldHandler}>
-            <i className="material-icons" style={{height:"20px",marginBottom:"0px",padding:0}}>add_box</i>
-          </button>
-        </Col>
-        <Col s={4}>
-        <AutosuggestInput
-          newFieldHandler={props.newFieldHandler}
-          fillData={props.fillData}
-          newFieldHandler={props.newFieldHandler}
-          name="newField"
-          value={props.newFieldContent}
-          onChange={props.handlerFunction}
-          placeholder="  New Field"
-        />
-        </Col>
-      </Row>
-      <Row>
-        <Col s={10}>
-          <Header
-          ticker={ticker}
-            data = {props.header}
-          />
-        </Col>
-      </Row>
-      <Row>
-        <Table
-          removeTicker={props.removeTicker}
-          compareData={compareData}
-          headers={headers}
-          showData={showData}
-          industryData={industryData}
-          compare={props.compare}
-          compareContent={props.compareContent}
-          onChange={props.handlerFunction}
-        />
-      </Row>
+      {searchNewField}
+      {table}
     </div>
     )
   }
+
 export default ShowCard
 
-// <Col s={4}>
-//   <input style={{maxWidth:"110px",fontSize:"80%",marginBottom:0,height:"25px",borderRadius:"5px",
-//   borderColor:"#888888",borderStyle:"solid",borderWidth:"1px"}}
-//     name="newField"
-//     value={props.newFieldContent}
-//     onChange={props.handlerFunction}
-//     placeholder="  New Field"
-//   />
+//
+// <Row>
+//   <Col s={10}>
+//     <Header
+//     ticker={ticker}
+//       data = {props.header}
+//     />
+//   </Col>
+// </Row>
+// <Col s={1}>
+// <button style={{height:"20px",borderRadius:"5px",background:"transparent",
+//   border:"transparent"}}
+//   onClick={props.newFieldHandler}>
+//     <i className="material-icons" style={{height:"20px",marginBottom:"0px",padding:0}}>add_box</i>
+//   </button>
+// </Col>

@@ -27,7 +27,8 @@ class ResearchIndex extends Component{
       newField:"",
       tags:['Price/Earnings','Market Cap','Revenue Growth'],
       stockHeader:[],
-      industryData:[]
+      industryData:[],
+      showTable:true
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -90,7 +91,7 @@ class ResearchIndex extends Component{
         compareData.push(body)
         this.setState({compareData:compareData})
       }else{
-        this.setState({stockData:body})
+        this.setState({stockData:body,showTable:true})
       }
     })
   }
@@ -134,6 +135,7 @@ class ResearchIndex extends Component{
     this.state.compareData.forEach(ticker=>{
       this.grabData(Object.keys(ticker)[0],{tags:newTags})
     })
+    $('.modal.open').modal('close')
   }
 
 //PASSED DOWN TO child components
@@ -270,6 +272,7 @@ class ResearchIndex extends Component{
         <Row>
           <Col s={6}>
             <ShowCard
+              showTable={this.state.showTable}
               removeTicker = {this.removeTicker}
               compareData={this.state.compareData}
               industryData={this.state.industryData}

@@ -39,7 +39,7 @@ renderSuggestion(suggestion){
   return(
     <div>
       <button style={{height:"20px",borderRadius:"5px",background:"transparent",
-        border:"transparent"}}
+        border:"transparent",fontSize:"80%",padding:0}}
         onClick={this.props.fillData}
         id={suggestion}>
         {suggestion}
@@ -74,7 +74,8 @@ renderSuggestion(suggestion){
       placeholder: this.props.placeholder,
       value:this.props.value,
       onChange: this.props.onChange,
-      name: this.props.name
+      name: this.props.name,
+      style:{border:"none"}
     };
 
     // Finally, render it!
