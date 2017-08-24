@@ -34,7 +34,7 @@ class Api::V1::ResearchController < ApplicationController
 
     company = JSON.parse(response)
     output = DataLabel.new(ticker,company).output
-    
+
     render json: output
   end
 
@@ -97,7 +97,7 @@ class Api::V1::ResearchController < ApplicationController
 
   def search_by_name(tag)
     name_to_tag = JSON.parse(File.read('./app/controllers/api/v1/utils/initioNames_to_tag.json'))
-    returned_tag = name_to_tag.select {|key| key.downcase.include?(tag.downcase)}.first[1]
+    returned_tag = name_to_tag.select {|key| key.downcase == tag.downcase}.first[1]
 
     if returned_tag.nil?
       first_tag = tag.split(" ")[0]

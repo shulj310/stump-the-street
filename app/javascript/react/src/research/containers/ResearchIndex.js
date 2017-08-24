@@ -3,6 +3,7 @@ import TextField from '../../components/TextField'
 import SelectField from '../../components/SelectField'
 import { Col, Row, Input } from 'react-materialize'
 import ShowCard from '../components/ShowCard'
+import { fieldValidator } from '../utils/fieldValidator'
 
 class ResearchIndex extends Component{
   constructor(props){
@@ -86,7 +87,6 @@ class ResearchIndex extends Component{
     .then(body=>{
       if (compare){
         let compareData = this.state.compareData.filter(stock=>Object.keys(stock)[0] !== ticker)
-        debugger;
         compareData.push(body)
         this.setState({compareData:compareData})
       }else{
@@ -130,7 +130,10 @@ class ResearchIndex extends Component{
     newTags.unshift(field)
     this.grabData(this.state.ticker,{tags:newTags},false)
     this.setState({tags:newTags,newField:""})
-
+    this.grabIndustryData(this.state.ticker,{tags:newTags})
+    this.state.compareData.forEach(ticker=>{
+      this.grabData(Object.keys(ticker)[0],{tags:newTags})
+    })
   }
 
 //PASSED DOWN TO child components
@@ -182,14 +185,16 @@ class ResearchIndex extends Component{
     event.preventDefault()
     let field = this.state.newField
     let newTags = this.state.tags
-    newTags.unshift(field)
-    if (field.trim()!==""){
+    if (fieldValidator(field)){
+      newTags.unshift(field)
       this.grabData(this.state.ticker,{tags:newTags},false)
       this.grabIndustryData(this.state.ticker,{tags:newTags})
       this.state.compareData.forEach(ticker=>{
         this.grabData(Object.keys(ticker)[0],{tags:newTags})
       })
       this.setState({tags:newTags,newField:""})
+    } else{
+      alert('Please enter valid field')
     }
   }
 

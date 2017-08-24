@@ -5,37 +5,21 @@ import Table from './Table'
 import Header from './Header'
 import AutosuggestInput from '../containers/AutosuggestInput'
 import { compareTickerData } from '../utils/compareData'
+import { retrieveData } from '../utils/retrieveData'
+import { headerData } from '../utils/headerData'
 
 
 const ShowCard = props =>{
 
-    let ticker,
-    stockObject,
-    data,
-    showData=[],
-    headers = [],
-    industryData,
-    showIndustryData = [],
-    compareData=[],
-    chips
-    if ((Object.keys(props.data).length !== 0) && Object.keys(props.industryData !== 0) && (Object.keys(props.compareData !== 0))){
-      compareData = compareTickerData(props.compareData)
-      industryData = props.industryData
-      stockObject = props.stockObject
-      data = props.data
-      ticker = Object.keys(data)[0]
-      Object.values(data)[0].forEach((field,index)=>{
-        if (Object.keys(field)[0]!="SIC"){
-        headers.push(Object.keys(field)[0])
-        showData.push(Object.values(field)[0][0])
-        }
-      })
-      Object.values(industryData)[0].forEach((field,index)=>{
-        showIndustryData.push(Object.values(field)[0][0])
-      })
-      headers.unshift("Ticker")
-      showData.unshift(ticker)
-      showIndustryData.unshift("Industry")
+    let ticker = props.ticker
+    let chips
+
+    let industryData = retrieveData(props.industryData,"Industry")
+    let showData = retrieveData(props.data,ticker)
+    let headers = headerData(props.data)
+    let compareData = compareTickerData(props.compareData)
+
+      if (showData.length !== 0){
       chips = props.tags.map((tag,index)=>{
           if (tag !=='sic'){
           return(
@@ -62,20 +46,21 @@ const ShowCard = props =>{
             </Chip>
           )
         }
-      })
-    }
+      })}
 
     return(
     <div style={{boxShadow:"0px 0px 3px #888888", borderRadius:"5px",background:"white",paddingLeft:"8px"}}>
       <Row style={{margin:0}}>
         <Col s={4}>
-          <input type="text"
-            name="ticker"
-            onChange={props.handlerFunction}
-            value={props.content}
-            placeholder="Enter Ticker"
-            style={{marginBottom:0}}
-          />
+          <form onSubmit={props.search}>
+            <input type="text"
+              name="ticker"
+              onChange={props.handlerFunction}
+              value={props.content}
+              placeholder="Enter Ticker"
+              style={{marginBottom:0}}
+            />
+          </form>
         </Col>
         <Col s={2}>
         <button style={{marginTop:"20px",borderRadius:"5px",background:"transparent",
@@ -109,6 +94,7 @@ const ShowCard = props =>{
         </Col>
         <Col s={4}>
         <AutosuggestInput
+          newFieldHandler={props.newFieldHandler}
           fillData={props.fillData}
           newFieldHandler={props.newFieldHandler}
           name="newField"
@@ -132,7 +118,7 @@ const ShowCard = props =>{
           compareData={compareData}
           headers={headers}
           showData={showData}
-          industryData={showIndustryData}
+          industryData={industryData}
           compare={props.compare}
           compareContent={props.compareContent}
           onChange={props.handlerFunction}

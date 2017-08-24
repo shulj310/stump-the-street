@@ -80,14 +80,16 @@ renderSuggestion(suggestion){
     // Finally, render it!
     return (
       <div>
-        <Autosuggest
-          suggestions={this.state.suggestions}
-          onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-          onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-          getSuggestionValue={this.getSuggestionValue}
-          renderSuggestion={this.renderSuggestion}
-          inputProps={inputProps}
-        />
+        <form onSubmit={this.props.newFieldHandler}>
+          <Autosuggest
+            suggestions={this.state.suggestions}
+            onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+            onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+            getSuggestionValue={this.getSuggestionValue}
+            renderSuggestion={this.renderSuggestion}
+            inputProps={inputProps}
+          />
+        </form>
       </div>
     );
   }
