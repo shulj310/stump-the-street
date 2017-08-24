@@ -4,6 +4,8 @@ import TextField from '../../components/TextField'
 import Table from './Table'
 import Header from './Header'
 import AutosuggestInput from '../containers/AutosuggestInput'
+import { compareTickerData } from '../utils/compareData'
+
 
 const ShowCard = props =>{
 
@@ -12,8 +14,13 @@ const ShowCard = props =>{
     data,
     showData=[],
     headers = [],
+    industryData,
+    showIndustryData = [],
+    compareData=[],
     chips
-    if (Object.keys(props.data).length !== 0){
+    if ((Object.keys(props.data).length !== 0) && Object.keys(props.industryData !== 0) && (Object.keys(props.compareData !== 0))){
+      compareData = compareTickerData(props.compareData)
+      industryData = props.industryData
       stockObject = props.stockObject
       data = props.data
       ticker = Object.keys(data)[0]
@@ -23,8 +30,12 @@ const ShowCard = props =>{
         showData.push(Object.values(field)[0][0])
         }
       })
+      Object.values(industryData)[0].forEach((field,index)=>{
+        showIndustryData.push(Object.values(field)[0][0])
+      })
       headers.unshift("Ticker")
       showData.unshift(ticker)
+      showIndustryData.unshift("Industry")
       chips = props.tags.map((tag,index)=>{
           if (tag !=='sic'){
           return(
@@ -117,8 +128,14 @@ const ShowCard = props =>{
       </Row>
       <Row>
         <Table
+          removeTicker={props.removeTicker}
+          compareData={compareData}
           headers={headers}
           showData={showData}
+          industryData={showIndustryData}
+          compare={props.compare}
+          compareContent={props.compareContent}
+          onChange={props.handlerFunction}
         />
       </Row>
     </div>

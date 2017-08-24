@@ -12,7 +12,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :research, only: [:index,:update] do
         get "search"
-        get "industry_comp"
+        put "industry_comp"
         get "header"
       end
       resources :trade_queues, only: [:show,:update,:destroy]
@@ -22,7 +22,7 @@ Rails.application.routes.draw do
         get "fund_data"
         get "hist_price"
         get "more_fund_data"
-        get "id"  
+        get "id"
       end
       resources :portfolios, only: [:index]
       resources :competitions, only: [:index,:create] do

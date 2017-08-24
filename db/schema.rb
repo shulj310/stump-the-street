@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170818122737) do
+ActiveRecord::Schema.define(version: 20170823143224) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -89,6 +89,8 @@ ActiveRecord::Schema.define(version: 20170818122737) do
     t.string "ticker", null: false
     t.string "name",   null: false
     t.float  "price",  null: false
+    t.string "sector"
+    t.string "sic"
   end
 
   create_table "trade_queues", force: :cascade do |t|
