@@ -75,7 +75,7 @@ renderSuggestion(suggestion){
       value:this.props.value,
       onChange: this.props.onChange,
       name: this.props.name,
-      style:{border:"none"}
+      style:{border:"none",maxWidth:"200px"}
     };
 
     // Finally, render it!

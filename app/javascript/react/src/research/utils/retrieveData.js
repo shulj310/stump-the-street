@@ -5,7 +5,7 @@ export function retrieveData(data,ticker){
   let d = Object.values(data)[0]
 
   let newData = d.map((field,index)=>{
-    return(Object.values(field)[0][0])
+    return(Object.values(field)[0])
     })
 
   newData.unshift(ticker)

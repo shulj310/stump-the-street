@@ -8,6 +8,7 @@ import { compareTickerData } from '../utils/compareData'
 import { retrieveData } from '../utils/retrieveData'
 import { headerData } from '../utils/headerData'
 import AvailableFields from './availableFields'
+import Clickable from './clickable'
 
 
 const ShowCard = props =>{
@@ -24,27 +25,12 @@ const ShowCard = props =>{
       chips = props.tags.map((tag,index)=>{
           if (tag !=='sic'){
           return(
-            <Chip
+            <Clickable
               key={index}
-              style={{padding:0,margin:0}}
-              >
-              <Row>
-                <Col s={1}>
-                  <button style={{padding:"0px",margin:"0px",borderRadius:"5px",background:"transparent",
-                    border:"transparent"}}>
-                      <i className="material-icons"
-                        style={{fontSize:"90%"}}
-                        id={tag}
-                        onClick={props.removeField}>clear</i>
-                    </button>
-                </Col>
-                <Col s={8}>
-                  <label style={{fontSize:"75%"}}>
-                    {tag}
-                  </label>
-                </Col>
-              </Row>
-            </Chip>
+              index={props.index}
+              removeField={props.removeField}
+              tag={tag}
+            />
           )
         }
       })}
@@ -56,7 +42,7 @@ const ShowCard = props =>{
 
           searchNewField =
 
-          <Row style={{marginTop:"2px"}}>
+          <Row style={{marginTop:"2px",marginBottom:0,paddingBottom:0}}>
             <Col s={7}>
               {chips}
             </Col>
@@ -82,7 +68,7 @@ const ShowCard = props =>{
                     name="newField"
                     value={props.newFieldContent}
                     onChange={props.handlerFunction}
-                    placeholder=" New Field..."
+                    placeholder=" Add field..."
                   />
                 </Col>
               </Row>
@@ -103,6 +89,9 @@ const ShowCard = props =>{
               onChange={props.handlerFunction}
             />
           </Row>
+    } else{
+
+      table= <br/>
     }
 
 
@@ -116,7 +105,7 @@ const ShowCard = props =>{
               onChange={props.handlerFunction}
               value={props.content}
               placeholder="Enter Ticker"
-              style={{marginBottom:0}}
+              style={{marginBottom:0,fontColor:"#37474F"}}
             />
           </form>
         </Col>

@@ -14,6 +14,7 @@ Rails.application.routes.draw do
         get "search"
         put "industry_comp"
         get "header"
+        get "historical_data/date_type/:date_id", to: "research#historical_data"
       end
       resources :trade_queues, only: [:show,:update,:destroy]
       resources :users, only: [:show,:update]

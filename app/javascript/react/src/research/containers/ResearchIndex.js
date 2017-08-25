@@ -4,6 +4,9 @@ import SelectField from '../../components/SelectField'
 import { Col, Row, Input } from 'react-materialize'
 import ShowCard from '../components/ShowCard'
 import { fieldValidator } from '../utils/fieldValidator'
+import CompareChart from './CompareChart'
+import { makeChart } from '../utils/makeChart'
+import Chart from '../components/Chart'
 
 class ResearchIndex extends Component{
   constructor(props){
@@ -25,10 +28,14 @@ class ResearchIndex extends Component{
       compareData:[],
       compareStockId:{},
       newField:"",
-      tags:['Price/Earnings','Market Cap','Revenue Growth'],
+      tags:['Company Name','Market Cap','Price/Earnings','Operating Margin'],
       stockHeader:[],
       industryData:[],
-      showTable:true
+      showTable:false,
+      chartPrices:[],
+      chartData:{},
+      date:90,
+      relative:false
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -44,6 +51,10 @@ class ResearchIndex extends Component{
     this.fillData = this.fillData.bind(this)
     this.grabIndustryData = this.grabIndustryData.bind(this)
     this.removeTicker = this.removeTicker.bind(this)
+    this.loadTickerPrices = this.loadTickerPrices.bind(this)
+    this.removeTickerPrices = this.removeTickerPrices.bind(this)
+    this.changeDate = this.changeDate.bind(this)
+    this.reloadTickerPrices = this.reloadTickerPrices.bind(this)
   }
 
   componentDidMount(){
@@ -61,12 +72,21 @@ class ResearchIndex extends Component{
     })
   }
 
+  removeTickerPrices(ticker){
+    let data = this.state.chartData
+    data.datasets = data.datasets.filter(t => t.label !== ticker)
+    let tickerPrices = this.state.chartPrices.filter(tik => Object.keys(tik)[0] !== ticker)
+    this.setState({chartPrices:tickerPrices,chartData:data})
+
+  }
+
   search(event){
     event.preventDefault()
     // this.headerData(this.state.ticker)
     this.grabData(this.state.ticker,{tags:this.state.tags},false)
     this.grabIndustryData(this.state.ticker,{tags:this.state.tags})
     this.getStockObject(this.state.ticker)
+    this.loadTickerPrices(this.state.ticker,this.state.date)
   }
 
   headerData(ticker){
@@ -148,10 +168,54 @@ class ResearchIndex extends Component{
     }
   }
 
+  loadTickerPrices(ticker,date,add=false){
+    if (add){
+      ticker = `_${ticker}`
+    }
+    fetch(`/api/v1/research/${ticker}/historical_data/date_type/${date}`)
+    .then(response=>response.json())
+    .then(body=>{
+      if (add){
+        let cPrices = this.state.chartPrices
+        cPrices.push(body)
+        let data = makeChart(cPrices)
+        this.setState({chartPrices:cPrices,chartData:data})
+      }else{
+        let currentChartPrices = this.state.chartPrices
+        currentChartPrices.splice(0,2)
+        let newData = body.concat(currentChartPrices)
+        let data = makeChart(newData)
+        this.setState({chartPrices:newData,chartData:data})
+        }
+    })
+  }
+
+  reloadTickerPrices(tickerList,date,rel=false){
+    let tickerJoin = tickerList.join('&')
+    if (rel){
+      tickerJoin = `rel-${tickerJoin}`
+    }
+    fetch(`/api/v1/research/${tickerJoin}/historical_data/date_type/${date}`)
+    .then(response=>response.json())
+    .then(body=>{
+      let newChartPrices = body
+      let data = makeChart(newChartPrices)
+      this.setState({chartPrices:newChartPrices,chartData:data,date:date})
+    })
+  }
+
+  changeDate(event){
+    event.preventDefault()
+    let newDate = event.target.id
+    let tickers = this.state.chartPrices.map(tik=> Object.keys(tik)[0])
+    this.reloadTickerPrices(tickers,newDate)
+  }
+
   compare(event){
     event.preventDefault()
     let compareTickers = this.state.compareTickers
     compareTickers.push(this.state.compareTicker)
+    this.loadTickerPrices(this.state.compareTicker,this.state.date,true)
     this.grabData(this.state.compareTicker,{tags:this.state.tags})
     this.setState({compareTickers:compareTickers,compareTicker:""})
   }
@@ -166,6 +230,7 @@ class ResearchIndex extends Component{
     let ticker = event.target.id
     let tickers = this.state.compareData
     let newTickers = tickers.filter(tik => Object.keys(tik)[0] !== ticker)
+    this.removeTickerPrices(ticker)
     this.setState({compareData:newTickers})
   }
 
@@ -264,13 +329,6 @@ class ResearchIndex extends Component{
         <label>{this.state.selectedPortfolio} cash: {this.state.cash}</label>
         <Row>
           <Col s={6}>
-
-            </Col>
-            <Col s={6}>
-            </Col>
-        </Row>
-        <Row>
-          <Col s={6}>
             <ShowCard
               showTable={this.state.showTable}
               removeTicker = {this.removeTicker}
@@ -291,6 +349,13 @@ class ResearchIndex extends Component{
               shares={this.state.shares}
               compareContent={this.state.compareTicker}
               compare={this.compare}
+            />
+          </Col>
+          <Col>
+            <Chart
+              chartData={this.state.chartData}
+              changeDate={this.changeDate}
+              content={this.state.date}
             />
           </Col>
         </Row>
