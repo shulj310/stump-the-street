@@ -24,6 +24,7 @@ Rails.application.routes.draw do
         get "hist_price"
         get "more_fund_data"
         get "id"
+        get "tickers"
       end
       resources :portfolios, only: [:index]
       resources :competitions, only: [:index,:create] do

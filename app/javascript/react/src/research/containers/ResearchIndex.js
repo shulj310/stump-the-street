@@ -39,7 +39,8 @@ class ResearchIndex extends Component{
       date:90,
       relative:false,
       show:1,
-      showViewChange:false
+      showViewChange:false,
+      stockList:[]
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -62,10 +63,13 @@ class ResearchIndex extends Component{
     this.changeRelative = this.changeRelative.bind(this)
     this.changeView = this.changeView.bind(this)
     this.changeViewAgain = this.changeViewAgain.bind(this)
+    this.getStockList = this.getStockList.bind(this)
+    this.validateTicker = this.validateTicker.bind(this)
   }
 
   componentDidMount(){
     this.getPortfolioData()
+    this.getStockList()
   }
 
   getPortfolioData(){
@@ -80,6 +84,18 @@ class ResearchIndex extends Component{
     .catch(this.setState({showPortfolio:false}))
   }
 
+  getStockList(){
+    fetch('/api/v1/stocks/get/tickers')
+    .then(response=>response.json())
+    .then(body=>{
+      this.setState({stockList:body})
+    })
+  }
+
+  validateTicker(ticker){
+    return (this.state.stockList.includes(ticker.toUpperCase()))
+  }
+
   removeTickerPrices(ticker){
     let data = this.state.chartData
     data.datasets = data.datasets.filter(t => t.label !== ticker)
@@ -90,12 +106,15 @@ class ResearchIndex extends Component{
 
   search(event){
     event.preventDefault()
-    // this.headerData(this.state.ticker)
-    this.grabData(this.state.ticker,{tags:this.state.tags},false)
-    this.grabIndustryData(this.state.ticker,{tags:this.state.tags})
-    this.getStockObject(this.state.ticker)
-    this.loadTickerPrices(this.state.ticker,this.state.date,false,this.state.relative,true)
-    this.setState({show:2,showViewChange:true})
+    if (this.validateTicker(this.state.ticker)){
+      this.grabData(this.state.ticker,{tags:this.state.tags},false)
+      this.grabIndustryData(this.state.ticker,{tags:this.state.tags})
+      this.getStockObject(this.state.ticker)
+      this.loadTickerPrices(this.state.ticker,this.state.date,false,this.state.relative,true)
+      this.setState({show:2,showViewChange:true})
+    } else{
+    alert('Please enter valid ticker!')
+    }
   }
 
   headerData(ticker){
@@ -244,11 +263,15 @@ class ResearchIndex extends Component{
   compare(event){
     event.preventDefault()
     let compareTickers = this.state.compareTickers
-    compareTickers.push(this.state.compareTicker)
-    this.loadTickerPrices(this.state.compareTicker,this.state.date,true,this.state.relative)
-    this.grabData(this.state.compareTicker,{tags:this.state.tags})
-    this.setState({compareTickers:compareTickers,compareTicker:""})
-  }
+    if (this.validateTicker(this.state.compareTicker)){
+      compareTickers.push(this.state.compareTicker)
+      this.loadTickerPrices(this.state.compareTicker,this.state.date,true,this.state.relative)
+      this.grabData(this.state.compareTicker,{tags:this.state.tags})
+      this.setState({compareTickers:compareTickers,compareTicker:""})
+    } else {
+      alert('Please enter valid ticker!')
+    }
+}
 
   clearSearch(event){
     event.preventDefault()
@@ -370,7 +393,7 @@ class ResearchIndex extends Component{
                     content={this.state.ticker}
                     handlerFunction={this.handleChange}
                     search={this.search}
-                    ticker={this.state.ticker}
+                    ticker={this.state.ticker.toUpperCase()}
                     stock={this.state.stockObject}
                     data={this.state.stockData}
                     shares={this.state.shares}

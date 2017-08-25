@@ -25,6 +25,10 @@ class Api::V1::StocksController < ApplicationController
     end
   end
 
+  def tickers
+    render json: Stock.all.pluck(:ticker)
+  end
+
   def create
 
     portfolio = Portfolio.find(params[:portfolio_id])

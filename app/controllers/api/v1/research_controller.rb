@@ -18,7 +18,7 @@ class Api::V1::ResearchController < ApplicationController
   end
 
   def update
-    ticker = params[:id]
+    ticker = params[:id].upcase
     data = JSON.parse(request.body.read)
 
     username = ENV["INTRINIO_USERNAME"]
@@ -73,8 +73,8 @@ class Api::V1::ResearchController < ApplicationController
   end
 
   def historical_data
-    ticker,date = params[:research_id],params[:date_id]
-    if ticker.starts_with?("rel-")
+    ticker,date = params[:research_id].upcase,params[:date_id]
+    if ticker.starts_with?("REL-")
       pricing_data = ticker[4..-1].split("&").map do |tick|
         tick = "_#{tick}"
         GetPrices.new(tick,date).relative_prices
@@ -84,7 +84,7 @@ class Api::V1::ResearchController < ApplicationController
       else
         render json: pricing_data
       end
-    elsif ticker.include?("&") && !ticker.include?("rel-")
+    elsif ticker.include?("&") && !ticker.include?("REL-")
       pricing_data = ticker.split("&").map do |tick|
         tick = "_#{tick}"
         GetPrices.new(tick,date).map_prices
@@ -97,7 +97,7 @@ class Api::V1::ResearchController < ApplicationController
   end
 
   def industry_comp
-    ticker = params[:research_id]
+    ticker = params[:research_id].upcase
     data = JSON.parse(request.body.read)
     sic = Stock.find_by(ticker:ticker).sic
 
