@@ -7,6 +7,7 @@ import { fieldValidator } from '../utils/fieldValidator'
 import CompareChart from './CompareChart'
 import { makeChart } from '../utils/makeChart'
 import Chart from '../components/Chart'
+import ViewChanger from '../components/ViewChanger'
 
 class ResearchIndex extends Component{
   constructor(props){
@@ -19,6 +20,7 @@ class ResearchIndex extends Component{
       strategyNames:[],
       selectedPortfolio:"",
       currentPortfolio:{},
+      showPortfolio:true,
       currentPositions:[],
       cash:0,
       stockObject:{},
@@ -35,7 +37,9 @@ class ResearchIndex extends Component{
       chartPrices:[],
       chartData:{},
       date:90,
-      relative:false
+      relative:false,
+      show:1,
+      showViewChange:false
     }
 
     this.handleChange = this.handleChange.bind(this)
@@ -56,6 +60,8 @@ class ResearchIndex extends Component{
     this.changeDate = this.changeDate.bind(this)
     this.reloadTickerPrices = this.reloadTickerPrices.bind(this)
     this.changeRelative = this.changeRelative.bind(this)
+    this.changeView = this.changeView.bind(this)
+    this.changeViewAgain = this.changeViewAgain.bind(this)
   }
 
   componentDidMount(){
@@ -69,8 +75,9 @@ class ResearchIndex extends Component{
     .then(body=>{
       let portfolios = body.map(port => port.name)
       portfolios.unshift("Select Portfolio")
-      this.setState({portfolios:body,strategyNames:portfolios})
+      this.setState({portfolios:body,strategyNames:portfolios,showPortfolio:true})
     })
+    .catch(this.setState({showPortfolio:false}))
   }
 
   removeTickerPrices(ticker){
@@ -88,6 +95,7 @@ class ResearchIndex extends Component{
     this.grabIndustryData(this.state.ticker,{tags:this.state.tags})
     this.getStockObject(this.state.ticker)
     this.loadTickerPrices(this.state.ticker,this.state.date,false,this.state.relative,true)
+    this.setState({show:2,showViewChange:true})
   }
 
   headerData(ticker){
@@ -331,57 +339,137 @@ class ResearchIndex extends Component{
     return shares
   }
 
+  changeView(event){
+    event.preventDefault()
+    let id = event.target.value
+    this.changeViewAgain(id)
+    this.setState({show:id})
+  }
+  changeViewAgain(id){
+    this.setState({show:id})
+  }
 
   render(){
+    let showCard,
+    chart
+
+    if (this.state.show == 1){
+      showCard =
+                <Col s={12}>
+                  <ShowCard
+                    showTable={this.state.showTable}
+                    removeTicker = {this.removeTicker}
+                    compareData={this.state.compareData}
+                    industryData={this.state.industryData}
+                    fillData={this.fillData}
+                    header={this.state.stockHeader}
+                    newFieldContent = {this.state.newField}
+                    newFieldHandler = {this.newField}
+                    removeField = {this.removeField}
+                    tags={this.state.tags}
+                    content={this.state.ticker}
+                    handlerFunction={this.handleChange}
+                    search={this.search}
+                    ticker={this.state.ticker}
+                    stock={this.state.stockObject}
+                    data={this.state.stockData}
+                    shares={this.state.shares}
+                    compareContent={this.state.compareTicker}
+                    compare={this.compare}
+                  />
+                </Col>
+      chart = ""
+    }
+    if (this.state.show == 2){
+      showCard =
+        <Col s={12}>
+          <ShowCard
+            showTable={this.state.showTable}
+            removeTicker = {this.removeTicker}
+            compareData={this.state.compareData}
+            industryData={this.state.industryData}
+            fillData={this.fillData}
+            header={this.state.stockHeader}
+            newFieldContent = {this.state.newField}
+            newFieldHandler = {this.newField}
+            removeField = {this.removeField}
+            tags={this.state.tags}
+            content={this.state.ticker}
+            handlerFunction={this.handleChange}
+            search={this.search}
+            ticker={this.state.ticker}
+            stock={this.state.stockObject}
+            data={this.state.stockData}
+            shares={this.state.shares}
+            compareContent={this.state.compareTicker}
+            compare={this.compare}
+          />
+        </Col>
+      chart =
+        <Col s={12}>
+          <Chart
+            chartData={this.state.chartData}
+            changeDate={this.changeDate}
+            content={this.state.date}
+            changeRelative={this.changeRelative}
+            relContent={this.state.relative}
+          />
+        </Col>
+    }
+    if (this.state.show == 3){
+      showCard =""
+      chart =
+        <Col s={12}>
+          <Chart
+            chartData={this.state.chartData}
+            changeDate={this.changeDate}
+            content={this.state.date}
+            changeRelative={this.changeRelative}
+            relContent={this.state.relative}
+          />
+        </Col>
+    }
+
+    let view = ""
+
+    if (this.state.showViewChange){
+    view=  <ViewChanger
+        content={this.state.show}
+        handleChange={this.changeView}
+      />
+    }
 
     let portfolioNames = this.state.strategyNames.map((name,index)=>{
       return(
       <option key={index} value={name}>{name}</option>)
     })
 
+    let portfolioShow
+
+
+    if (this.state.showPortfolio) {
+      portfolioShow =
+            <Row>
+              <Input s={4} name="selectedPortfolio" type='select'
+                defaultValue={this.state.selectedPortfolio}
+                onChange={this.handleChange}>
+                  {portfolioNames}
+              </Input>
+            </Row>
+    } else {
+      portfolioShow = <br/>
+    }
+
     return(
       <div>
+        <h4>Stock Research Center</h4>
+        {portfolioShow}
+        <div className="center-align">
+          {view}
+        </div>
         <Row>
-          <Input s={4} name="selectedPortfolio" type='select'
-            defaultValue={this.state.selectedPortfolio}
-            onChange={this.handleChange}>
-              {portfolioNames}
-          </Input>
-        </Row>
-        <label>{this.state.selectedPortfolio} cash: {this.state.cash}</label>
-        <Row>
-          <Col s={6}>
-            <ShowCard
-              showTable={this.state.showTable}
-              removeTicker = {this.removeTicker}
-              compareData={this.state.compareData}
-              industryData={this.state.industryData}
-              fillData={this.fillData}
-              header={this.state.stockHeader}
-              newFieldContent = {this.state.newField}
-              newFieldHandler = {this.newField}
-              removeField = {this.removeField}
-              tags={this.state.tags}
-              content={this.state.ticker}
-              handlerFunction={this.handleChange}
-              search={this.search}
-              ticker={this.state.ticker}
-              stock={this.state.stockObject}
-              data={this.state.stockData}
-              shares={this.state.shares}
-              compareContent={this.state.compareTicker}
-              compare={this.compare}
-            />
-          </Col>
-          <Col>
-            <Chart
-              chartData={this.state.chartData}
-              changeDate={this.changeDate}
-              content={this.state.date}
-              changeRelative={this.changeRelative}
-              relContent={this.state.relative}
-            />
-          </Col>
+          {showCard}
+          {chart}
         </Row>
       </div>
     )

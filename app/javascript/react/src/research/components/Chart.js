@@ -12,15 +12,14 @@ const Chart = props =>{
   let graph
 
   if (props.chartData !== {}){
-    graph =
-        <Line
+      graph =
+      <Line
           data={props.chartData}
-          height={350}
-          width={400}
+          height={800}
+          width={1600}
           options={{maintainAspectRatio:true}}
         />
-
-  }
+    }
 
   return(
     <div style={{boxShadow:"0px 0px 3px #888888", borderRadius:"5px",background:"white",padding:"8px"}}>
@@ -36,7 +35,9 @@ const Chart = props =>{
           content={props.relContent}
         />
       </div>
-      {graph}
+      <div>
+        {graph}
+      </div>
     </div>
   )
 }
