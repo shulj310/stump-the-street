@@ -55,6 +55,7 @@ class ResearchIndex extends Component{
     this.removeTickerPrices = this.removeTickerPrices.bind(this)
     this.changeDate = this.changeDate.bind(this)
     this.reloadTickerPrices = this.reloadTickerPrices.bind(this)
+    this.changeRelative = this.changeRelative.bind(this)
   }
 
   componentDidMount(){
@@ -86,7 +87,7 @@ class ResearchIndex extends Component{
     this.grabData(this.state.ticker,{tags:this.state.tags},false)
     this.grabIndustryData(this.state.ticker,{tags:this.state.tags})
     this.getStockObject(this.state.ticker)
-    this.loadTickerPrices(this.state.ticker,this.state.date)
+    this.loadTickerPrices(this.state.ticker,this.state.date,false,this.state.relative,true)
   }
 
   headerData(ticker){
@@ -168,11 +169,19 @@ class ResearchIndex extends Component{
     }
   }
 
-  loadTickerPrices(ticker,date,add=false){
+  loadTickerPrices(ticker,date,add=false,rel=false,reload=false){
+    let tick = ticker
     if (add){
-      ticker = `_${ticker}`
+      tick = `_${ticker}`
     }
-    fetch(`/api/v1/research/${ticker}/historical_data/date_type/${date}`)
+    if (rel){
+      if (reload){
+        tick = `rel-${ticker}&SPY`
+      } else {
+        tick = `rel-${ticker}`
+      }
+    }
+    fetch(`/api/v1/research/${tick}/historical_data/date_type/${date}`)
     .then(response=>response.json())
     .then(body=>{
       if (add){
@@ -204,18 +213,31 @@ class ResearchIndex extends Component{
     })
   }
 
+  changeRelative(event){
+    event.preventDefault()
+    let rel
+    if (event.target.value=="Absolute"){
+      rel=false
+    } else{
+      rel=true
+    }
+    let tickers = this.state.chartPrices.map(tik=> Object.keys(tik)[0])
+    this.reloadTickerPrices(tickers,this.state.date,rel)
+    this.setState({relative:rel})
+  }
+
   changeDate(event){
     event.preventDefault()
     let newDate = event.target.id
     let tickers = this.state.chartPrices.map(tik=> Object.keys(tik)[0])
-    this.reloadTickerPrices(tickers,newDate)
+    this.reloadTickerPrices(tickers,newDate,this.state.relative)
   }
 
   compare(event){
     event.preventDefault()
     let compareTickers = this.state.compareTickers
     compareTickers.push(this.state.compareTicker)
-    this.loadTickerPrices(this.state.compareTicker,this.state.date,true)
+    this.loadTickerPrices(this.state.compareTicker,this.state.date,true,this.state.relative)
     this.grabData(this.state.compareTicker,{tags:this.state.tags})
     this.setState({compareTickers:compareTickers,compareTicker:""})
   }
@@ -356,6 +378,8 @@ class ResearchIndex extends Component{
               chartData={this.state.chartData}
               changeDate={this.changeDate}
               content={this.state.date}
+              changeRelative={this.changeRelative}
+              relContent={this.state.relative}
             />
           </Col>
         </Row>

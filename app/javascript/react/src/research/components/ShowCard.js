@@ -135,20 +135,3 @@ const ShowCard = props =>{
   }
 
 export default ShowCard
-
-//
-// <Row>
-//   <Col s={10}>
-//     <Header
-//     ticker={ticker}
-//       data = {props.header}
-//     />
-//   </Col>
-// </Row>
-// <Col s={1}>
-// <button style={{height:"20px",borderRadius:"5px",background:"transparent",
-//   border:"transparent"}}
-//   onClick={props.newFieldHandler}>
-//     <i className="material-icons" style={{height:"20px",marginBottom:"0px",padding:0}}>add_box</i>
-//   </button>
-// </Col>

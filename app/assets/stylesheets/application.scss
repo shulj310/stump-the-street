@@ -46,6 +46,21 @@
    flex: 1 0 auto;
  }
 
+[type=radio]:not(:checked) + label{
+  font-size: 14px;
+  padding-right:0;
+  padding-left: 25px;
+  margin-top: 10;
+}
+
+[type=radio]:checked + label{
+  font-size: 14px;
+  padding-right:0;
+  font-weight: bold;
+  padding-left: 25px;
+  margin-top: 10;
+}
+
  .trans {
    position: absolute;
  }

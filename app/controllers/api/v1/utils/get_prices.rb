@@ -43,8 +43,9 @@ class GetPrices
   end
 
   def relative_prices
+    first_price = @prices["data"][0].values[1]
     price_hash = {}
-    binding.pry
-    return true
+    @prices["data"].map { |data| price_hash[data.values[0]] = data.values[1]/first_price }
+    return {@ticker=>price_hash}
   end
 end
