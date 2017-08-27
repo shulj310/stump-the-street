@@ -25,6 +25,10 @@ class Api::V1::StocksController < ApplicationController
     end
   end
 
+  def tickers
+    render json: Stock.all.pluck(:ticker)
+  end
+
   def create
 
     portfolio = Portfolio.find(params[:portfolio_id])
@@ -134,6 +138,10 @@ class Api::V1::StocksController < ApplicationController
   def trade_params
     data = JSON.parse(request.body.read)
     return [data["ticker"].upcase , data["share_amount"].to_i, data["side"]]
+  end
+
+  def id
+    render json: Stock.find_by(ticker:params[:stock_id].upcase)
   end
 
   def new_stock(ticker)

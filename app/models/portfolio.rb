@@ -8,6 +8,15 @@ class Portfolio < ApplicationRecord
   has_many :trade_queues
   has_many :portfolio_histories
 
+  after_create do |port|
+
+    PortfolioHistory.create(
+      portfolio_id:port.id,
+      value:1000000,
+      trades_made:0
+    )
+  end
+
   after_touch do |port|
     port.positions.each {|pos| pos.touch}
     port.value = port.positions.pluck(:value).inject(0) {|sum,x| sum + x} + port.cash

@@ -5,7 +5,7 @@ class DailyDash < Thor
   desc "end_of_day","sends perf updates at the end of day"
 
   def end_of_day
-    # unless DateTime.now.saturday? || DateTime.now.sunday?
+    unless DateTime.now.saturday? || DateTime.now.sunday?
       User.all.each do |user|
         competitions = []
         user.competitions.each do |comp|
@@ -23,8 +23,10 @@ class DailyDash < Thor
           )
           competitions.push(CompetitionPrep.new(comp,prior_value))
         end
-        CompetitionMailer.end_of_day(user,competitions).deliver
+        if competitions.length > 0
+          CompetitionMailer.end_of_day(user,competitions).deliver
+        end
       end
     end
-  # end
+  end
 end

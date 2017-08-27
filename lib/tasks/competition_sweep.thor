@@ -11,7 +11,7 @@ class CompetitionSweep < Thor
   desc "updater", "updates all pertinent data"
 
   def updater
-    Stock.all.each {|s| s.touch}
+    Portfolio.all.each { |p| p.positions.each { |pos|  pos.stock.touch  } }
     Portfolio.all.each {|p| p.touch}
     CompetitorPortfolio.all.each {|cp| cp.touch}
     Competition.all.each do |c|
@@ -39,6 +39,7 @@ class CompetitionSweep < Thor
             if win
               winnings = comp.current_value
               user.wallet += winnings
+              user.wallet += comp.wager_amount
               user.save
             end
             CompetitionHistory.create(
@@ -48,7 +49,8 @@ class CompetitionSweep < Thor
               competitor_id: comp.competitor_id,
               return: comp.portfolio.return,
               competitor_return: comp.competitor_portfolio.return,
-              winnings: winnings
+              winnings: winnings,
+              length: comp.length
             )
             comp.destroy
           end

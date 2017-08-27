@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170818122737) do
+ActiveRecord::Schema.define(version: 20170827165855) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 20170818122737) do
     t.datetime "created_at",        null: false
     t.datetime "updated_at",        null: false
     t.float    "winnings"
+    t.integer  "length"
     t.index ["user_id"], name: "index_competition_histories_on_user_id", using: :btree
   end
 
@@ -85,10 +86,22 @@ ActiveRecord::Schema.define(version: 20170818122737) do
     t.index ["portfolio_id"], name: "index_positions_on_portfolio_id", using: :btree
   end
 
+  create_table "search_histories", force: :cascade do |t|
+    t.string   "ticker"
+    t.string   "fields"
+    t.integer  "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string   "session_id"
+    t.index ["user_id"], name: "index_search_histories_on_user_id", using: :btree
+  end
+
   create_table "stocks", force: :cascade do |t|
     t.string "ticker", null: false
     t.string "name",   null: false
     t.float  "price",  null: false
+    t.string "sector"
+    t.string "sic"
   end
 
   create_table "trade_queues", force: :cascade do |t|

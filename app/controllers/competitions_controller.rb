@@ -12,6 +12,10 @@ class CompetitionsController < ApplicationController
 
   end
 
+  def trade
+    return true
+  end
+
   private
 
   def competition_params

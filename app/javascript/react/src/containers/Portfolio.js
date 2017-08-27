@@ -20,7 +20,8 @@ class Portfolio extends Component{
     auth: true,
     tradeQueue:[],
     showTradeQueue:false,
-    netCashQueue:0
+    netCashQueue:0,
+    ticker:""
   }
   this.makeTrade = this.makeTrade.bind(this)
   this.newStocks = this.newStocks.bind(this)
@@ -101,6 +102,10 @@ class Portfolio extends Component{
 
   componentDidMount(){
     this.newStocks()
+    let ticker = this.props.match.params.ticker_id.toUpperCase()
+    if (ticker !== ""){
+      this.setState({ticker:ticker})
+    }
   }
 
   cancelTrade(payLoad){
@@ -186,6 +191,9 @@ class Portfolio extends Component{
         this.setState({stocks: filteredPositions,portfolio:new_portfolio,chartLength: filteredPositions.length})
       }
     })
+    if (this.props.match.params.ticker_id !== ""){
+      document.location.replace(`/competitions/show/portfolios/${this.props.match.params.port_id}`)
+    }
   }
 
   render (){
@@ -278,6 +286,7 @@ class Portfolio extends Component{
           stocks = {this.state.stocks}
           portfolio = {this.state.portfolio}
           netCashQueue = {this.state.netCashQueue}
+          ticker={this.state.ticker}
           />
           {table}
         <br/>

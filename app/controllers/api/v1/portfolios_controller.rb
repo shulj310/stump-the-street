@@ -1,6 +1,11 @@
 class Api::V1::PortfoliosController < ApplicationController
   skip_before_action :verify_authenticity_token
 
+  def index
+    portfolios = Competition.where(user_id:current_user.id).map {|comp| comp.portfolio}
+    render json: portfolios, include: ["positions"]
+  end
+
   def show
 
     portfolio = Portfolio.find(params[:id])

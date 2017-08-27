@@ -19,6 +19,7 @@ const App = props =>{
         <Route exact path="/competitions" component={Competitions}/>
         <Route exact path='/competitors' component={CompetitorIndex}/>
         <Route exact path='/research' component={ResearchIndex}/>
+        <Route exact path="/competitions/trade/portfolios/:port_id/ticker/:ticker_id" component={Portfolio}/>
         <Route exact path="/competitions/:comp_id/portfolios/:port_id" component={Portfolio}/>
       </Switch>
     </BrowserRouter>
