@@ -1,13 +1,13 @@
 export function joinScroll(height,shift){
     let starter = 100
-    if (height<100){
+    if (height<200){
       this.setState({showJoin:false,joinStyle:{
         position:"absolute",
         top:300,
         left:0
       }})
     }
-    if (height>100){
+    if (height>200){
       this.setState({showJoin:true,joinStyle:{
           position: "fixed",
           top: 20,
