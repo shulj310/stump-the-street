@@ -101,19 +101,21 @@ class ResearchIndex extends Component{
     event.preventDefault()
     let ticker = this.state.ticker
     let pid = this.state.currentPortfolio.id
-    if (this.state.showPortfolio){
-      if (this.state.selectedPortfolio == ""){
-        alert('Select Portfolio!')
-      } else {
-        if (this.state.ticker == ""){
-          alert('Enter Ticker!')
-        } else {
-          document.location.replace(`/competitions/trade/portfolios/${pid}/ticker/${ticker}`)
-        }
-      }
-    } else {
-      document.location.replace(`/users/sign_in`)
-    }
+    document.location.replace(`/competitions/trade/portfolios/${pid}/ticker/${ticker}`)
+    // if (this.state.showPortfolio){
+    //   if (this.state.selectedPortfolio == ""){
+    //     alert('Select Portfolio!')
+    //   } else {
+    //     if (this.state.ticker == ""){
+    //       alert('Enter Ticker!')
+    //     } else {
+    //     }
+    //   }
+    // }else {
+    //   debugger;
+    //   // document.location.replace(`/users/sign_in`)
+    //   alert('Please create a competition to trade!')
+    // }
   }
 
   removeTickerPrices(ticker){
@@ -428,6 +430,7 @@ class ResearchIndex extends Component{
       showCard =
         <Col s={12}>
           <ShowCard
+            selectedPortfolio ={this.state.selectedPortfolio}
             showTable={this.state.showTable}
             removeTicker = {this.removeTicker}
             compareData={this.state.compareData}

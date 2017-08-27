@@ -100,12 +100,6 @@ const ShowCard = props =>{
 
     if (props.showTable){
       pulse = ""
-      trade =
-          <div>
-            <button style={{marginTop:"20px",lineHeight:"20px",borderRadius:"5px",background:"transparent",
-              borderColor:"#888888",display:"inline-block"}}
-              onClick={props.trade}>Trade</button>
-          </div>
       shares =
       <div style={{marginTop:"25px"}}>
         <label style={{fontSize:"100%"}}>Shares: {props.shares}</label>
@@ -113,6 +107,15 @@ const ShowCard = props =>{
 
     }
 
+    if ((props.showTable) && (props.ticker != "") && (props.selectedPortfolio != "")){
+
+    trade =
+        <div>
+          <button style={{marginTop:"20px",lineHeight:"20px",borderRadius:"5px",background:"transparent",
+            borderColor:"#888888",display:"inline-block"}}
+            onClick={props.trade}>Trade</button>
+        </div>
+}
     // <button style={{marginTop:"20px",borderRadius:"5px",background:"transparent",
     //   border:"transparent"}}>
     //   <i className="material-icons"

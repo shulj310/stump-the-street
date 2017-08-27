@@ -21,7 +21,8 @@ class Portfolio extends Component{
     tradeQueue:[],
     showTradeQueue:false,
     netCashQueue:0,
-    ticker:""
+    ticker:"",
+    fromResearch:false
   }
   this.makeTrade = this.makeTrade.bind(this)
   this.newStocks = this.newStocks.bind(this)
@@ -102,9 +103,10 @@ class Portfolio extends Component{
 
   componentDidMount(){
     this.newStocks()
-    let ticker = this.props.match.params.ticker_id.toUpperCase()
-    if (ticker !== ""){
-      this.setState({ticker:ticker})
+    let ticker = this.props.match.params.ticker_id
+    if ((ticker !== "")&&(ticker !== undefined)){
+      ticker = ticker.toUpperCase()
+      this.setState({ticker:ticker,fromResearch:true})
     }
   }
 
@@ -150,6 +152,9 @@ class Portfolio extends Component{
       if (body["auth"]=='after-hours'){
         this.getTradeQueue()
         alert('Your trade will be executed when the market opens!')
+        if (this.state.fromResearch){
+          document.location.replace(`/competitions/show/portfolios/${this.props.match.params.port_id}`)
+        }
       }
 
       if (body["auth"]=='no-cash'){
@@ -191,7 +196,7 @@ class Portfolio extends Component{
         this.setState({stocks: filteredPositions,portfolio:new_portfolio,chartLength: filteredPositions.length})
       }
     })
-    if (this.props.match.params.ticker_id !== ""){
+    if (this.state.fromResearch){
       document.location.replace(`/competitions/show/portfolios/${this.props.match.params.port_id}`)
     }
   }
@@ -266,6 +271,7 @@ class Portfolio extends Component{
           <div>
             <ReactTable
                 data={this.state.stocks}
+                noDataText="Empty Portfolio!"
                 columns={columns}
                 minRows={this.state.chartLength}
                 defaultPageSize={20}

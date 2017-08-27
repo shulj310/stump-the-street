@@ -135,6 +135,7 @@ class Competitions extends Component{
         table =  <ReactTable
                     className='-centered -highlight'
                     data={this.state.competitions}
+                    noDataText="No Active Competitions!"
                     columns={columns}
                     minRows={this.state.competitions.length}
                     showPagination={false}
