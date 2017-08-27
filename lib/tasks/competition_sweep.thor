@@ -37,7 +37,7 @@ class CompetitionSweep < Thor
           if comp.deadline < Time.now.utc
             CompetitionMailer.competition_end(comp,win).deliver
             if win
-              winnings = comp.current_value
+              winnings = comp.current_value + comp.wager_amount
               user.wallet += winnings
               user.save
             end
