@@ -192,7 +192,6 @@ class Portfolio extends Component{
       }
     })
     if (this.props.match.params.ticker_id !== ""){
-      debugger;
       document.location.replace(`/competitions/show/portfolios/${this.props.match.params.port_id}`)
     }
   }
