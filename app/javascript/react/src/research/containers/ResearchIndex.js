@@ -65,6 +65,7 @@ class ResearchIndex extends Component{
     this.changeViewAgain = this.changeViewAgain.bind(this)
     this.getStockList = this.getStockList.bind(this)
     this.validateTicker = this.validateTicker.bind(this)
+    this.tradeTicker = this.tradeTicker.bind(this)
   }
 
   componentDidMount(){
@@ -94,6 +95,25 @@ class ResearchIndex extends Component{
 
   validateTicker(ticker){
     return (this.state.stockList.includes(ticker.toUpperCase()))
+  }
+
+  tradeTicker(event){
+    event.preventDefault()
+    let ticker = this.state.ticker
+    let pid = this.state.currentPortfolio.id
+    if (this.state.showPortfolio){
+      if (this.state.selectedPortfolio == ""){
+        alert('Select Portfolio!')
+      } else {
+        if (this.state.ticker == ""){
+          alert('Enter Ticker!')
+        } else {
+          document.location.replace(`/competitions/show/portfolios/${pid}`)
+        }
+      }
+    } else {
+      document.location.replace(`/users/sign_in`)
+    }
   }
 
   removeTickerPrices(ticker){
@@ -399,6 +419,7 @@ class ResearchIndex extends Component{
                     shares={this.state.shares}
                     compareContent={this.state.compareTicker}
                     compare={this.compare}
+                    trade={this.tradeTicker}
                   />
                 </Col>
       chart = ""
@@ -426,6 +447,7 @@ class ResearchIndex extends Component{
             shares={this.state.shares}
             compareContent={this.state.compareTicker}
             compare={this.compare}
+            trade={this.tradeTicker}
           />
         </Col>
       chart =
@@ -487,9 +509,6 @@ class ResearchIndex extends Component{
       <div>
         <h4>Stock Research Center</h4>
         {portfolioShow}
-        <div className="center-align">
-          {view}
-        </div>
         <Row>
           {showCard}
           {chart}
@@ -500,3 +519,7 @@ class ResearchIndex extends Component{
 }
 
 export default ResearchIndex
+
+// <div className="center-align">
+//   {view}
+// </div>

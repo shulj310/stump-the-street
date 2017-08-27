@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Col,Row,Chip,Tag,Modal } from 'react-materialize'
+import { Col,Row,Chip,Tag,Modal,Icon } from 'react-materialize'
 import TextField from '../../components/TextField'
 import Table from './Table'
 import Header from './Header'
@@ -94,6 +94,30 @@ const ShowCard = props =>{
       table= <br/>
     }
 
+    let trade = ""
+    let shares = ""
+    let pulse = "pulse"
+
+    if (props.showTable){
+      pulse = ""
+      trade =
+          <div>
+            <button style={{marginTop:"20px",lineHeight:"20px",borderRadius:"5px",background:"transparent",
+              borderColor:"#888888",display:"inline-block"}}
+              onClick={props.trade}>Trade</button>
+          </div>
+      shares =
+      <div style={{marginTop:"25px"}}>
+        <label style={{fontSize:"100%"}}>Shares: {props.shares}</label>
+      </div>
+
+    }
+
+    // <button style={{marginTop:"20px",borderRadius:"5px",background:"transparent",
+    //   border:"transparent"}}>
+    //   <i className="material-icons"
+    //     onClick={props.search}>search</i>
+    //   </button>
 
     return(
     <div style={{boxShadow:"0px 0px 3px #888888", borderRadius:"5px",background:"white",paddingLeft:"8px"}}>
@@ -106,26 +130,23 @@ const ShowCard = props =>{
               value={props.content}
               placeholder="Enter Ticker"
               style={{marginBottom:0,fontColor:"#37474F"}}
+              className="pulse"
             />
           </form>
         </Col>
         <Col s={2}>
-        <button style={{marginTop:"20px",borderRadius:"5px",background:"transparent",
-          border:"transparent"}}>
-          <i className="material-icons"
-            onClick={props.search}>search</i>
-          </button>
+        <a
+        style={{marginTop:"10px"}}
+        className={`blue-grey lighten-3 text-days btn-floating btn + ${pulse}`}
+        onClick={props.search}>
+        <Icon>search</Icon></a>
+
         </Col>
         <Col s={4}>
-          <div style={{marginTop:"25px"}}>
-            <label style={{fontSize:"100%"}}>Shares: {props.shares}</label>
-          </div>
+          {shares}
         </Col>
         <Col s={2}>
-          <div>
-            <button style={{marginTop:"20px",lineHeight:"20px",borderRadius:"5px",background:"transparent",
-              borderColor:"#888888",display:"inline-block"}}>Trade</button>
-          </div>
+          {trade}
         </Col>
       </Row>
       {searchNewField}

@@ -21,9 +21,16 @@ class Api::V1::ResearchController < ApplicationController
     ticker = params[:id].upcase
     data = JSON.parse(request.body.read)
 
+    if current_user
+      id = current_user.id
+      signed_in = true
+    else
+      session["init"] = true
+      id = session[:session_id]
+      signed_in = false
+    end
     username = ENV["INTRINIO_USERNAME"]
     password = ENV["INTRINIO_PASSWORD"]
-
 
     name_tags = data["tags"]
     tags = name_tags.map {|tag| search_by_name(tag)}
@@ -34,7 +41,7 @@ class Api::V1::ResearchController < ApplicationController
     response = restclient.get
 
     company = JSON.parse(response)
-    output = DataLabel.new(ticker,company).output
+    output = DataLabel.new(ticker,company,tags,id,true,signed_in).output
 
     render json: output
   end
