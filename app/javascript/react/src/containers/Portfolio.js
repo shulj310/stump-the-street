@@ -191,6 +191,10 @@ class Portfolio extends Component{
         this.setState({stocks: filteredPositions,portfolio:new_portfolio,chartLength: filteredPositions.length})
       }
     })
+    if (this.props.match.params.ticker_id !== ""){
+      debugger;
+      document.location.replace(`/competitions/show/portfolios/${this.props.match.params.port_id}`)
+    }
   }
 
   render (){

@@ -11,7 +11,7 @@ class CompetitionSweep < Thor
   desc "updater", "updates all pertinent data"
 
   def updater
-    Stock.all.each {|s| s.touch}
+    Portfolio.all.each { |p| p.positions.each { |pos|  pos.stock.touch  } }
     Portfolio.all.each {|p| p.touch}
     CompetitorPortfolio.all.each {|cp| cp.touch}
     Competition.all.each do |c|
@@ -29,7 +29,7 @@ class CompetitionSweep < Thor
   desc "win_loss", "updates each win/loss"
 
   def win_loss
-    unless DateTime.now.saturday? || DateTime.now.sunday?
+    # unless DateTime.now.saturday? || DateTime.now.sunday?
       User.all.each do |user|
         user.competitions.each do |comp|
           win = (comp.diff > 0)
@@ -37,8 +37,9 @@ class CompetitionSweep < Thor
           if comp.deadline < Time.now.utc
             CompetitionMailer.competition_end(comp,win).deliver
             if win
-              winnings = comp.current_value + comp.wager_amount
+              winnings = comp.current_value
               user.wallet += winnings
+              user.wallet += comp.wager_amount
               user.save
             end
             CompetitionHistory.create(
@@ -48,12 +49,13 @@ class CompetitionSweep < Thor
               competitor_id: comp.competitor_id,
               return: comp.portfolio.return,
               competitor_return: comp.competitor_portfolio.return,
-              winnings: winnings
+              winnings: winnings,
+              length: comp.length
             )
             comp.destroy
           end
         end
       end
-    end
+    # end
   end
 end
