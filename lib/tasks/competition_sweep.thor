@@ -29,7 +29,7 @@ class CompetitionSweep < Thor
   desc "win_loss", "updates each win/loss"
 
   def win_loss
-    # unless DateTime.now.saturday? || DateTime.now.sunday?
+    unless DateTime.now.saturday? || DateTime.now.sunday?
       User.all.each do |user|
         user.competitions.each do |comp|
           win = (comp.diff > 0)
@@ -56,6 +56,6 @@ class CompetitionSweep < Thor
           end
         end
       end
-    # end
+    end
   end
 end
