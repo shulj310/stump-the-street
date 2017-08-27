@@ -34,7 +34,6 @@ class DataLabel
     new_tags = @tags.split(',').select { |t| !original_tags.include?(t) }
 
     tags = new_tags.join(',')
-    binding.pry
     if @signed_in
       unless SearchHistory.where({user_id:@id,fields:tags,created_at:(Time.now-1.day..Time.now)}).length > 0
         SearchHistory.create(

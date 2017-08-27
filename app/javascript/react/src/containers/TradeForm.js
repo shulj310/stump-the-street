@@ -25,6 +25,7 @@ class TradeForm extends Component{
   this.errorLister = this.errorLister.bind(this)
   this.handleTicker = this.handleTicker.bind(this)
   this.handFundData = this.handFundData.bind(this)
+  this.getTickerData = this.getTickerData.bind(this)
 }
 
 
@@ -128,11 +129,7 @@ handleClearForm(event){
     this.setState({[event.target.name]:event.target.value})
   }
 
-  handleTicker(event){
-    let ticker = event.target.value
-    this.setState({ticker:ticker})
-    if (event.target.value !== ""){
-
+  getTickerData(ticker){
     fetch(`/api/v1/stocks/${ticker}`,{
       credentials: 'same-origin'
     })
@@ -157,6 +154,14 @@ handleClearForm(event){
         this.setState({stockData:{},tickerLoaded:false})
         console.error(`Ticker does not exist: ${error.message}`)
     })
+    }
+
+
+  handleTicker(event){
+    let ticker = event.target.value
+    this.setState({ticker:ticker})
+    if (event.target.value !== ""){
+      this.getTickerData(ticker)
     }
   }
 handFundData(event){
@@ -204,6 +209,14 @@ handFundData(event){
     .catch(error=> {
       this.setState({histPrice:{}})
   })
+  }
+
+  componentWillReceiveProps(){
+    let ticker = this.props.ticker
+    if (ticker !== ""){
+      this.getTickerData(ticker)
+      this.setState({ticker:ticker})
+    }
   }
 
 

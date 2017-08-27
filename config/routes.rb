@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   devise_for :users, controllers: {sessions: "users/sessions",passwords: "users/passwords", registrations: "users/registrations"}
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
   root "static_pages#index"
+  get "/competitions/trade/portfolios/:port_id/ticker/:ticker_id", to: "static_pages#index"
   resources :research, only: [:index], to: "static_pages#index"
   resources :competitors, only: [:index], to: "static_pages#index"
   resources :competitions, only: [:index,:create,:new], to: "static_pages#index" do

@@ -108,7 +108,7 @@ class ResearchIndex extends Component{
         if (this.state.ticker == ""){
           alert('Enter Ticker!')
         } else {
-          document.location.replace(`/competitions/show/portfolios/${pid}`)
+          document.location.replace(`/competitions/trade/portfolios/${pid}/ticker/${ticker}`)
         }
       }
     } else {
