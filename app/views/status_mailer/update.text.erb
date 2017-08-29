@@ -3,3 +3,23 @@ Total Competitions: <%= @total_competitions %>
 
 Total Exposure: <%= number_to_currency(@total_exposure,precision: 2) %>
 Current Exposure: <%= number_to_currency(@current_exposure, precision: 2) %>
+
+Last Day Users: <% @last_day_users.each do |user| %>
+  <%= user[2]%> <%=user[1] %> <%=user[0] %>
+<% end %>
+
+Latest Users: <% @latest_users.each do |user| %>
+  <%= user[2]%> <%=user[1] %> <%=user[0] %>
+<% end %>
+
+Stock Exposure: <% @sorted_exposure_hash.each_with_index do |stock,index| %>
+      <% if index < 10 %>
+          Ticker <%= stock.keys[0] %> * Percentage of "Portfolio" Assets <%= number_to_percentage(stock.values[0]*100,precision: 2) %>
+      <%end%>
+<% end %>
+
+Dollar Exposure: <% @stock_exposure.keys.each_with_index do |stock,index| %>
+      <% if index <10 %>
+           Ticker <%= stock  %> * Dollar Amount of outstanding competitions <%= number_to_currency(@stock_exposure[stock], precision: 2) %>
+      <%end%>
+<% end %>
