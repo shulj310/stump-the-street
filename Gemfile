@@ -9,6 +9,7 @@ gem 'uglifier', '>= 1.3.0'
 gem 'jquery-rails'
 gem "simple_form"
 gem "devise"
+gem "intrinio-realtime"
 gem "webpacker"
 gem 'materialize-sass'
 gem 'material_icons'

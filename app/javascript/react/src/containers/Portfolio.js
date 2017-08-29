@@ -108,6 +108,7 @@ class Portfolio extends Component{
       ticker = ticker.toUpperCase()
       this.setState({ticker:ticker,fromResearch:true})
     }
+    debugger;
     App.portfolioChannel = App.cable.subscriptions.create(
       {
         channel:"StockPriceChannel",
