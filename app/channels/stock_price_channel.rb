@@ -5,12 +5,12 @@ class StockPriceChannel < ApplicationCable::Channel
   end
 
   def unsubscribed
+    puts "Hello!"
     # Any cleanup needed when channel is unsubscribed
-    EventMachine.stop()
   end
 
   def receive(data)
-    tickers = data["message"]
+    tickers = data["stocks"]
 
     tickers = tickers.split(",")
 

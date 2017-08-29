@@ -6,6 +6,7 @@ import PortfolioDash from '../components/PortfolioDash';
 import ReactTable from 'react-table';
 import numeral from 'numeral';
 import TradeQueue from '../components/TradeQueue'
+import TestContainer from '../realtime/TestContainer'
 
 class Portfolio extends Component{
   constructor(props){
@@ -22,13 +23,15 @@ class Portfolio extends Component{
     showTradeQueue:false,
     netCashQueue:0,
     ticker:"",
-    fromResearch:false
+    fromResearch:false,
+    lastTrade:{}
   }
   this.makeTrade = this.makeTrade.bind(this)
   this.newStocks = this.newStocks.bind(this)
   this.cancelTrade = this.cancelTrade.bind(this)
   this.getTradeQueue = this.getTradeQueue.bind(this)
   this.handleCancelTrade = this.handleCancelTrade.bind(this)
+  this.liveTickers = this.liveTickers.bind(this)
 }
 
     getTradeQueue(){
@@ -94,6 +97,7 @@ class Portfolio extends Component{
         this.setState({ portfolio: portfolio, loading: false })
       })
       this.getTradeQueue()
+      this.queueActionCable()
     }
 
     refreshButton(){
@@ -108,7 +112,22 @@ class Portfolio extends Component{
       ticker = ticker.toUpperCase()
       this.setState({ticker:ticker,fromResearch:true})
     }
+  }
+
+  componentWillUpdate(nextProps,nextState){
+
     debugger;
+
+  }
+
+  liveTickers(stocks){
+    console.log('grabbing tickers')
+    let tickers = stocks.map(stock => stock.ticker)
+    App.portfolioChannel.send({stocks:tickers})
+  }
+
+
+  queueActionCable(){
     App.portfolioChannel = App.cable.subscriptions.create(
       {
         channel:"StockPriceChannel",
@@ -116,16 +135,17 @@ class Portfolio extends Component{
       },
       {
         connected: () => console.log("StockPriceChannel connected"),
-        disconnected: () => console.log("StockPriceChannel disconnected"),
+        disconnected: function () {
+            App.cable.subscriptions.remove(this)
+            this.perform("unsubscribed")},
         received: data => {
+          this.setState({lastTrade:data})
           console.log(data)
         }
       }
     )
-    App.portfolioChannel.send({
-      message:"AAPL,MSFT"
-    })
-}
+  }
+
 
   cancelTrade(payLoad){
     fetch(`/api/v1/trade_queues/${this.props.match.params.port_id}`,{
@@ -286,6 +306,9 @@ class Portfolio extends Component{
         <div>
           {queueButton}
           <div>
+            <TestContainer
+              lastTrade={this.state.lastTrade}
+            />
             <ReactTable
                 data={this.state.stocks}
                 noDataText="Empty Portfolio!"
