@@ -108,7 +108,23 @@ class Portfolio extends Component{
       ticker = ticker.toUpperCase()
       this.setState({ticker:ticker,fromResearch:true})
     }
-  }
+    App.portfolioChannel = App.cable.subscriptions.create(
+      {
+        channel:"StockPriceChannel",
+        portfolio_id:this.props.match.params.port_id
+      },
+      {
+        connected: () => console.log("StockPriceChannel connected"),
+        disconnected: () => console.log("StockPriceChannel disconnected"),
+        received: data => {
+          console.log(data)
+        }
+      }
+    )
+    App.portfolioChannel.send({
+      message:"AAPL,MSFT"
+    })
+}
 
   cancelTrade(payLoad){
     fetch(`/api/v1/trade_queues/${this.props.match.params.port_id}`,{
