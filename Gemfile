@@ -1,5 +1,4 @@
 source 'https://rubygems.org/'
-ruby "2.3.3"
 
 gem 'rails', '~> 5.0.0'
 gem 'pg', '~> 0.18'
@@ -10,6 +9,8 @@ gem 'jquery-rails'
 gem "simple_form"
 gem "devise"
 gem "intrinio-realtime"
+gem 'thread'
+gem 'pool'
 gem "webpacker"
 gem 'materialize-sass'
 gem 'material_icons'
