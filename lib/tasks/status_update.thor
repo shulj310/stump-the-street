@@ -39,9 +39,16 @@ class StatusUpdate < Thor
     ########## GET THE DOLLAR EXPOSURE BY EACH STOCK ACROSS ALL PORTFOLIOS ##############
 
     stock_exposure = {}
+    current_value = 0
+    Competition.all.each  do |comp|
+      comp.portfolio.positions.each do |pos|
+        current_value += pos.value
+      end
+    end
+
     Competition.all.each do |comp|
       stock_hash = comp.portfolio.positions.group(:stock_id).sum(:value)
-      stocks_by_weight = stock_hash.map { |key,value| {Stock.find(key).ticker => value/total_value*comp.current_value}}
+      stocks_by_weight = stock_hash.map { |key,value| {Stock.find(key).ticker => value/current_value*comp.current_value}}
       # stocks_by_weight.map { |k,v| stock_exposure[k].nil? ? stock_exposure[k]=v : stock_exposure[k] += v }
       stocks_by_weight.each { |hash| stock_exposure[hash.keys[0]].nil? ? stock_exposure[hash.keys[0]] = hash.values[0] : stock_exposure[hash.keys[0]] += hash.values[0]}
     end
