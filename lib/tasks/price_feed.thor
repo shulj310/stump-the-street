@@ -33,7 +33,13 @@ class PriceFeed < Thor
         pool.process do
           if quote['type'] == 'last'
             puts quote
+            # update pre-database cache
             quotes[quote['ticker']] = quote['price']
+            # broadcast to subscribers
+            ActionCable.server.broadcast(
+              "ticker_#{quote['ticker']}",
+              quote,
+            )
             # this is a good place to check for stop limits and if any match process them
             # (probably in another thread or Sidekiq process)
           end
@@ -41,12 +47,13 @@ class PriceFeed < Thor
       end
       client.connect
 
-      if sg.count > 1 # rotate groups if there are more than SUBSCRIPTION_LIMIT active stocks
-        EventMachine.add_periodic_timer(SWITCH_EVERY) do
-          pool.process do
-            puts ">FLUSH STARTED"
-            flush_quotes(quotes)
-            puts ">FLUSH_COMPLETED"
+
+      EventMachine.add_periodic_timer(SWITCH_EVERY) do
+        pool.process do
+          puts ">FLUSH STARTED"
+          flush_quotes(quotes)
+          puts ">FLUSH_COMPLETED"
+          if sg.count > SUBSCRIPTION_LIMIT # rotate groups if there are more than SUBSCRIPTION_LIMIT active stocks
             client.leave(last_stock(index).dup)
             puts ">LEAVE COMPLETED (#{last_stock(index)})"
             index += 1
@@ -78,17 +85,23 @@ class PriceFeed < Thor
     end
 
     def stock_groups(i) # get active stocks and group them in batches < SUBSCRIPTION_LIMIT
-      # stocks = Stock.connection.select_all('SELECT
-      #   DISTINCT ticker
-      # FROM stocks
-      # INNER JOIN positions ON (positions.stock_id = stocks.id)
-      # WHERE portfolio_id IS NOT NULL')
-      # stocks = Stock.all.limit(100).map do |stock|
-      #   stock['ticker']
-      # end
-      # total_stock_group_length = stocks.length
-      total_stock_group_length,stocks = all_stocks[0],all_stocks[1]
-      if i < total_stock_group_length - SUBSCRIPTION_LIMIT
+      # TODO: might be necessary to add a few seconds cache for this method
+      stocks = Stock.connection.select_all('SELECT
+        DISTINCT ticker
+      FROM stocks
+      INNER JOIN positions ON (positions.stock_id = stocks.id)
+      INNER JOIN portfolios ON (positions.portfolio_id = portfolios.id)
+      WHERE competition_id IS NOT NULL AND positions.value > 0').map do |stock|
+        stock['ticker']
+      end
+      total_stock_group_length = stocks.length
+      #total_stock_group_length,stocks = all_stocks[0],all_stocks[1]
+      #puts "i = #{i}"
+      #puts "total len = #{total_stock_group_length}"
+      #puts "limit = #{SUBSCRIPTION_LIMIT}"
+      if total_stock_group_length <= SUBSCRIPTION_LIMIT
+        stocks
+      elsif i < total_stock_group_length - SUBSCRIPTION_LIMIT
         stocks.slice(i,SUBSCRIPTION_LIMIT)
       else
         stocks.slice(i,SUBSCRIPTION_LIMIT).concat(stocks.slice(0,i-SUBSCRIPTION_LIMIT))

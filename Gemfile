@@ -8,9 +8,13 @@ gem 'uglifier', '>= 1.3.0'
 gem 'jquery-rails'
 gem "simple_form"
 gem "devise"
+
+# real-time quotes
 gem "intrinio-realtime"
 gem 'thread'
 gem 'pool'
+gem 'redis'
+
 gem "webpacker"
 gem 'materialize-sass'
 gem 'material_icons'

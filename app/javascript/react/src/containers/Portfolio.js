@@ -87,6 +87,7 @@ class Portfolio extends Component{
 
         let chartLength = portfolio.length
         this.setState({ stocks: portfolio, chartLength: chartLength })
+        this.liveTickers(portfolio)
       })
       fetch(`/api/v1/competitions/show/portfolios/${this.props.match.params.port_id}`,{
         credentials: 'same-origin'
@@ -121,29 +122,52 @@ class Portfolio extends Component{
   }
 
   liveTickers(stocks){
-    console.log('grabbing tickers')
     let tickers = stocks.map(stock => stock.ticker)
-    App.portfolioChannel.send({stocks:tickers})
+    console.log('grabbing tickers for', tickers)
+    let component = this
+    tickers.forEach(function(ticker) {
+      if (App.portfolioChannel[ticker]) {
+        return
+      }
+      App.portfolioChannel[ticker] = App.cable.subscriptions.create(
+        {
+          channel: 'StockPriceChannel',
+          ticker: ticker,
+        },
+        {
+          connected: () => console.log("StockPriceChannel connected for " + ticker),
+          disconnected: function () {
+            App.cable.subscriptions.remove(this)
+            this.perform("unsubscribed")},
+          received: data => {
+            component.setState({lastTrade:data})
+            component.updateStocks(data)
+            console.log(data)
+            console.log(component.state.stocks)
+          }
+        }
+      )
+    })
+  }
+
+  updateStocks(quote) {
+    let stocks = this.state.stocks
+    stocks.forEach(function(stock) {
+      if (stock.ticker == quote['ticker']) {
+        // TODO: makeTrade has very similar code, probably can be refactored
+        stock.price = quote['price']
+        stock.value = stock.price * stock.shares
+        stock.return = stock.price / stock.cost - 1
+      }
+    })
+    this.setState({ stocks: stocks })
+    // TODO: recalculate portfolio totals
+    // TODO: highlight updated cells in the UI
   }
 
 
   queueActionCable(){
-    App.portfolioChannel = App.cable.subscriptions.create(
-      {
-        channel:"StockPriceChannel",
-        portfolio_id:this.props.match.params.port_id
-      },
-      {
-        connected: () => console.log("StockPriceChannel connected"),
-        disconnected: function () {
-            App.cable.subscriptions.remove(this)
-            this.perform("unsubscribed")},
-        received: data => {
-          this.setState({lastTrade:data})
-          console.log(data)
-        }
-      }
-    )
+    App.portfolioChannel = {}
   }
 
 
@@ -231,6 +255,7 @@ class Portfolio extends Component{
 
         filteredPositions.unshift(body)
         this.setState({stocks: filteredPositions,portfolio:new_portfolio,chartLength: filteredPositions.length})
+        this.liveTickers(filteredPositions)
       }
     })
     if (this.state.fromResearch){
