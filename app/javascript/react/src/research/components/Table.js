@@ -124,15 +124,18 @@ compareData
                     value={props.compareContent}
                     onChange={props.onChange}
                     onSubmit={props.compare}
-                    placeholder="Add ticker..."
+                    placeholder=" Add ticker..."
                     style={{
                       padding:0,
                       fontSize:"85%",
-                      maxWidth:"100px",
-                      minWidth:"100px",
-                      border:"none",
+                      maxWidth:"75px",
+                      minWidth:"75px",
+                      borderBottom:'none',
+                      maxHeight:"25px",
+                      borderLeft:"3px solid #37474F",
                       fontStyle:"italic",
-                      margin:0
+                      margin:0,
+                      zIndex:100
                     }}
                   />
                 </form>

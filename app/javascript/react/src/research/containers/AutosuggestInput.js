@@ -38,8 +38,8 @@ getSuggestions(value) {
 renderSuggestion(suggestion){
   return(
     <div>
-      <button style={{height:"20px",borderRadius:"5px",background:"transparent",
-        border:"transparent",fontSize:"80%",padding:0}}
+      <button style={{height:"20px",borderRadius:"5px",background:"white",border:"none",
+        fontSize:"90%",zIndex:100}}
         onClick={this.props.fillData}
         id={suggestion}>
         {suggestion}
@@ -75,7 +75,8 @@ renderSuggestion(suggestion){
       value:this.props.value,
       onChange: this.props.onChange,
       name: this.props.name,
-      style:{border:"none",maxWidth:"200px"}
+      style:{borderBottom:"none",borderLeft:"3px solid #37474F",maxWidth:"200px"},
+      className:"add-field"
     };
 
     // Finally, render it!

@@ -47,6 +47,25 @@
  }
 
 
+ input[type="text"].add-field::-webkit-input-placeholder {
+   color: #37474F;
+   font-style: italic;
+   opacity: 0.4;
+   border-left: thick red
+ }
+
+ input[type="text"].add-field::-moz-placeholder {
+  color: #37474F;
+  font-style: italic;
+  opacity: 0.4
+
+}
+
+input[type="text"].add-field::-ms-input-placeholder {
+  color: #37474F;
+  font-style: italic;
+  opacity: 0.4
+}
 
 [type=radio]:not(:checked) + label{
   font-size: 14px;
