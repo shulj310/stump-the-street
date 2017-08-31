@@ -1,6 +1,7 @@
 import Autosuggest from 'react-autosuggest';
 import React, {Component} from 'react'
 import { nameToTag } from '../utils/nameToTag'
+import { Icon } from 'react-materialize'
 
 class AutosuggestInput extends React.Component {
   constructor(props) {
@@ -38,8 +39,8 @@ getSuggestions(value) {
 renderSuggestion(suggestion){
   return(
     <div>
-      <button style={{height:"20px",borderRadius:"5px",background:"transparent",
-        border:"transparent",fontSize:"80%",padding:0}}
+      <button style={{height:"20px",borderRadius:"5px",background:"white",border:"none",
+        fontSize:"90%",zIndex:100,minWidth:"100px"}}
         onClick={this.props.fillData}
         id={suggestion}>
         {suggestion}
@@ -75,21 +76,27 @@ renderSuggestion(suggestion){
       value:this.props.value,
       onChange: this.props.onChange,
       name: this.props.name,
-      style:{border:"none",maxWidth:"200px"}
+      style:{borderBottom:"none",maxHeight:"30px",maxWidth:"200px"},
+      className:"add-field"
     };
 
     // Finally, render it!
     return (
       <div>
         <form onSubmit={this.props.newFieldHandler}>
-          <Autosuggest
-            suggestions={this.state.suggestions}
-            onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-            onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-            getSuggestionValue={this.getSuggestionValue}
-            renderSuggestion={this.renderSuggestion}
-            inputProps={inputProps}
-          />
+          <div style={{position:"absolute"}}>
+            <Icon>create</Icon>
+          </div>
+          <div style={{position:"relative",right:-18}}>
+            <Autosuggest
+              suggestions={this.state.suggestions}
+              onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+              onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+              getSuggestionValue={this.getSuggestionValue}
+              renderSuggestion={this.renderSuggestion}
+              inputProps={inputProps}
+            />
+          </div>
         </form>
       </div>
     );

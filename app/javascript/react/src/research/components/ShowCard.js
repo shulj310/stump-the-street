@@ -43,33 +43,34 @@ const ShowCard = props =>{
           searchNewField =
 
           <Row style={{marginTop:"2px",marginBottom:0,paddingBottom:0}}>
-            <Col s={7}>
+            <Col s={8}>
               {chips}
             </Col>
-            <Col s={5}
+            <Col s={4}
               style={{paddingBotton:0}}>
               <Row>
-                <Col s={2}>
-                  <Modal
-                    header="Available Fields"
-                    trigger={<a href="#"><i className="material-icons">info</i></a>}>
-                      <AvailableFields
-                        currentField = {props.newField}
-                        fillData = {props.fillData}
-                      />
-                  </Modal>
-
-                </Col>
-                <Col s={10}>
-                  <AutosuggestInput
-                    newFieldHandler={props.newFieldHandler}
-                    fillData={props.fillData}
-                    newFieldHandler={props.newFieldHandler}
-                    name="newField"
-                    value={props.newFieldContent}
-                    onChange={props.handlerFunction}
-                    placeholder=" Add field..."
-                  />
+                <Col s={12}>
+                  <div style={{position:"absolute"}}>
+                    <AutosuggestInput
+                      newFieldHandler={props.newFieldHandler}
+                      fillData={props.fillData}
+                      newFieldHandler={props.newFieldHandler}
+                      name="newField"
+                      value={props.newFieldContent}
+                      onChange={props.handlerFunction}
+                      placeholder=" Add more analysis"
+                    />
+                  </div>
+                  <div style={{position:"relative",top:-10,right:-140,zIndex:100}}>
+                    <Modal
+                      header="Available Fields"
+                      trigger={<a href="#"><i className="material-icons">info</i></a>}>
+                        <AvailableFields
+                          currentField = {props.newField}
+                          fillData = {props.fillData}
+                        />
+                    </Modal>
+                  </div>
                 </Col>
               </Row>
             </Col>
@@ -121,6 +122,28 @@ const ShowCard = props =>{
     //   <i className="material-icons"
     //     onClick={props.search}>search</i>
     //   </button>
+    // <Col s={2}>
+    //   <Modal
+    //     header="Available Fields"
+    //     trigger={<a href="#"><i className="material-icons">info</i></a>}>
+    //       <AvailableFields
+    //         currentField = {props.newField}
+    //         fillData = {props.fillData}
+    //       />
+    //   </Modal>
+    //
+    // </Col>
+    // <Col s={10}>
+    //   <AutosuggestInput
+    //     newFieldHandler={props.newFieldHandler}
+    //     fillData={props.fillData}
+    //     newFieldHandler={props.newFieldHandler}
+    //     name="newField"
+    //     value={props.newFieldContent}
+    //     onChange={props.handlerFunction}
+    //     placeholder=" Add field..."
+    //   />
+    // </Col>
 
     return(
     <div style={{boxShadow:"0px 0px 3px #888888", borderRadius:"5px",background:"white",paddingLeft:"8px"}}>
