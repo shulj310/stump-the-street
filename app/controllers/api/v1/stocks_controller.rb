@@ -40,7 +40,6 @@ class Api::V1::StocksController < ApplicationController
 
     stock.get_price
 
-    binding.pry
     tx_px = make_trade(ticker,side)
 
     if Rails.env.production?
@@ -56,8 +55,6 @@ class Api::V1::StocksController < ApplicationController
       end_time = Time.new(2017,8,1,24,0,0).utc
 
     end
-
-    binding.pry
 
     if (beg_time.utc.strftime("%H%M%S%N") <= current_time.utc.strftime("%H%M%S%N") && current_time.utc.strftime("%H%M%S%N") <= end_time.utc.strftime("%H%M%S%N") && !current_time.saturday? && !current_time.sunday?)
 
@@ -142,11 +139,11 @@ class Api::V1::StocksController < ApplicationController
     response = restclient.get
 
     price = JSON.parse(response)
-
+    
     if side
-      return price["data"].select { |o| o["item"] == "bid_price" }[0]["value"]
-    else
       return price["data"].select { |o| o["item"] == "ask_price" }[0]["value"]
+    else
+      return price["data"].select { |o| o["item"] == "bid_price" }[0]["value"]
     end
   end
 
