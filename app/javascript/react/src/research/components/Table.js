@@ -119,25 +119,31 @@ compareData
                 <td
                   style={{padding:0,margin:0}}>
                 <form onSubmit={props.compare}>
-                  <input
-                    name="compareTicker"
-                    value={props.compareContent}
-                    onChange={props.onChange}
-                    onSubmit={props.compare}
-                    placeholder=" Add ticker..."
-                    style={{
-                      padding:0,
-                      fontSize:"85%",
-                      maxWidth:"75px",
-                      minWidth:"75px",
-                      borderBottom:'none',
-                      maxHeight:"25px",
-                      borderLeft:"3px solid #37474F",
-                      fontStyle:"italic",
-                      margin:0,
-                      zIndex:100
-                    }}
-                  />
+                  <div style={{position:"absolute"}}>
+                      <i className="material-icons" style={{fontSize:"80%"}}
+                      onClick={props.compare}>add</i>
+                  </div>
+                  <div style={{position:"relative",left:10}}>
+                    <input
+                      name="compareTicker"
+                      value={props.compareContent}
+                      onChange={props.onChange}
+                      onSubmit={props.compare}
+                      placeholder=" Add ticker..."
+                      style={{
+                        padding:0,
+                        fontSize:"85%",
+                        maxWidth:"75px",
+                        minWidth:"75px",
+                        borderBottom:'none',
+                        maxHeight:"25px",
+                        fontStyle:"italic",
+                        margin:0,
+                        zIndex:100
+                      }}
+                      className="add-field"
+                    />
+                  </div>
                 </form>
                 </td>
               </tr>

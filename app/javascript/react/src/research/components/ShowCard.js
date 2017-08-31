@@ -58,10 +58,10 @@ const ShowCard = props =>{
                       name="newField"
                       value={props.newFieldContent}
                       onChange={props.handlerFunction}
-                      placeholder="Add more analysis"
+                      placeholder=" Add more analysis"
                     />
                   </div>
-                  <div style={{position:"relative",top:-10,left:-10,zIndex:100}}>
+                  <div style={{position:"relative",top:-10,right:-140,zIndex:100}}>
                     <Modal
                       header="Available Fields"
                       trigger={<a href="#"><i className="material-icons">info</i></a>}>
