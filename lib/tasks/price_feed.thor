@@ -7,20 +7,26 @@ class PriceFeed < Thor
 
   SUBSCRIPTION_LIMIT = 50
   SWITCH_EVERY = 1.second
+  # INDEX = 0
+  # TOTAL_STOCK_GROUP_LENGTH = 0
 
   def price_feed
-    sg = stock_groups
+
+    index = 0
+    total_stock_group_length = all_stocks[0].to_i
+    sg = stock_groups(index)
     current_group = 0
     quotes = Hash.new # keeps latest quote values
 
     options = {
       username: ENV["INTRINIO_USERNAME"],
       password: ENV["INTRINIO_PASSWORD"],
-      channels: sg[current_group].dup, # dup is required as Intrinio::Realtime clears array passed here!
+      channels: sg.dup, # dup is required as Intrinio::Realtime clears array passed here!
     }
 
     pool = Thread.pool(50)
     EventMachine.run do
+      puts 'hello'
       client = Intrinio::Realtime::Client.new(options)
       client.on_quote do |quote|
         # Process quote in next available thread
@@ -41,14 +47,14 @@ class PriceFeed < Thor
             puts ">FLUSH STARTED"
             flush_quotes(quotes)
             puts ">FLUSH_COMPLETED"
-            client.leave(sg[current_group].dup)
-            puts ">LEAVE COMPLETED (#{current_group})"
-            current_group += 1
-            current_group = 0 if current_group == sg.count
-            channels_to_join = sg[current_group]
+            client.leave(last_stock(index).dup)
+            puts ">LEAVE COMPLETED (#{last_stock(index)})"
+            index += 1
+            index = 0 if index > total_stock_group_length
+            channels_to_join = next_stock(index)
             puts ">JOINING #{channels_to_join}"
             client.join(channels_to_join.dup)
-            puts ">JOIN COMPLETED (#{current_group})"
+            puts ">JOIN COMPLETED (#{stock_groups(index)})"
           end
         end
       end
@@ -56,15 +62,37 @@ class PriceFeed < Thor
   end
 
   private
-    def stock_groups # get active stocks and group them in batches < SUBSCRIPTION_LIMIT
-      stocks = Stock.connection.select_all('SELECT
-        DISTINCT ticker
-      FROM stocks
-      INNER JOIN positions ON (positions.stock_id = stocks.id)
-      WHERE portfolio_id IS NOT NULL').map do |stock|
-        stock['ticker']
+    def next_stock(i)
+      stock_groups(i).first
+    end
+
+    def last_stock(i)
+      stock_groups(i).last
+    end
+
+    def all_stocks
+      stocks =  Stock.all.limit(100).map do |stock|
+              stock['ticker']
+            end
+      return [stocks.length,stocks]
+    end
+
+    def stock_groups(i) # get active stocks and group them in batches < SUBSCRIPTION_LIMIT
+      # stocks = Stock.connection.select_all('SELECT
+      #   DISTINCT ticker
+      # FROM stocks
+      # INNER JOIN positions ON (positions.stock_id = stocks.id)
+      # WHERE portfolio_id IS NOT NULL')
+      # stocks = Stock.all.limit(100).map do |stock|
+      #   stock['ticker']
+      # end
+      # total_stock_group_length = stocks.length
+      total_stock_group_length,stocks = all_stocks[0],all_stocks[1]
+      if i < total_stock_group_length - SUBSCRIPTION_LIMIT
+        stocks.slice(i,SUBSCRIPTION_LIMIT)
+      else
+        stocks.slice(i,SUBSCRIPTION_LIMIT).concat(stocks.slice(0,i-SUBSCRIPTION_LIMIT))
       end
-      stocks.each_slice(SUBSCRIPTION_LIMIT).to_a
     end
 
     def flush_quotes(quotes)
