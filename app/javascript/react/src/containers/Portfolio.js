@@ -6,7 +6,6 @@ import PortfolioDash from '../components/PortfolioDash';
 import ReactTable from 'react-table';
 import numeral from 'numeral';
 import TradeQueue from '../components/TradeQueue'
-import TestContainer from '../realtime/TestContainer'
 
 class Portfolio extends Component{
   constructor(props){
@@ -32,6 +31,7 @@ class Portfolio extends Component{
   this.getTradeQueue = this.getTradeQueue.bind(this)
   this.handleCancelTrade = this.handleCancelTrade.bind(this)
   this.liveTickers = this.liveTickers.bind(this)
+  this.portfolioValue = this.portfolioValue.bind(this)
 }
 
     getTradeQueue(){
@@ -115,14 +115,9 @@ class Portfolio extends Component{
     }
   }
 
-  componentWillUpdate(nextProps,nextState){
-
-    debugger;
-
-  }
-
   liveTickers(stocks){
     let tickers = stocks.map(stock => stock.ticker)
+    tickers.push("SPY")
     console.log('grabbing tickers for', tickers)
     let component = this
     tickers.forEach(function(ticker) {
@@ -142,12 +137,23 @@ class Portfolio extends Component{
           received: data => {
             component.setState({lastTrade:data})
             component.updateStocks(data)
+            component.updateMarket(data)
             console.log(data)
             console.log(component.state.stocks)
           }
         }
       )
     })
+  }
+
+  updateMarket(quote){
+    let market = this.state.portfolio
+    if (quote["ticker"] == "SPY"){
+      market.comp_price = quote['price']
+    }
+    market.diff = market.return - (market.comp_price/market.comp_cost -1)
+    debugger;
+    this.setState({portfolio:market})
   }
 
   updateStocks(quote) {
@@ -160,6 +166,7 @@ class Portfolio extends Component{
         stock.return = stock.price / stock.cost - 1
       }
     })
+    this.portfolioValue(stocks)
     this.setState({ stocks: stocks })
     // TODO: recalculate portfolio totals
     // TODO: highlight updated cells in the UI
@@ -196,6 +203,14 @@ class Portfolio extends Component{
       tradeId:event.target.value
     }
     this.cancelTrade(formPayload)
+  }
+
+  portfolioValue(stocks){
+    let newValue = stocks.reduce(function(a,b) {return a + b.value},0)
+    let newPortfolio = this.state.portfolio
+    newPortfolio.value = newValue + newPortfolio.cash
+    newPortfolio.return = newPortfolio.value/1000000-1
+    this.setState({portfolio:newPortfolio})
   }
 
 
@@ -256,6 +271,7 @@ class Portfolio extends Component{
         filteredPositions.unshift(body)
         this.setState({stocks: filteredPositions,portfolio:new_portfolio,chartLength: filteredPositions.length})
         this.liveTickers(filteredPositions)
+        this.portfolioValue(filteredPositions)
       }
     })
     if (this.state.fromResearch){
@@ -331,9 +347,6 @@ class Portfolio extends Component{
         <div>
           {queueButton}
           <div>
-            <TestContainer
-              lastTrade={this.state.lastTrade}
-            />
             <ReactTable
                 data={this.state.stocks}
                 noDataText="Empty Portfolio!"

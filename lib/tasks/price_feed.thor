@@ -5,7 +5,7 @@ class PriceFeed < Thor
 
   desc "price_feed","continiously gather stock prices and update database"
 
-  SUBSCRIPTION_LIMIT = 50
+  SUBSCRIPTION_LIMIT = 49
   SWITCH_EVERY = 1.second
   # INDEX = 0
   # TOTAL_STOCK_GROUP_LENGTH = 0
@@ -14,7 +14,7 @@ class PriceFeed < Thor
 
     index = 0
     total_stock_group_length = all_stocks[0].to_i
-    sg = stock_groups(index)
+    sg = stock_groups(index).push("SPY")
     current_group = 0
     quotes = Hash.new # keeps latest quote values
 
@@ -26,7 +26,6 @@ class PriceFeed < Thor
 
     pool = Thread.pool(50)
     EventMachine.run do
-      puts 'hello'
       client = Intrinio::Realtime::Client.new(options)
       client.on_quote do |quote|
         # Process quote in next available thread
@@ -95,10 +94,7 @@ class PriceFeed < Thor
         stock['ticker']
       end
       total_stock_group_length = stocks.length
-      #total_stock_group_length,stocks = all_stocks[0],all_stocks[1]
-      #puts "i = #{i}"
-      #puts "total len = #{total_stock_group_length}"
-      #puts "limit = #{SUBSCRIPTION_LIMIT}"
+      puts ">NUMBER OF STOCKS: #{stocks.length}"
       if total_stock_group_length <= SUBSCRIPTION_LIMIT
         stocks
       elsif i < total_stock_group_length - SUBSCRIPTION_LIMIT
