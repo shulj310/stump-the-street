@@ -12,10 +12,10 @@ class Api::V1::PortfoliosController < ApplicationController
     portfolio.competition.competitor_portfolio.touch
 
     if portfolio.competition.user == current_user
-      portfolio.touch
-      portfolio.competition.touch
+      # portfolio.touch
+      # portfolio.competition.touch
       data = Competition.select(:competitor_id,:wager_amount,:'portfolios.id',:'portfolios.name',:deadline,
-        :'portfolios.return',:diff,'competitor_portfolios.return AS comp_return',:'portfolios.value',:'portfolios.cash'
+        :'portfolios.return',:diff,'competitor_portfolios.cost AS comp_cost','competitor_portfolios.value AS comp_price',:'portfolios.value',:'portfolios.cash'
           ).joins(:portfolio,:competitor_portfolio).where(
             "portfolios.competition_id = competitions.id AND competitor_portfolios.competition_id = competitions.id AND portfolios.id = #{params[:id]}")
 

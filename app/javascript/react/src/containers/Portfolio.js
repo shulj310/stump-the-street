@@ -22,13 +22,16 @@ class Portfolio extends Component{
     showTradeQueue:false,
     netCashQueue:0,
     ticker:"",
-    fromResearch:false
+    fromResearch:false,
+    lastTrade:{}
   }
   this.makeTrade = this.makeTrade.bind(this)
   this.newStocks = this.newStocks.bind(this)
   this.cancelTrade = this.cancelTrade.bind(this)
   this.getTradeQueue = this.getTradeQueue.bind(this)
   this.handleCancelTrade = this.handleCancelTrade.bind(this)
+  this.liveTickers = this.liveTickers.bind(this)
+  this.portfolioValue = this.portfolioValue.bind(this)
 }
 
     getTradeQueue(){
@@ -84,6 +87,7 @@ class Portfolio extends Component{
 
         let chartLength = portfolio.length
         this.setState({ stocks: portfolio, chartLength: chartLength })
+        this.liveTickers(portfolio)
       })
       fetch(`/api/v1/competitions/show/portfolios/${this.props.match.params.port_id}`,{
         credentials: 'same-origin'
@@ -94,6 +98,7 @@ class Portfolio extends Component{
         this.setState({ portfolio: portfolio, loading: false })
       })
       this.getTradeQueue()
+      this.queueActionCable()
     }
 
     refreshButton(){
@@ -109,6 +114,69 @@ class Portfolio extends Component{
       this.setState({ticker:ticker,fromResearch:true})
     }
   }
+
+  liveTickers(stocks){
+    let tickers = stocks.map(stock => stock.ticker)
+    tickers.push("SPY")
+    console.log('grabbing tickers for', tickers)
+    let component = this
+    tickers.forEach(function(ticker) {
+      if (App.portfolioChannel[ticker]) {
+        return
+      }
+      App.portfolioChannel[ticker] = App.cable.subscriptions.create(
+        {
+          channel: 'StockPriceChannel',
+          ticker: ticker,
+        },
+        {
+          connected: () => console.log("StockPriceChannel connected for " + ticker),
+          disconnected: function () {
+            App.cable.subscriptions.remove(this)
+            this.perform("unsubscribed")},
+          received: data => {
+            component.setState({lastTrade:data})
+            component.updateStocks(data)
+            component.updateMarket(data)
+            console.log(data)
+            console.log(component.state.stocks)
+          }
+        }
+      )
+    })
+  }
+
+  updateMarket(quote){
+    let market = this.state.portfolio
+    if (quote["ticker"] == "SPY"){
+      market.comp_price = quote['price']
+    }
+    market.diff = market.return - (market.comp_price/market.comp_cost -1)
+    debugger;
+    this.setState({portfolio:market})
+  }
+
+  updateStocks(quote) {
+    let stocks = this.state.stocks
+    stocks.forEach(function(stock) {
+      if (stock.ticker == quote['ticker']) {
+        // TODO: makeTrade has very similar code, probably can be refactored
+        stock.price = quote['price']
+        stock.value = stock.price * stock.shares
+        stock.return = stock.price / stock.cost - 1
+      }
+    })
+    this.portfolioValue(stocks)
+    this.setState({ stocks: stocks })
+    // TODO: recalculate portfolio totals
+    // TODO: highlight updated cells in the UI
+  }
+
+
+  queueActionCable(){
+    App.portfolioChannel = {}
+  }
+
 
   cancelTrade(payLoad){
     fetch(`/api/v1/trade_queues/${this.props.match.params.port_id}`,{
@@ -135,6 +203,14 @@ class Portfolio extends Component{
       tradeId:event.target.value
     }
     this.cancelTrade(formPayload)
+  }
+
+  portfolioValue(stocks){
+    let newValue = stocks.reduce(function(a,b) {return a + b.value},0)
+    let newPortfolio = this.state.portfolio
+    newPortfolio.value = newValue + newPortfolio.cash
+    newPortfolio.return = newPortfolio.value/1000000-1
+    this.setState({portfolio:newPortfolio})
   }
 
 
@@ -194,6 +270,8 @@ class Portfolio extends Component{
 
         filteredPositions.unshift(body)
         this.setState({stocks: filteredPositions,portfolio:new_portfolio,chartLength: filteredPositions.length})
+        this.liveTickers(filteredPositions)
+        this.portfolioValue(filteredPositions)
       }
     })
     if (this.state.fromResearch){

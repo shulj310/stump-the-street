@@ -35,13 +35,12 @@ class Api::V1::StocksController < ApplicationController
 
     ticker,shares,side = trade_params
 
+
     stock = Stock.find_by(ticker:ticker)
 
-    if stock.nil?
-      stock = new_stock(ticker)
-    end
+    stock.get_price
 
-    stock.touch
+    tx_px = make_trade(ticker,side)
 
     if Rails.env.production?
 
@@ -52,8 +51,8 @@ class Api::V1::StocksController < ApplicationController
     else
 
       current_time = Time.now.utc
-      beg_time = Time.new(2017,8,1,9,30,0).utc
-      end_time = Time.new(2017,8,1,16,0,0).utc
+      beg_time = Time.new(2017,8,1,0,0,0).utc
+      end_time = Time.new(2017,8,1,24,0,0).utc
 
     end
 
@@ -66,7 +65,7 @@ class Api::V1::StocksController < ApplicationController
           Trade.create(
             portfolio_id: params[:portfolio_id],
             stock_id: stock.id,
-            transaction_price: stock.price,
+            transaction_price: tx_px,
             shares: shares.floor,
             side: side
           )
@@ -131,6 +130,20 @@ class Api::V1::StocksController < ApplicationController
       render json: data
     else
       render json: {data:nil}
+    end
+  end
+
+  def make_trade(ticker,side)
+    request_url = "https://api.intrinio.com/data_point?identifier=#{ticker}&item=last_price,bid_price,ask_price"
+    restclient = RestClient::Resource.new(request_url,ENV["INTRINIO_USERNAME"],ENV["INTRINIO_PASSWORD"])
+    response = restclient.get
+
+    price = JSON.parse(response)
+    
+    if side
+      return price["data"].select { |o| o["item"] == "ask_price" }[0]["value"]
+    else
+      return price["data"].select { |o| o["item"] == "bid_price" }[0]["value"]
     end
   end
 

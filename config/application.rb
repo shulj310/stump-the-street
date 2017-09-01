@@ -23,6 +23,7 @@ module StumpTheStreet
       YAML.load(File.open(env_file)).each do |key, value|
         ENV[key.to_s] = value
       end if File.exists?(env_file)
+      config.action_cable.mount_path = '/cable'
     end
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers

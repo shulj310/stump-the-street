@@ -47,7 +47,7 @@ const PortfolioDash = (props) => {
     gainClass = 'gain-value v-red'
     }
 
-    if (props.portfolio.comp_return > 0){
+    if ((props.portfolio.comp_price/props.portfolio.comp_cost -1) > 0){
       compClass = " gain-value v-green"} else {
       compClass = 'gain-value v-red'
     }
@@ -83,7 +83,7 @@ const PortfolioDash = (props) => {
             <p className="gain-value">Total Gain<br/>
             <span className={gainClass}>
               {numeral(props.portfolio.value-1000000).format('$0,0.00')}
-              ({numeral(props.portfolio.return).format('0.00%')})
+               ({numeral(props.portfolio.return).format('0.00%')})
               </span>
             </p>
           </div>
@@ -92,7 +92,7 @@ const PortfolioDash = (props) => {
           <div className="left-align">
             <p className="gain-value comp-text">{name} Gain<br/>
             <span className={compClass}>
-              ({numeral(props.portfolio.comp_return).format('0.00%')})
+              {numeral(props.portfolio.comp_price/props.portfolio.comp_cost-1).format('0.00%')}
               </span>
             </p>
           </div>
@@ -101,7 +101,7 @@ const PortfolioDash = (props) => {
           <div className="left-align">
             <p className="gain-value center-align">+/-<br/>
             <span className={diffClass}>
-              ({numeral(props.portfolio.diff).format('0.00%')})
+              {numeral(props.portfolio.diff).format('0.00%')}
               </span>
             </p>
           </div>
