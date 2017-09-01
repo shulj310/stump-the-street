@@ -24,6 +24,20 @@ class Stock < ApplicationRecord
     end
   end
 
+  def get_quote(ticker,side)
+    request_url = "https://api.intrinio.com/data_point?identifier=#{ticker}&item=last_price,bid_price,ask_price"
+    restclient = RestClient::Resource.new(request_url,ENV["INTRINIO_USERNAME"],ENV["INTRINIO_PASSWORD"])
+    response = restclient.get
+
+    price = JSON.parse(response)
+
+    if side
+      return price["data"].select { |o| o["item"] == "ask_price" }[0]["value"]
+    else
+      return price["data"].select { |o| o["item"] == "bid_price" }[0]["value"]
+    end
+  end
+
   def get_price_and_name
 
     api_key = ENV["BAR_CHART_API"]

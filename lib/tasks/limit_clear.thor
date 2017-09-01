@@ -4,6 +4,6 @@ class LimitClear < Thor
   desc "clear","clears all limit orders still outstanding if its past the date"
 
   def clear
-
+    LimitOrder.where(deadline:(Time.now-100000000.day..Time.now)).destroy
   end
 end
