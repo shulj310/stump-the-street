@@ -7,6 +7,7 @@ class Portfolio < ApplicationRecord
   accepts_nested_attributes_for :stocks
   has_many :trade_queues
   has_many :portfolio_histories
+  has_many :limit_orders
 
   after_create do |port|
 
