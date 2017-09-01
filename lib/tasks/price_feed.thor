@@ -5,14 +5,12 @@ class PriceFeed < Thor
 
   desc "price_feed","continiously gather stock prices and update database"
 
-  SUBSCRIPTION_LIMIT = 50
+  SUBSCRIPTION_LIMIT = 49
   SWITCH_EVERY = 1.second
 
   def price_feed
-
     index = 0
     @sg = stock_groups(index)
-    current_group = 0
     quotes = Hash.new # keeps latest quote values
 
     options = {
@@ -96,10 +94,8 @@ class PriceFeed < Thor
 
     def stock_groups(i) # get active stocks and group them in batches < SUBSCRIPTION_LIMIT
       stocks = active_stocks #all_stocks
+      stocks << 'SPY'
       @total_stock_group_length = stocks.length
-      #puts "i = #{i}"
-      #puts "total len = #{@total_stock_group_length}"
-      #puts "limit = #{SUBSCRIPTION_LIMIT}"
       if @total_stock_group_length <= SUBSCRIPTION_LIMIT
         stocks
       elsif i < @total_stock_group_length - SUBSCRIPTION_LIMIT
