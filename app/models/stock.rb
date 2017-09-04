@@ -5,7 +5,7 @@ class Stock < ApplicationRecord
 
   # after_touch do |stock|
   #   stock.get_price
-  # end
+  # end TODO once again, need method to remove this!
 
 
   def get_price
