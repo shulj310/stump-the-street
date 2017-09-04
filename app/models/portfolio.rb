@@ -19,7 +19,7 @@ class Portfolio < ApplicationRecord
   end
 
   after_touch do |port|
-    port.positions.each {|pos| pos.touch}
+    # port.positions.each {|pos| pos.touch}
     port.value = port.positions.pluck(:value).inject(0) {|sum,x| sum + x} + port.cash
     port.return = port.value/1000000-1
     port.save

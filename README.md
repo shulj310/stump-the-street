@@ -4,6 +4,8 @@ Things you may want to cover:
 
 * System dependencies
 
+Redis server is used for PubSub functionality to power ActionCable subscriptions.
+
 * Configuration
 
 * Database creation
@@ -15,5 +17,11 @@ Things you may want to cover:
 * Services (job queues, cache servers, search engines, etc.)
 
 * Deployment instructions
+
+To stream live portfolio updates:
+```
+redis-server
+thor price_feed:price_feed
+```
 
 * ...
