@@ -9,7 +9,7 @@ class Api::V1::StocksController < ApplicationController
 
       port.positions.each do |position|
         if position.shares > 0
-          position.stock.touch
+          position.stock.touch ## need a worker to get live prices!!
         end
       end
 
@@ -31,17 +31,15 @@ class Api::V1::StocksController < ApplicationController
 
   def create
 
-    portfolio = Portfolio.find(params[:portfolio_id])
-
     ticker,shares,side = trade_params
 
-    stock = Stock.find_by(ticker:ticker)
+    ###### TODO get bid/ask price from get_quote method in Stock model
+    #pass the new transaction price into trade record #######
+    # if its a limit order, create a limit record --> this will have to be passed in from payload
 
-    if stock.nil?
-      stock = new_stock(ticker)
-    end
+    portfolio = Portfolio.find(params[:portfolio_id])
 
-    stock.touch
+    stock = Stock.find_by(ticker:ticker).touch # this is added so the most updated price shows up immeadiately after trade
 
     if Rails.env.production?
 
@@ -52,8 +50,8 @@ class Api::V1::StocksController < ApplicationController
     else
 
       current_time = Time.now.utc
-      beg_time = Time.new(2017,8,1,9,30,0).utc
-      end_time = Time.new(2017,8,1,16,0,0).utc
+      beg_time = current_time - 10
+      end_time = current_time + 10
 
     end
 
@@ -62,6 +60,8 @@ class Api::V1::StocksController < ApplicationController
       if portfolio.competition.user == current_user
 
         if (stock.price * shares <= portfolio.cash) || !side
+
+          ## update stock.price!
 
           Trade.create(
             portfolio_id: params[:portfolio_id],
