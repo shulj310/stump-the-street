@@ -39,7 +39,8 @@ class Api::V1::StocksController < ApplicationController
 
     portfolio = Portfolio.find(params[:portfolio_id])
 
-    stock = Stock.find_by(ticker:ticker).touch # this is added so the most updated price shows up immeadiately after trade
+    stock = Stock.find_by(ticker:ticker) # this is added so the most updated price shows up immeadiately after trade
+    stock.touch
 
     if Rails.env.production?
 
@@ -66,7 +67,7 @@ class Api::V1::StocksController < ApplicationController
           Trade.create(
             portfolio_id: params[:portfolio_id],
             stock_id: stock.id,
-            transaction_price: tx_px,
+            transaction_price: stock.price,
             shares: shares.floor,
             side: side
           )

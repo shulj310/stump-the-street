@@ -3,9 +3,10 @@ class Stock < ApplicationRecord
   has_many :positions
   has_many :trade_queues
 
-  # after_touch do |stock|
-  #   stock.get_price
-  # end TODO once again, need method to remove this!
+  after_touch do |stock|
+    stock.get_price
+  end
+  #TODO once again, need method to remove this!
 
 
   def get_price
