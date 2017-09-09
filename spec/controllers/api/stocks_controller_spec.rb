@@ -1,6 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe Api::V1::StocksController, type: :controller do
+  before(:each) do
+    allow(Time).to receive(:now).and_return(Time.new(2017,8,1,14,0,0).utc)
+  end
 
     let!(:user) {
       User.create(
@@ -88,7 +91,6 @@ RSpec.describe Api::V1::StocksController, type: :controller do
         side: true
       }.to_json
       sign_in user
-
 
       post(:create, params: { portfolio_id:portfolio.id, competition_id:'trade'}, body:post_json)
 

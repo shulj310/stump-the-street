@@ -84,7 +84,7 @@ RSpec.describe Api::V1::CompetitionsController, type: :controller do
       user.save
 
       post_json = {
-        length: 8,
+        length: 7,
         wager_amount: 50,
         competitor_id: competitor.id,
         name: "Port Test Two"
@@ -98,7 +98,7 @@ RSpec.describe Api::V1::CompetitionsController, type: :controller do
 
       expect(returned_json).to be_kind_of(Hash)
       expect(returned_json).to_not be_kind_of(Array)
-      expect(returned_json['length']).to eq 8
+      expect(returned_json['length']).to eq 7
       expect(returned_json['user_id']).to eq user.id
     end
   end
