@@ -3,7 +3,7 @@ class LimitOrder < ApplicationRecord
 
   def create_order(quote)
     stock = Stock.find_by(quote['ticker'])
-    tx_px = stock.get_quote(quote['ticker'],self.side)
+    tx_px = stock.get_quote(self.side)
 
 
     Trade.create(

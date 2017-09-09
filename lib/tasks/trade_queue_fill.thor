@@ -13,16 +13,16 @@ class TradeQueueFill < Thor
         user.competitions.each do |competition|
 
           TradeQueue.where(portfolio_id:competition.portfolio.id).order(:side).each do |trade|
-
-            trade.stock.touch
             trade.portfolio.touch
 
-            if (trade.side && trade.portfolio.cash > trade.stock.price * trade.shares
+            tx_price = trade.stock.get_quote(trade.side)
+
+            if (trade.side && trade.portfolio.cash > tx_price * trade.shares
                 ) || (!trade.side && trade.portfolio.positions.find_by(stock_id:trade.stock.id).shares >= trade.shares)
               Trade.create(
                 portfolio_id:trade.portfolio.id,
                 stock_id:trade.stock.id,
-                transaction_price:trade.stock.price,
+                transaction_price:tx_price,
                 shares:trade.shares,
                 side:trade.side
               )

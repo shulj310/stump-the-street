@@ -6,13 +6,6 @@ class Api::V1::StocksController < ApplicationController
     port = Portfolio.find(params[:portfolio_id])
 
     if port.competition.user == current_user
-
-      port.positions.each do |position|
-        if position.shares > 0
-          position.stock.touch ## need a worker to get live prices!!
-        end
-      end
-
       stocks = Portfolio.select(:id,"stocks.id AS stock_id",
         :'positions.shares',:'positions.cost',:'stocks.ticker',
           :'stocks.price',"stocks.price * positions.shares AS value"
@@ -30,17 +23,14 @@ class Api::V1::StocksController < ApplicationController
   end
 
   def create
-
     ticker,shares,side = trade_params
 
-    ###### TODO get bid/ask price from get_quote method in Stock model
-    #pass the new transaction price into trade record #######
+    ###### TODO
     # if its a limit order, create a limit record --> this will have to be passed in from payload
 
     portfolio = Portfolio.find(params[:portfolio_id])
 
-    stock = Stock.find_by(ticker:ticker) # this is added so the most updated price shows up immeadiately after trade
-    stock.touch
+    stock = Stock.find_by(ticker:ticker)
 
     current_time = Time.now.utc
     beg_time = Time.new(2017,8,1,13,30,0).utc
@@ -49,15 +39,13 @@ class Api::V1::StocksController < ApplicationController
     if (beg_time.utc.strftime("%H%M%S%N") <= current_time.utc.strftime("%H%M%S%N") && current_time.utc.strftime("%H%M%S%N") <= end_time.utc.strftime("%H%M%S%N") && !current_time.saturday? && !current_time.sunday?)
 
       if portfolio.competition.user == current_user
+        tx_price = stock.get_quote(side)
 
-        if (stock.price * shares <= portfolio.cash) || !side
-
-          ## update stock.price!
-
+        if (tx_price * shares <= portfolio.cash) || !side
           Trade.create(
             portfolio_id: params[:portfolio_id],
             stock_id: stock.id,
-            transaction_price: stock.price,
+            transaction_price: tx_price,
             shares: shares.floor,
             side: side
           )
@@ -124,21 +112,6 @@ class Api::V1::StocksController < ApplicationController
       render json: {data:nil}
     end
   end
-
-  def make_trade(ticker,side)
-    request_url = "https://api.intrinio.com/data_point?identifier=#{ticker}&item=last_price,bid_price,ask_price"
-    restclient = RestClient::Resource.new(request_url,ENV["INTRINIO_USERNAME"],ENV["INTRINIO_PASSWORD"])
-    response = restclient.get
-
-    price = JSON.parse(response)
-
-    if side
-      return price["data"].select { |o| o["item"] == "ask_price" }[0]["value"]
-    else
-      return price["data"].select { |o| o["item"] == "bid_price" }[0]["value"]
-    end
-  end
-
 
   def trade_params
     data = JSON.parse(request.body.read)

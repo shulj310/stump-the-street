@@ -11,7 +11,6 @@ class CompetitionSweep < Thor
   desc "updater", "updates all pertinent data"
 
   def updater
-    Portfolio.all.each { |p| p.positions.each { |pos|  pos.stock.touch  } }
     Portfolio.all.each {|p| p.touch}
     CompetitorPortfolio.all.each {|cp| cp.touch}
     Competition.all.each do |c|

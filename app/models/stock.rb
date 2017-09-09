@@ -3,12 +3,6 @@ class Stock < ApplicationRecord
   has_many :positions
   has_many :trade_queues
 
-  after_touch do |stock|
-    stock.get_price
-  end
-  #TODO once again, need method to remove this!
-
-
   def get_price
     request_url = "https://api.intrinio.com/data_point?identifier=#{ticker}&item=last_price"
     restclient = RestClient::Resource.new(request_url,ENV["INTRINIO_USERNAME"],ENV["INTRINIO_PASSWORD"])
@@ -33,7 +27,7 @@ class Stock < ApplicationRecord
     # end
   end
 
-  def get_quote(ticker,side)
+  def get_quote(side)
     request_url = "https://api.intrinio.com/data_point?identifier=#{ticker}&item=last_price,bid_price,ask_price"
     restclient = RestClient::Resource.new(request_url,ENV["INTRINIO_USERNAME"],ENV["INTRINIO_PASSWORD"])
     response = restclient.get
