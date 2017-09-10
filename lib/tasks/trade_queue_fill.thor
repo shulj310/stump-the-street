@@ -4,14 +4,13 @@ class TradeQueueFill < Thor
   desc "open_trade","buys stocks on the open"
 
   def open_trade
-    unless DateTime.now.saturday? || DateTime.now.sunday?
+    unless Time.now.saturday? || Time.now.sunday?
       User.all.each do |user|
 
         trade_queue = []
         trade_errors = []
 
         user.competitions.each do |competition|
-
           TradeQueue.where(portfolio_id:competition.portfolio.id).order(:side).each do |trade|
             trade.portfolio.touch
 

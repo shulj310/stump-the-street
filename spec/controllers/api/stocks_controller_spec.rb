@@ -46,6 +46,16 @@ RSpec.describe Api::V1::StocksController, type: :controller do
       )
     }
 
+    let!(:poor_portfolio) {
+      Portfolio.create(
+        name:"Test Port",
+        value: 0,
+        cash: 0,
+        return: 0,
+        competition_id:competition.id
+      )
+    }
+
     let!(:stock) {
       Stock.create(
       ticker:"AAPL",
@@ -87,7 +97,7 @@ RSpec.describe Api::V1::StocksController, type: :controller do
         portfolio_id: portfolio.id,
         stock_id: stock.id,
         transaction_price:stock.price,
-        shares: 100,
+        share_amount: 100,
         side: true
       }.to_json
       sign_in user
@@ -103,8 +113,28 @@ RSpec.describe Api::V1::StocksController, type: :controller do
       expect(returned_json['stock']['ticker']).to eq stock.ticker
       expect(returned_json['shares']).to eq portfolio.positions.first.shares
     end
-  end
-    describe "POST#create" do
+
+    it "should not be able to place a trade with insufficient funds" do
+      post_json = {
+        ticker:'AAPL',
+        portfolio_id: poor_portfolio.id,
+        stock_id: stock.id,
+        transaction_price:stock.price,
+        share_amount: 100,
+        side: true
+      }.to_json
+      sign_in user
+
+      post(:create, params: { portfolio_id:poor_portfolio.id, competition_id:'trade'}, body:post_json)
+
+      returned_json = JSON.parse(response.body)
+      expect(response.status).to eq 200
+
+      expect(returned_json).to be_kind_of(Hash)
+      expect(returned_json).to_not be_kind_of(Array)
+      expect(returned_json['auth']).to eq 'no-cash'
+    end
+
     it "should not be able to trade unless signed in" do
       post_json = {
         ticker:'AAPL',
