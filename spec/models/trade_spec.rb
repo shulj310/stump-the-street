@@ -37,7 +37,7 @@ RSpec.describe Trade, :type => :model do
     Portfolio.create(
       name:"Test Port",
       value: 100,
-      cash: 100,
+      cash: 100000,
       return: 0,
       competition_id:competition.id
     )
@@ -65,6 +65,13 @@ RSpec.describe Trade, :type => :model do
   end
 
   it "is not valid with valid attributes" do
-    expect(subject).to be_valid
+    expect(described_class.new(
+      portfolio_id:portfolio.id,
+      stock_id:stock.id,
+      transaction_price:stock.price,
+      shares:100000,
+      side:true
+      )
+    ).to_not be_valid
   end
 end

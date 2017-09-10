@@ -135,6 +135,27 @@ RSpec.describe Api::V1::StocksController, type: :controller do
       expect(returned_json['auth']).to eq 'no-cash'
     end
 
+    it 'should not be able to place a trade with insufficient stock available' do
+      post_json = {
+        ticker:'AAPL',
+        portfolio_id: portfolio.id,
+        stock_id: stock.id,
+        transaction_price:stock.price,
+        share_amount: 200,
+        side: false
+      }.to_json
+      sign_in user
+
+      post(:create, params: { portfolio_id:portfolio.id, competition_id:'trade'}, body:post_json)
+
+      returned_json = JSON.parse(response.body)
+      expect(response.status).to eq 200
+
+      expect(returned_json).to be_kind_of(Hash)
+      expect(returned_json).to_not be_kind_of(Array)
+      expect(returned_json['auth']).to eq 'no-cash'
+    end
+
     it "should not be able to trade unless signed in" do
       post_json = {
         ticker:'AAPL',

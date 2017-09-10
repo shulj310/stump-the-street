@@ -2,6 +2,8 @@ class Trade < ApplicationRecord
   belongs_to :portfolio
   belongs_to :stock
 
+  validate :sufficient_funds
+
   after_create do |trade|
 
     position = Position.find_by(portfolio_id:trade.portfolio_id,stock_id:trade.stock_id)
@@ -17,8 +19,7 @@ class Trade < ApplicationRecord
         position.shares -= trade.shares
       end
       position.save
-    else
-
+    elsif trade.side
       Position.create(
         portfolio_id:trade.portfolio_id,
         shares:trade.shares,
@@ -26,6 +27,8 @@ class Trade < ApplicationRecord
         value: trade.transaction_price*trade.shares,
         cost: (trade.transaction_price)
       )
+    else
+      raise 'Attempting to sell where there is no position'
     end
   end
 
@@ -47,5 +50,18 @@ class Trade < ApplicationRecord
       portfolio.cash += self.transaction_price*self.shares
     end
     portfolio.save
+  end
+
+  def sufficient_funds
+    portfolio.touch
+    if side
+      if portfolio.cash < transaction_price * shares
+        errors.add(:cost, 'is over portfolio balance')
+      end
+    else
+      if portfolio.positions.find_by(stock_id:stock_id).shares < shares
+        errors.add(:shares, 'number is more than available in portfolio')
+      end
+    end
   end
 end

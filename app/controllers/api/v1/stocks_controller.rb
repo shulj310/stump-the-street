@@ -41,21 +41,21 @@ class Api::V1::StocksController < ApplicationController
       if portfolio.competition.user == current_user
         tx_price = stock.get_quote(side)
 
-        if (tx_price * shares <= portfolio.cash) || !side
-          Trade.create(
-            portfolio_id: params[:portfolio_id],
-            stock_id: stock.id,
-            transaction_price: tx_price,
-            shares: shares.floor,
-            side: side
-          )
-
+        trade = Trade.create(
+          portfolio_id: params[:portfolio_id],
+          stock_id: stock.id,
+          transaction_price: tx_price,
+          shares: shares.floor,
+          side: side
+        )
+        
+        if trade.valid?
           position = Position.find_by(
             stock_id:stock.id,portfolio_id:params[:portfolio_id])
 
           render json: position, include: ["stock"]
         else
-          render json: {auth:"no-cash"}
+          render json: {auth:"no-cash", message:trade.errors}
         end
       else
         ## user is not authorized
