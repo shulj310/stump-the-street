@@ -17,6 +17,7 @@ Rails.application.routes.draw do
         get "header"
         get "historical_data/date_type/:date_id", to: "research#historical_data"
       end
+      resources :trending_tickers, only: [:index]
       resources :trade_queues, only: [:show,:update,:destroy]
       resources :users, only: [:show,:update]
       resources :stocks, only: [:show]
