@@ -4,7 +4,7 @@ class TradeQueueFill < Thor
   desc "open_trade","buys stocks on the open"
 
   def open_trade
-    unless Time.now.saturday? || Time.now.sunday?
+    if Market.new.open?
       User.all.each do |user|
 
         trade_queue = []

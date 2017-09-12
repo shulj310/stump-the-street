@@ -2,6 +2,7 @@ class Stock < ApplicationRecord
   has_many :trades
   has_many :positions
   has_many :trade_queues
+  has_many :limit_orders
 
   def get_price
     request_url = "https://api.intrinio.com/data_point?identifier=#{ticker}&item=last_price"

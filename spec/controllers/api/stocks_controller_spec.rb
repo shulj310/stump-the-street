@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::StocksController, type: :controller do
   before(:each) do
-    allow(Time).to receive(:now).and_return(Time.new(2017,8,1,14,0,0).utc)
+    allow_any_instance_of(Market).to receive(:current_time).and_return(Time.zone.local(2017,8,1,14,0,0))
   end
 
     let!(:user) {

@@ -2,7 +2,7 @@ class Trade < ApplicationRecord
   belongs_to :portfolio
   belongs_to :stock
 
-  validate :sufficient_funds
+  include TradeValidations
 
   after_create do |trade|
 
@@ -50,18 +50,5 @@ class Trade < ApplicationRecord
       portfolio.cash += self.transaction_price*self.shares
     end
     portfolio.save
-  end
-
-  def sufficient_funds
-    portfolio.touch
-    if side
-      if portfolio.cash < transaction_price * shares
-        errors.add(:cost, 'is over portfolio balance')
-      end
-    else
-      if portfolio.positions.find_by(stock_id:stock_id).shares < shares
-        errors.add(:shares, 'number is more than available in portfolio')
-      end
-    end
   end
 end

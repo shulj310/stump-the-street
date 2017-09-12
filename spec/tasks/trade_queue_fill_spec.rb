@@ -4,7 +4,7 @@ load File.join(Rails.root.join('lib/tasks/trade_queue_fill.thor'))
 
 describe TradeQueueFill do
   before(:each) do
-    allow(Time).to receive(:now).and_return(Time.new(2017,8,1,14,0,0).utc)
+    allow_any_instance_of(Market).to receive(:current_time).and_return(Time.zone.local(2017,8,1,14,0,0))
   end
 
   before(:all) do

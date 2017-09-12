@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170901113718) do
+ActiveRecord::Schema.define(version: 20170912141033) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,13 +57,16 @@ ActiveRecord::Schema.define(version: 20170901113718) do
   end
 
   create_table "limit_orders", force: :cascade do |t|
-    t.string   "ticker",                      null: false
     t.boolean  "side",         default: true, null: false
     t.integer  "shares",                      null: false
     t.datetime "created_at",                  null: false
     t.datetime "updated_at",                  null: false
     t.integer  "portfolio_id",                null: false
     t.datetime "deadline",                    null: false
+    t.float    "price"
+    t.integer  "stock_id"
+    t.index ["price"], name: "index_limit_orders_on_price", using: :btree
+    t.index ["stock_id"], name: "index_limit_orders_on_stock_id", using: :btree
   end
 
   create_table "portfolio_histories", force: :cascade do |t|
@@ -162,4 +165,5 @@ ActiveRecord::Schema.define(version: 20170901113718) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
 
+  add_foreign_key "limit_orders", "stocks"
 end

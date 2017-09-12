@@ -34,8 +34,9 @@ class PriceFeed < Thor
               "ticker_#{quote['ticker']}",
               quote,
             )
-            # this is a good place to check for stop limits and if any match process them
-            # (probably in another thread or Sidekiq process)
+          else
+            # check limit orders
+            LimitOrders.perform_async(quote['ticker'], quote['type'], quote['price'])
           end
         end
       end

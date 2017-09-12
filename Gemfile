@@ -15,6 +15,11 @@ gem 'thread'
 gem 'pool'
 gem 'redis'
 
+# background processing
+gem 'sidekiq'
+
+gem 'holidays'
+
 gem "webpacker"
 gem 'materialize-sass'
 gem 'material_icons'

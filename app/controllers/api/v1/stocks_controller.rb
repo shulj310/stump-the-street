@@ -25,29 +25,28 @@ class Api::V1::StocksController < ApplicationController
   def create
     ticker,shares,side = trade_params
 
-    ###### TODO
-    # if its a limit order, create a limit record --> this will have to be passed in from payload
-
     portfolio = Portfolio.find(params[:portfolio_id])
 
     stock = Stock.find_by(ticker:ticker)
 
-    current_time = Time.now.utc
-    beg_time = Time.new(2017,8,1,13,30,0).utc
-    end_time = Time.new(2017,8,1,20,0,0).utc
-
-    if (beg_time.utc.strftime("%H%M%S%N") <= current_time.utc.strftime("%H%M%S%N") && current_time.utc.strftime("%H%M%S%N") <= end_time.utc.strftime("%H%M%S%N") && !current_time.saturday? && !current_time.sunday?)
+    if Market.new.open?
+      trade_attributes = {
+        portfolio_id: params[:portfolio_id],
+        stock_id: stock.id,
+        shares: shares.floor,
+        side: side,
+      }
 
       if portfolio.competition.user == current_user
-        tx_price = stock.get_quote(side)
+        unless @price_limit
+          trade_attributes[:transaction_price] = stock.get_quote(side)
 
-        trade = Trade.create(
-          portfolio_id: params[:portfolio_id],
-          stock_id: stock.id,
-          transaction_price: tx_price,
-          shares: shares.floor,
-          side: side
-        )
+          trade = Trade.create(trade_attributes)
+        else
+          trade_attributes[:price] = @price_limit
+
+          trade = LimitOrder.create(trade_attributes)
+        end
         
         if trade.valid?
           position = Position.find_by(
@@ -115,6 +114,7 @@ class Api::V1::StocksController < ApplicationController
 
   def trade_params
     data = JSON.parse(request.body.read)
+    @price_limit = data['price_limit']
     return [data["ticker"].upcase , data["share_amount"].to_i, data["side"]]
   end
 
