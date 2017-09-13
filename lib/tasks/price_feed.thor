@@ -82,7 +82,7 @@ class PriceFeed < Thor
     end
 
     def active_stocks
-      Stock.connection.select_all('SELECT
+      portfolio_stocks = Stock.connection.select_all('SELECT
         DISTINCT ticker AS ticker
       FROM stocks
       INNER JOIN positions ON (positions.stock_id = stocks.id)
@@ -91,6 +91,8 @@ class PriceFeed < Thor
       ORDER BY ticker').map do |stock|
         stock['ticker']
       end
+      limit_order_stocks = LimitOrder.includes(:stock).pluck(:ticker)
+      (portfolio_stocks + limit_order_stocks).uniq
     end
 
     def stock_groups(i) # get active stocks and group them in batches < SUBSCRIPTION_LIMIT
