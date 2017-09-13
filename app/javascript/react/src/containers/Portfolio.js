@@ -175,6 +175,22 @@ class Portfolio extends Component{
 
   queueActionCable(){
     App.portfolioChannel = {}
+
+    App.cable.subscriptions.create(
+      {
+        channel: 'PortfolioUpdatesChannel',
+        portfolio_id: this.props.match.params.port_id,
+      },
+      {
+        connected: () => console.log("PortfolioUpdatesChannel connected for " + this.props.match.params.port_id),
+        disconnected: function () {
+          App.cable.subscriptions.remove(this)
+          this.perform("unsubscribed")},
+        received: data => {
+          console.log(data)
+        }
+      }
+    )
   }
 
 
