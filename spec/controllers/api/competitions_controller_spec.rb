@@ -86,8 +86,8 @@ RSpec.describe Api::V1::CompetitionsController, type: :controller do
       post_json = {
         length: 7,
         wager_amount: 50,
-        competitor_id: competitor.id,
-        name: "Port Test Two"
+        competitor: competitor.id,
+        strategy: "Port Test Two"
       }.to_json
       sign_in user
 
@@ -107,8 +107,8 @@ RSpec.describe Api::V1::CompetitionsController, type: :controller do
       post_json = {
         length: 8,
         wager_amount: 5000,
-        competitor_id: competitor.id,
-        name: "Port Test Two"
+        competitor: competitor.id,
+        strategy: "Port Test Two"
       }.to_json
 
       post(:create, body:post_json)

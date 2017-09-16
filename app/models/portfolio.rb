@@ -1,5 +1,6 @@
 class Portfolio < ApplicationRecord
   belongs_to :competition
+  belongs_to :user
   has_many :trades
   has_many :positions
   has_many :stocks,
@@ -25,4 +26,11 @@ class Portfolio < ApplicationRecord
     port.save
   end
 
+  # legacy getter to support portfolios that were created before user was added to the model
+  def user
+    self[:user] ? User.find(self[:user_id]) : competition.user
+  end
+  def user_id
+    self[:user_id] || competition.user_id
+  end
 end

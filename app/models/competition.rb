@@ -2,7 +2,7 @@ class Competition < ApplicationRecord
   belongs_to :user
   belongs_to :competitor
   has_one :competitor_portfolio
-  has_one :portfolio
+  has_many :portfolios
 
   enum status: [ :created, :active, :completed, :cancelled ]
 
@@ -22,4 +22,13 @@ class Competition < ApplicationRecord
     comp.save
   end
 
+  # convenience getter for non-group competitions
+  def portfolio
+    raise 'Attempting to access single Portfolio for a group Competition. Use portfolios relation instead.' if is_group?
+    portfolios.first
+  end
+
+  def is_group?
+    competitor_id.nil?
+  end
 end

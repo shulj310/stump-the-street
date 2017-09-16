@@ -11,8 +11,12 @@ class Api::V1::CompetitionsController < ApplicationController
 
     competitions = Competition.select(:'portfolios.id',:'portfolios.name',:deadline,
       :'portfolios.return',:current_value,:diff,'competitor_portfolios.return AS comp_return'
-        ).joins(:portfolio,:competitor_portfolio).where(
-          "win IS NULL AND portfolios.competition_id = competitions.id AND competitor_portfolios.competition_id = competitions.id AND competitions.user_id = #{current_user.id}").order(
+        ).joins(:portfolios,:competitor_portfolio).where(
+          "win IS NULL AND
+          portfolios.competition_id = competitions.id AND
+          competitor_portfolios.competition_id = competitions.id AND
+          competitions.user_id = #{current_user.id} AND
+          (portfolios.user_id IS NULL OR portfolios.user_id = #{current_user.id})").order(
             :deadline)
 
     render json: competitions
@@ -34,7 +38,7 @@ class Api::V1::CompetitionsController < ApplicationController
 
         odds_calculated = odds.calc_odds
 
-        new_competition = Competition.create(
+        new_competition = Competition.create!(
           length: data["length"],
           deadline: new_date,
           wager_amount: data["wager_amount"].to_i,
@@ -43,18 +47,20 @@ class Api::V1::CompetitionsController < ApplicationController
           competitor_id: data["competitor"].to_i,
           user_id: current_user.id,
           status: :active, # mark non-group competitions as active immediately
+          starts_at: Time.now,
         )
 
-        Portfolio.create(
+        Portfolio.create!(
           name: data["strategy"],
           value: 1000000,
           cash: 1000000,
           return: 0,
-          competition_id: new_competition.id
+          competition: new_competition,
+          user: current_user,
         )
 
 
-        CompetitorPortfolio.create(
+        CompetitorPortfolio.create!(
           competition_id: new_competition.id,
           value: 1000000,
           cost: 1000000,

@@ -11,12 +11,12 @@ class Api::V1::PortfoliosController < ApplicationController
     portfolio = Portfolio.find(params[:id])
     portfolio.competition.competitor_portfolio.touch
 
-    if portfolio.competition.user == current_user
+    if portfolio.user_id == current_user.id
       portfolio.touch
       portfolio.competition.touch
       data = Competition.select(:competitor_id,:wager_amount,:'portfolios.id',:'portfolios.name',:deadline,
         :'portfolios.return',:diff,'competitor_portfolios.cost AS comp_cost','competitor_portfolios.value AS comp_price',:'portfolios.value',:'portfolios.cash'
-          ).joins(:portfolio,:competitor_portfolio).where(
+          ).joins(:portfolios,:competitor_portfolio).where(
             "win IS NULL AND portfolios.competition_id = competitions.id AND competitor_portfolios.competition_id = competitions.id AND portfolios.id = #{params[:id]}")
 
       render json: data
