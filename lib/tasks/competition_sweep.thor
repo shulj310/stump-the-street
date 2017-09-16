@@ -30,22 +30,47 @@ class CompetitionSweep < Thor
   def win_loss
     unless DateTime.now.saturday? || DateTime.now.sunday?
       Competition.ready_for_settlement.each do |comp|
-        win = (comp.diff > 0)
-        winnings = 0
-        user = comp.user # TODO: determine winner for group competitions
-        CompetitionMailer.competition_end(comp,win).deliver
-        if win
-          winnings = comp.current_value
-          user.wallet += winnings
-          user.wallet += comp.wager_amount
-          user.save
+        Competition.transaction do
+          winnings = 0
+          if comp.is_group?
+            win = true # group comp. always has a winner
+            # TODO: consider handling tie condition
+            portfolio = comp.top_portfolio
+            user = portfolio.user
+            comp.portfolios.each do |port|
+              unless port.id == portfolio.id
+                port.won = false
+                port.save!
+              end
+            end
+          else
+            win = (comp.diff > 0)
+            user = comp.user
+            portfolio = comp.portfolio
+          end
+          portfolio.won = win
+          portfolio.save!
+          
+          if win
+            winnings = comp.current_value
+            user.wallet += winnings
+            user.wallet += comp.wager_amount
+            user.save
+          end
+          comp.return = portfolio.return
+          comp.winnings = winnings
+          comp.completed!
+          comp.save!
         end
-        comp.win = win
-        comp.return = comp.portfolio.return
-        comp.winnings = winnings
-        comp.completed!
-        comp.save
+        mail_results comp
       end
     end
   end
+
+  private
+    def mail_results(comp)
+      comp.portfolios.each do |portfolio|
+        CompetitionMailer.competition_end(comp,portfolio.user).deliver
+      end
+    end
 end

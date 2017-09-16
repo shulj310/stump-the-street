@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170916180512) do
+ActiveRecord::Schema.define(version: 20170916210253) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,7 +26,6 @@ ActiveRecord::Schema.define(version: 20170916180512) do
     t.integer  "user_id",                         null: false
     t.integer  "competitor_id",                   null: false
     t.float    "diff"
-    t.boolean  "win"
     t.float    "return"
     t.float    "winnings"
     t.integer  "status",          default: 0,     null: false
@@ -34,7 +33,6 @@ ActiveRecord::Schema.define(version: 20170916180512) do
     t.integer  "max_users"
     t.boolean  "private",         default: false, null: false
     t.string   "secret_key"
-    t.index ["win"], name: "index_competitions_on_win", using: :btree
   end
 
   create_table "competitor_portfolios", force: :cascade do |t|
@@ -82,6 +80,7 @@ ActiveRecord::Schema.define(version: 20170916180512) do
     t.datetime "updated_at",     null: false
     t.integer  "competition_id", null: false
     t.integer  "user_id"
+    t.boolean  "won"
     t.index ["user_id"], name: "index_portfolios_on_user_id", using: :btree
   end
 

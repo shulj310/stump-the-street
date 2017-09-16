@@ -17,7 +17,10 @@ class Api::V1::PortfoliosController < ApplicationController
       data = Competition.select(:competitor_id,:wager_amount,:'portfolios.id',:'portfolios.name',:deadline,
         :'portfolios.return',:diff,'competitor_portfolios.cost AS comp_cost','competitor_portfolios.value AS comp_price',:'portfolios.value',:'portfolios.cash'
           ).joins(:portfolios,:competitor_portfolio).where(
-            "win IS NULL AND portfolios.competition_id = competitions.id AND competitor_portfolios.competition_id = competitions.id AND portfolios.id = #{params[:id]}")
+            "won IS NULL AND
+            portfolios.competition_id = competitions.id AND
+            competitor_portfolios.competition_id = competitions.id AND
+            portfolios.id = #{params[:id]}")
 
       render json: data
     elsif current_user

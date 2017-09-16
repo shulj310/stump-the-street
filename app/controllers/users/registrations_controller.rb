@@ -16,7 +16,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def edit
     super do |resource|
       @competitions = @current_user.competitions.order(:deadline).limit(5)
-      @all_competitions = @current_user.competitions
     end
   end
 

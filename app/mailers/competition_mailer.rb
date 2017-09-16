@@ -11,10 +11,10 @@ class CompetitionMailer < ApplicationMailer
 
   end
 
-  def competition_end(competition,win)
+  def competition_end(competition,user)
     @competition = competition
-    @user = @competition.user
-    @win = win
+    @win = competition.winner == user
+    @user = user
 
     if @win
       subject = "Ding, ding, ding, we have a winner..."
@@ -23,7 +23,7 @@ class CompetitionMailer < ApplicationMailer
     end
 
     mail(
-      to: @user.email,
+      to: user.email,
       subject: subject
     )
   end

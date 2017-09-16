@@ -12,7 +12,7 @@ class Api::V1::CompetitionsController < ApplicationController
     competitions = Competition.select(:'portfolios.id',:'portfolios.name',:deadline,
       :'portfolios.return',:current_value,:diff,'competitor_portfolios.return AS comp_return'
         ).joins(:portfolios,:competitor_portfolio).where(
-          "win IS NULL AND
+          "won IS NULL AND
           portfolios.competition_id = competitions.id AND
           competitor_portfolios.competition_id = competitions.id AND
           competitions.user_id = #{current_user.id} AND
