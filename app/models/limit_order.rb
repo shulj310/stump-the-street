@@ -25,6 +25,9 @@ class LimitOrder < ApplicationRecord
 
   private
     def init
-      self.deadline ||= Market.new.closing_time
+      unless self.deadline
+        market = Market.new
+        self.deadline = market.next_working_day(market.closing_time)
+      end
     end
 end

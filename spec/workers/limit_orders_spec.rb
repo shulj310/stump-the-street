@@ -37,19 +37,20 @@ RSpec.describe LimitOrders do
       value: 100000,
       cash: 100000,
       return: 0,
-      competition_id:competition.id
+      competition_id:competition.id,
+      user: user,
     )
   }
 
   let!(:stock) {
-    Stock.create(
+    Stock.create!(
     ticker:"AAPL",
     name:"Apple",
     price:100)
   }
 
   it 'should process order only when price is below treshold' do
-    order = LimitOrder.create({
+    order = LimitOrder.create!({
       stock: stock,
       price: 99,
       side: true,

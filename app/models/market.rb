@@ -6,7 +6,7 @@ class Market
   end
 
   def open?
-    if current_time.saturday? or current_time.sunday? or Holidays.on(current_time, @holidays_schedule).present?
+    if bank_holiday?(current_time)
       return false
     end
     current_time.between?(opening_time, closing_time)
@@ -22,5 +22,16 @@ class Market
 
   def current_time
     Time.zone.now
+  end
+
+  def bank_holiday?(time)
+    time.saturday? or time.sunday? or Holidays.on(time, @holidays_schedule).present?
+  end
+
+  def next_working_day(time)
+    while bank_holiday?(time)
+      time += 1.day
+    end
+    time
   end
 end
