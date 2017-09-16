@@ -4,6 +4,10 @@ class Competition < ApplicationRecord
   has_one :competitor_portfolio
   has_one :portfolio
 
+  enum status: [ :created, :active, :completed, :cancelled ]
+
+  scope :ready_for_settlement, -> { where('deadline < NOW() AND win IS NULL') }
+
   after_create do |comp|
     user = comp.user
 

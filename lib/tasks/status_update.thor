@@ -5,12 +5,12 @@ class StatusUpdate < Thor
 
   def status_update
     total_users = User.all.length
-    total_competitions = Competition.all.length
+    total_competitions = Competition.active.length
 
-    total_exposure = Competition.all.pluck(:current_value).inject(0) {|sum,x| sum+x }
+    total_exposure = Competition.active.pluck(:current_value).inject(0) {|sum,x| sum+x }
     current_exposure = 0
 
-    Competition.all.each do |comp|
+    Competition.active.each do |comp|
 
       if comp.diff > 0
         current_exposure += comp.current_value
@@ -40,13 +40,13 @@ class StatusUpdate < Thor
 
     stock_exposure = {}
     current_value = 0
-    Competition.all.each  do |comp|
+    Competition.active.each  do |comp|
       comp.portfolio.positions.each do |pos|
         current_value += pos.value
       end
     end
 
-    Competition.all.each do |comp|
+    Competition.active.each do |comp|
       stock_hash = comp.portfolio.positions.group(:stock_id).sum(:value)
       stocks_by_weight = stock_hash.map { |key,value| {Stock.find(key).ticker => value/current_value*comp.current_value}}
       # stocks_by_weight.map { |k,v| stock_exposure[k].nil? ? stock_exposure[k]=v : stock_exposure[k] += v }

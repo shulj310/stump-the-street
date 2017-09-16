@@ -8,9 +8,9 @@
           <h4><%= @current_user.first_name %> <%=@current_user.last_name%></h4></li>
     <li class="collection-item avatar">
       <i class="material-icons circle orange">business</i>
-      <span class="title">Total Competitions: <%= @current_user.competitions.length %></span>
-      <p>Total Wins: <%=@current_user.competition_histories.pluck(:win).select {|comp| comp ==true}.length%> <br>
-         Total Losses: <%=@current_user.competition_histories.pluck(:win).select {|comp| comp !=true}.length%>
+      <span class="title">Total Competitions: <%= @all_competitions.size %></span>
+      <p>Total Wins: <%= @all_competitions.where(win:true).size %> <br>
+         Total Losses: <%= @all_competitions.where(win:false).size %>
       </p>
       <a href="#" class="secondary-content btn-floating tooltipped"
       data-position="bottom"

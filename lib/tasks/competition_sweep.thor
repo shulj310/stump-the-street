@@ -13,7 +13,7 @@ class CompetitionSweep < Thor
   def updater
     Portfolio.all.each {|p| p.touch}
     CompetitorPortfolio.all.each {|cp| cp.touch}
-    Competition.all.each do |c|
+    Competition.active.each do |c|
 
       ## here is where we decide if the competition is over or not!
       ## update competition history table (which we need to create!)
@@ -29,31 +29,22 @@ class CompetitionSweep < Thor
 
   def win_loss
     unless DateTime.now.saturday? || DateTime.now.sunday?
-      User.all.each do |user|
-        user.competitions.each do |comp|
-          win = (comp.diff > 0)
-          winnings = 0
-          if comp.deadline < Time.now.utc
-            CompetitionMailer.competition_end(comp,win).deliver
-            if win
-              winnings = comp.current_value
-              user.wallet += winnings
-              user.wallet += comp.wager_amount
-              user.save
-            end
-            CompetitionHistory.create(
-              user_id: user.id,
-              win: win,
-              wager_amount: comp.wager_amount,
-              competitor_id: comp.competitor_id,
-              return: comp.portfolio.return,
-              competitor_return: comp.competitor_portfolio.return,
-              winnings: winnings,
-              length: comp.length
-            )
-            comp.destroy
-          end
+      Competition.ready_for_settlement.each do |comp|
+        win = (comp.diff > 0)
+        winnings = 0
+        user = comp.user # TODO: determine winner for group competitions
+        CompetitionMailer.competition_end(comp,win).deliver
+        if win
+          winnings = comp.current_value
+          user.wallet += winnings
+          user.wallet += comp.wager_amount
+          user.save
         end
+        comp.win = win
+        comp.return = comp.portfolio.return
+        comp.winnings = winnings
+        comp.completed!
+        comp.save
       end
     end
   end

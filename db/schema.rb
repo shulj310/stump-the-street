@@ -10,36 +10,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170912141033) do
+ActiveRecord::Schema.define(version: 20170916170646) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "competition_histories", force: :cascade do |t|
-    t.integer  "user_id"
-    t.boolean  "win",               null: false
-    t.float    "wager_amount",      null: false
-    t.integer  "competitor_id",     null: false
-    t.float    "return",            null: false
-    t.float    "competitor_return", null: false
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
-    t.float    "winnings"
-    t.integer  "length"
-    t.index ["user_id"], name: "index_competition_histories_on_user_id", using: :btree
-  end
-
   create_table "competitions", force: :cascade do |t|
-    t.integer  "length",          null: false
-    t.datetime "deadline",        null: false
-    t.integer  "wager_amount",    null: false
-    t.float    "odds_calculated", null: false
-    t.float    "current_value",   null: false
-    t.datetime "created_at",      null: false
-    t.datetime "updated_at",      null: false
-    t.integer  "user_id",         null: false
-    t.integer  "competitor_id",   null: false
+    t.integer  "length",                          null: false
+    t.datetime "deadline",                        null: false
+    t.integer  "wager_amount",                    null: false
+    t.float    "odds_calculated",                 null: false
+    t.float    "current_value",                   null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.integer  "user_id",                         null: false
+    t.integer  "competitor_id",                   null: false
     t.float    "diff"
+    t.boolean  "win"
+    t.float    "return"
+    t.float    "winnings"
+    t.integer  "status",          default: 0,     null: false
+    t.datetime "starts_at"
+    t.integer  "max_users"
+    t.boolean  "private",         default: false, null: false
+    t.string   "secret_key"
+    t.index ["win"], name: "index_competitions_on_win", using: :btree
   end
 
   create_table "competitor_portfolios", force: :cascade do |t|

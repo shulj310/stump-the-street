@@ -2,7 +2,7 @@ class Api::V1::PortfoliosController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def index
-    portfolios = Competition.where(user_id:current_user.id).map {|comp| comp.portfolio}
+    portfolios = Competition.where(user_id:current_user.id, win: nil).map {|comp| comp.portfolio}
     render json: portfolios, include: ["positions"]
   end
 
@@ -17,7 +17,7 @@ class Api::V1::PortfoliosController < ApplicationController
       data = Competition.select(:competitor_id,:wager_amount,:'portfolios.id',:'portfolios.name',:deadline,
         :'portfolios.return',:diff,'competitor_portfolios.cost AS comp_cost','competitor_portfolios.value AS comp_price',:'portfolios.value',:'portfolios.cash'
           ).joins(:portfolio,:competitor_portfolio).where(
-            "portfolios.competition_id = competitions.id AND competitor_portfolios.competition_id = competitions.id AND portfolios.id = #{params[:id]}")
+            "win IS NULL AND portfolios.competition_id = competitions.id AND competitor_portfolios.competition_id = competitions.id AND portfolios.id = #{params[:id]}")
 
       render json: data
     elsif current_user

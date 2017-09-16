@@ -15,7 +15,6 @@ class User < ApplicationRecord
   has_many :competitions
   has_many :portfolios,
     through: :competitions
-  has_many :competition_histories
   has_many :search_histories
 
 end

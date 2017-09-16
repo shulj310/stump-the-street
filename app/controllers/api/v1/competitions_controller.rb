@@ -12,7 +12,7 @@ class Api::V1::CompetitionsController < ApplicationController
     competitions = Competition.select(:'portfolios.id',:'portfolios.name',:deadline,
       :'portfolios.return',:current_value,:diff,'competitor_portfolios.return AS comp_return'
         ).joins(:portfolio,:competitor_portfolio).where(
-          "portfolios.competition_id = competitions.id AND competitor_portfolios.competition_id = competitions.id AND competitions.user_id = #{current_user.id}").order(
+          "win IS NULL AND portfolios.competition_id = competitions.id AND competitor_portfolios.competition_id = competitions.id AND competitions.user_id = #{current_user.id}").order(
             :deadline)
 
     render json: competitions
@@ -41,7 +41,8 @@ class Api::V1::CompetitionsController < ApplicationController
           odds_calculated: odds_calculated,
           current_value: data["wager_amount"].to_f*odds_calculated,
           competitor_id: data["competitor"].to_i,
-          user_id: current_user.id
+          user_id: current_user.id,
+          status: :active, # mark non-group competitions as active immediately
         )
 
         Portfolio.create(

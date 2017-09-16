@@ -16,7 +16,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   def edit
     super do |resource|
       @competitions = @current_user.competitions.order(:deadline).limit(5)
-      @wins = @current_user.competition_histories.pluck(:win).select {|comp| comp == true}
+      @all_competitions = @current_user.competitions
     end
   end
 
