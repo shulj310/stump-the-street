@@ -38,17 +38,32 @@ class Api::V1::CompetitionsController < ApplicationController
 
         odds_calculated = odds.calc_odds
 
-        new_competition = Competition.create!(
+        new_competition = Competition.new(
           length: data["length"],
           deadline: new_date,
           wager_amount: data["wager_amount"].to_i,
           odds_calculated: odds_calculated,
           current_value: data["wager_amount"].to_f*odds_calculated,
-          competitor_id: data["competitor"].to_i,
+          competitor_id: data["competitor"],
           user_id: current_user.id,
-          status: :active, # mark non-group competitions as active immediately
-          starts_at: Time.now,
+          max_users: data['max_users'],
         )
+
+        if new_competition.is_group?
+          # start group competitions at the beginning of the next working day
+          market = Market.new
+          new_competition.starts_at = market.next_working_day(market.opening_time)
+          if new_competition.starts_at < Time.now
+            new_competition.starts_at += 1.day
+          end
+        else
+          # start non-group competitions immediately
+          new_competition.active!
+          new_competition.starts_at = Time.now
+        end
+
+        new_competition.save!
+
 
         Portfolio.create!(
           name: data["strategy"],
@@ -59,14 +74,14 @@ class Api::V1::CompetitionsController < ApplicationController
           user: current_user,
         )
 
-
-        CompetitorPortfolio.create!(
-          competition_id: new_competition.id,
-          value: 1000000,
-          cost: 1000000,
-          return: 0
-        )
-
+        unless new_competition.is_group?
+          CompetitorPortfolio.create!(
+            competition_id: new_competition.id,
+            value: 1000000,
+            cost: 1000000,
+            return: 0
+          )
+        end
 
         render json: new_competition, include: ["portfolio"]
       else
