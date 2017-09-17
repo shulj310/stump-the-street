@@ -1,6 +1,6 @@
 class Competition < ApplicationRecord
   belongs_to :user
-  belongs_to :competitor
+  belongs_to :competitor, optional: true
   has_one :competitor_portfolio
   has_many :portfolios
 
@@ -45,5 +45,26 @@ class Competition < ApplicationRecord
   def winner
     winning_portfolio = portfolios.find_by(won:true)
     winning_portfolio.present ? winning_portfolio.user : nil
+  end
+
+  # attempt to start group competition that hasn't begun yet
+  # designed to be run regularly (at the start of market day)
+  def start!
+    # attempt to start only group competitions that are not active
+    return unless created? and is_group?
+    if (starts_at and starts_at >= Time.now) or (max_users and portfolios.count >= max_users)
+      # ready to start
+      if portfolios.count < 2
+        # hit deadline but not ready to start
+        cancelled!
+      else
+        deadline = Time.now + length.days
+        starts_at = Time.now # reset to actual start time
+        active!
+      end
+    else
+      # not ready to be started yet
+      false
+    end
   end
 end
