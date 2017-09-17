@@ -47,6 +47,7 @@ class Api::V1::CompetitionsController < ApplicationController
           competitor_id: data["competitor"],
           user_id: current_user.id,
           max_users: data['max_users'],
+          private: true & data['private'],
         )
 
         if new_competition.is_group?
@@ -55,6 +56,9 @@ class Api::V1::CompetitionsController < ApplicationController
           new_competition.starts_at = market.next_working_day(market.opening_time)
           if new_competition.starts_at < Time.now
             new_competition.starts_at += 1.day
+          end
+          if new_competition.private
+            new_competition.secret_key = SecureRandom.hex(10)
           end
         else
           # start non-group competitions immediately
