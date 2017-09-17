@@ -30,4 +30,24 @@ class Api::V1::PortfoliosController < ApplicationController
     end
   end
 
+  def create
+    competition = Competition.find(params[:competition_id])
+    unless competition.created?
+      raise "Competition #{competition.id} has already been #{competition.status}"
+    end
+    if competition.portfolios.where(user: current_user).count > 0
+      raise "Current user already has portfolio in the competition"
+    end
+    portfolio = Portfolio.create!(
+      name: params["strategy"],
+      value: 1000000,
+      cash: 1000000,
+      return: 0,
+      competition: competition,
+      user: current_user,
+    )
+    # attempt to start competition if max_users reached
+    competition.start!
+    render json: portfolio
+  end
 end
