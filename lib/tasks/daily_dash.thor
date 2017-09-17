@@ -9,22 +9,23 @@ class DailyDash < Thor
       competitions = {}
       Competition.active do |comp|
         date = DateTime.now - 1
+        comp.portfolios.each do |portfolio|
+          trades = portfolio.trades.select {|trade| trade.created_at>date}.length
 
-        trades = comp.portfolio.trades.select {|trade| trade.created_at>date}.length
+          prior_value = PortfolioHistory.where(portfolio:portfolio).last.value
 
-        prior_value = PortfolioHistory.find_by(portfolio_id:comp.portfolio.id).value
+          PortfolioHistory.create(
+            portfolio_id: portfolio.id,
+            value:portfolio.value,
+            trades_made:trades
+          )
 
-        PortfolioHistory.create(
-          portfolio_id: comp.portfolio.id,
-          value:comp.portfolio.value,
-          trades_made:trades
-        )
-
-        competitions[user] = [] unless competitions[user]
-        competitions[user].push(CompetitionPrep.new(comp,prior_value))
+          portfolios[portfolio.user] = [] unless portfolios[portfolio.user]
+          portfolios[portfolio.user].push(CompetitionPrep.new(portfolio,prior_value))
+        end
       end
-      competitions.each do |user,competitions|
-        CompetitionMailer.end_of_day(user,competitions).deliver
+      portfolios.each do |user,portfolios|
+        CompetitionMailer.end_of_day(user,portfolios).deliver
       end
     end
   end

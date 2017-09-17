@@ -1,20 +1,20 @@
 class CompetitionPrep
   attr_reader :best_stock,:worst_stock,:cash_drag,:biggest_weight,:total_trades_to_date, :competition
 
-  def initialize(competition,prior_value)
-    @competition = competition
+  def initialize(portfolio,prior_value)
+    @portfolio = portfolio
     @prior_value = prior_value
   end
 
   def best_stock
-    positions = @competition.portfolio.positions
+    positions = @portfolio.positions
 
     if positions.length == 0
       return false
     else
       best_stock = {}
       best_return = -1
-      @competition.portfolio.positions.each do |pos|
+      @portfolio.positions.each do |pos|
         unless pos.value == 0
           if pos.return > best_return
             best_return = pos.return
@@ -27,7 +27,7 @@ class CompetitionPrep
   end
 
   def worst_stock
-    positions = @competition.portfolio.positions
+    positions = @portfolio.positions
 
     if positions.length == 0
       return false
@@ -47,11 +47,11 @@ class CompetitionPrep
   end
 
   def cash_drag
-    return @competition.portfolio.cash / @competition.portfolio.value
+    return @portfolio.cash / @portfolio.value
   end
 
   def biggest_weight
-    positions = @competition.portfolio.positions
+    positions = @portfolio.positions
 
     if positions.length == 0
       return false
@@ -69,19 +69,19 @@ class CompetitionPrep
   end
 
   def total_trades_to_date
-    @competition.portfolio.trades.length
+    @portfolio.trades.length
   end
 
   def total_trades_today
-    @competition.portfolio.portfolio_histories.last.trades_made
+    @portfolio.portfolio_histories.last.trades_made
   end
 
   def day_return_pct
-    @competition.portfolio.portfolio_histories.last.value / @prior_value -1
+    @portfolio.portfolio_histories.last.value / @prior_value -1
   end
 
   def day_return_cash
-    @competition.portfolio.portfolio_histories.last.value - @prior_value
+    @portfolio.portfolio_histories.last.value - @prior_value
   end
 
   def comp_return

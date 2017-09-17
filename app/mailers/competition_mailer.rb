@@ -1,8 +1,9 @@
 class CompetitionMailer < ApplicationMailer
 
-  def end_of_day(user,competitions)
+  def end_of_day(user,portfolios)
     @user = user
-    @competitions = competitions
+    @portfolios = portfolios
+    @competitions = portfolios.map(&:competition)
 
     mail(
       to:@user.email,

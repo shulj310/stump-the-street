@@ -16,7 +16,7 @@
         Here is your daily dashboard for today!
       </p>
 
-      <p><strong>Let's take a look at your <%= @competitions.length %> active competitions</strong></p>
+      <p><strong>Let's take a look at your <%= @portfolios.length %> active competitions</strong></p>
 
       <table class="striped highlight">
         <thead>
@@ -31,15 +31,15 @@
           </tr>
         </thead>
         <tbody>
-          <% @competitions.each do |comp| %>
+          <% @portfolios.each do |port| %>
           <tr>
-            <td><a href="http://www.stumpthestreet.com/competitions/show/portfolios/<%=comp.competition.portfolio.id%>"><%=comp.competition.portfolio.name %></td>
-            <td><%=number_to_currency(comp.competition.current_value,precision: 2) %></td>
-            <td><%=number_to_currency(comp.competition.wager_amount,precision: 2) %></td>
-            <td><%=comp.competition.deadline.strftime("%b %e, %Y") %></td>
-            <td><%= number_to_percentage(comp.competition.portfolio.return*100, precision: 2) %></td>
-            <td><%=number_to_percentage(comp.competition.competitor_portfolio.return* 100, precision: 2) %></td>
-            <td><%=number_to_percentage(comp.competition.diff* 100, precision: 2) %></td>
+            <td><a href="http://www.stumpthestreet.com/competitions/show/portfolios/<%=port.id%>"><%=port.name %></td>
+            <td><%=number_to_currency(port.competition.current_value,precision: 2) %></td>
+            <td><%=number_to_currency(port.competition.wager_amount,precision: 2) %></td>
+            <td><%=port.competition.deadline.strftime("%b %e, %Y") %></td>
+            <td><%= number_to_percentage(port.return*100, precision: 2) %></td>
+            <td><%=number_to_percentage(port.competition.top_portfolio.return* 100, precision: 2) %></td>
+            <td><%=number_to_percentage(port.competition.diff* 100, precision: 2) %></td>
           </tr>
           <%end%>
         </tbody>
@@ -47,12 +47,12 @@
 
       <br/>
 
-      <% @competitions.each do |comp| %>
+      <% @portfolios.each do |port| %>
         <div style="background:#eceff1;padding:2%;box-shadow:2px 2px 2px 1px rgba(0, 0, 0, 0.2)">
-          <h5> <%= comp.competition.portfolio.name %> <label>Potential Payout: <%=number_to_currency(comp.competition.current_value,precision:2) %></label></h5>
+          <h5> <%= port.name %> <label>Potential Payout: <%=number_to_currency(port.competition.current_value,precision:2) %></label></h5>
           <hr/>
-          <p><strong>Current Market Value:</strong> <%= number_to_currency(comp.competition.portfolio.value, precision:2) %></p>
-          <p><span><strong>Current Cash Position:</strong> <%= number_to_currency(comp.competition.portfolio.cash,precision: 2) %> (<%= number_to_percentage(comp.cash_drag*100,precision: 2) %>)</span><% if comp.cash_drag > 0.25%><span>
+          <p><strong>Current Market Value:</strong> <%= number_to_currency(port.value, precision:2) %></p>
+          <p><span><strong>Current Cash Position:</strong> <%= number_to_currency(port.cash,precision: 2) %> (<%#TODO: WHAT IS CASH_DRAG?? = number_to_percentage(comp.cash_drag*100,precision: 2) %>)</span><% if comp.cash_drag > 0.25%><span>
             <i class="material-icons">flag</i> <a href="http://www.stumpthestreet.com/competitions/show/portfolios/<%=comp.competition.portfolio.id%>"><strong>Get trading!</strong></a></span><%end%></p>
           <p><strong>Day Return:</strong> <%= number_to_currency(comp.day_return_cash,precision: 2)%> (<%=number_to_percentage(comp.day_return_pct*100, precision:2)%>) vs. <%=comp.competition.competitor.name%>: <%= number_to_percentage(comp.comp_return,precision: 2)%></p>
           <h6><u>Full Trading Analysis Coming Soon</u></h6>
