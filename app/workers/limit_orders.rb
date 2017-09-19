@@ -13,9 +13,9 @@ class LimitOrders
     end
 
     orders = LimitOrder.
-      includes(:stock).
-      where(stocks: {ticker:ticker}).
-      where("#{condition} AND deadline > NOW()")
+      includes(:stock, portfolio: [:competition]).
+      where(stocks: {ticker:ticker}, competitions: {status: Competition.statuses[:active]}).
+      where("#{condition} AND limit_orders.deadline > NOW()")
 
     orders.each do |lo|
       lo.create_order

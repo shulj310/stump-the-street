@@ -27,7 +27,8 @@ RSpec.describe LimitOrders do
       odds_calculated:1,
       current_value:95,
       user_id:user.id,
-      competitor_id:competitor.id
+      competitor_id:competitor.id,
+      status: :active,
     )
   }
 
