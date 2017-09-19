@@ -16,11 +16,15 @@ class Competition < ApplicationRecord
   end
 
   after_touch do |comp|
-    comp.portfolio.touch
+    comp.portfolios.each{|p| p.touch}
     unless comp.is_group?
-      comp.diff = comp.portfolio.return - comp.competitor_portfolio.return
+      comp.diff = comp.portfolio.return - comp.top_portfolio.return
       comp.save
     end
+  end
+
+  def diff_for(port)
+    port.return - top_portfolio.return
   end
 
   # convenience getter for non-group competitions

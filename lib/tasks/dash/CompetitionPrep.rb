@@ -1,5 +1,5 @@
 class CompetitionPrep
-  attr_reader :best_stock,:worst_stock,:cash_drag,:biggest_weight,:total_trades_to_date, :competition
+  attr_reader :best_stock,:worst_stock,:cash_drag,:biggest_weight,:total_trades_to_date, :portfolio
 
   def initialize(portfolio,prior_value)
     @portfolio = portfolio

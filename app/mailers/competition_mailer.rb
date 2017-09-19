@@ -3,7 +3,6 @@ class CompetitionMailer < ApplicationMailer
   def end_of_day(user,portfolios)
     @user = user
     @portfolios = portfolios
-    @competitions = portfolios.map(&:competition)
 
     mail(
       to:@user.email,
