@@ -13,7 +13,7 @@ const HowToPlay = props =>{
         <img style={{float:"left",margin:"-0.5em 2vw 1vw 0",height:"auto",width:"auto",paddingLeft:"3vw",maxWidth:"25%"}}
           src={require(`./../../../../assets/images/stump_homepage_icon_group.png`)}
         />
-          Stump the Street is where new investors and seasoned pros come to challenge their peers and walk away with prizes. Create your own winning strategies and watch as your Investor Rank soars.
+          Stump the Street is where new investors and seasoned pros come to challenge their peers and walk away with prizes. Create your own winning strategies and watch your Global Rank soar.
         </p>
       </div>
     </div>

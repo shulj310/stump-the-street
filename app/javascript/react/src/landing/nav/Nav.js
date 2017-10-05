@@ -16,7 +16,7 @@ const Nav = props =>{
             display:"block",
             padding:"5px",
             textDecoration:"none",
-            maxWidth:"60vw"
+            maxWidth:"65vw"
         }}>
           <Logo />
         </li>
@@ -24,7 +24,7 @@ const Nav = props =>{
             float:"right",
             display:"block",
             padding:"5px",
-            fontSize:"1vw",
+            fontSize:"1.5vw",
             textDecoration:"none"
         }}>
            Beta Login
