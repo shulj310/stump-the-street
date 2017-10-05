@@ -7,6 +7,7 @@ import createBrowserHistory from 'history/createBrowserHistory';
 import { BrowserRouter } from 'react-router-dom'
 import CompetitorIndex from '../components/CompetitorIndex'
 import ResearchIndex from '../research/containers/ResearchIndex'
+import Landing from '../landing/Landing'
 
 const history = createBrowserHistory();
 
@@ -15,7 +16,7 @@ const App = props =>{
     <div>
     <BrowserRouter history={history}>
       <Switch>
-        <Route exact path="/" component={HomePage}/>
+        <Route exact path="/" component={Landing}/>
         <Route exact path="/competitions" component={Competitions}/>
         <Route exact path='/competitors' component={CompetitorIndex}/>
         <Route exact path='/research' component={ResearchIndex}/>

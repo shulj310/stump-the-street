@@ -11,78 +11,11 @@
   </head>
 
   <body>
-
-    <header>
-  <nav class="nav-extended">
-    <div class="nav-wrapper blue-grey darken-3">
-      <li class="brand-logo">&nbsp;&nbsp;&nbsp;<%= link_to "Stump the Street", root_path %></li>
-      <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
-      <ul class="right hide-on-med-and-down">
-        <% if current_user %>
-          <li><%= link_to "Research", research_index_path %></li>
-          <li><%= link_to "My Competitions", competitions_path %></li>
-          <li><%= link_to "My Profile", edit_user_registration_path %></li>
-          <li><%= link_to "Sign out", destroy_user_session_path, :method => :delete %></li>
-          <%else%>
-          <li><%= link_to "Research", research_index_path %></li>
-          <li><%=link_to "Sign In", new_user_session_path %></li>
-          <li><%=link_to "Sign Up", new_user_registration_path %></li>
-        <%end%>
-      </ul>
-      <ul class="side-nav" id="mobile-demo">
-        <% if current_user %>
-          <li><%= link_to "Research", research_index_path %></span></li>
-          <li><%= link_to "My Competitions", competitions_path %></li>
-          <li><%= link_to "My Profile", edit_user_registration_path %></li>
-          <li><%= link_to "Sign out", destroy_user_session_path, :method => :delete %></li>
-          <%else%>
-          <li><%= link_to "Research", research_index_path %></li>
-          <li><%=link_to "Sign In", new_user_session_path %></li>
-          <li><%=link_to "Sign Up", new_user_registration_path %></li>
-        <%end%>
-      </ul>
+    <main>
+    <div>
+      <%= yield%>
     </div>
-  </nav>
-</header>
-
-  <% if flash[:notice] %>
-  <div class="notice"><%= flash[:notice] %></div>
-  <% elsif flash[:error] %>
-  <div class="error"><%= flash[:error] %></div>
-  <% elsif flash[:alert] %>
-  <div class="alert"><%= flash[:alert] %></div>
-  <% end %>
-  <main>
-  <div  class="container">
-    <%= yield%>
-  </div>
-</main>
-
-    <footer class="page-footer  blue-grey darken-3">
-    <div class="container">
-      <div class="row">
-        <div class="col l6 s12">
-          <h5 class="white-text">Stump the Street</h5>
-          <p class="grey-text text-lighten-4">
-            Stump the Street was built on the premise that the fat cats on Wall Street do not need to prosper at the expense of Main Street.
-          With no trading costs, larger portfolios to diversify, and considerable analytical tools, we hope to empower you to Stump the Street. Happy Trading!</p>
-        </div>
-        <div class="col l4 offset-l2 s12">
-          <h5 class="white-text">Learn More</h5>
-          <ul>
-            <li><a class="grey-text text-lighten-3" href="/users/edit#about-us">About Us</a></li>
-            <li><%= link_to "My Profile", edit_user_registration_path, class:"grey-text text-lighten-3"  %></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div class="footer-copyright">
-      <div class="container">
-      © 2017 Copyright Text
-      <a class="grey-text text-lighten-4 right" href="http://www.pendleton.ai">Pendleton Capital, LLC</a>
-      </div>
-    </div>
-  </footer>
+  </main>
 
 </body>
 </html>
