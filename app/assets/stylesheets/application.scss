@@ -29,6 +29,50 @@
    font-family: "Montserrat"
  }
 
+ .form-input label{
+   font-size: "2vw";
+ }
+
+ .material-icons, .mi {
+   line-height: 3rem
+ }
+
+ [type="checkbox"] + label {
+     position: relative;
+     padding-left: 4vw;
+     cursor: pointer;
+     display: inline-block;
+     height: 25px;
+     line-height: 3.5vw;
+  }
+
+ [type="checkbox"] + label:before, [type="checkbox"]:not(.filled-in) + label:after{
+   height:3vw;
+   width:3vw;
+
+}
+ [type="checkbox"] + label:before, [type="checkbox"]:not(.filled-in) + label:after{
+   height:3vw;
+   width:3vw;
+ }
+
+.input-field .prefix.active{
+  color:#E55425
+}
+
+input[type=text]:not(.browser-default):focus:not([readonly]) + label {
+  color: black;
+}
+.input-field input[type=text]:focus{
+  border-bottom: 1px solid black !important;
+  box-shadow: 0 1px 0 0 black !important;
+}
+
+.input-field input[type=text].valid {
+  border-bottom: 1px solid #000;
+  box-shadow: 0 1px 0 0 #000;
+}
+
  body {
    display: flex;
    font-weight: bold;
@@ -40,6 +84,15 @@
 
  main {
    flex: 1 0 auto;
+ }
+
+ .btn{
+   line-height: 5vw;
+   padding: 0 0;
+ }
+
+ .checkbox label{
+   font-size: "2vw";
  }
 
 

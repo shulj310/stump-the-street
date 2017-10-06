@@ -1,5 +1,7 @@
 import React from 'react'
-import {Col,Row,Input,Icon,Button} from 'react-materialize'
+import {Col,Row,Icon,Button} from 'react-materialize'
+import Input from "./Input"
+import Checked from './Checked'
 
 const Form = props =>{
 
@@ -15,9 +17,24 @@ const Form = props =>{
       <div style={{fontSize:"3vw", paddingLeft:"2vw",color:"#311B92"}}>
         <Row>
           <Col s={6}>
-        	<Input s={12} label="Name" validate><Icon>account_circle</Icon></Input>
-        	<Input s={12} label="Email" validate type='email'><Icon>email</Icon></Input>
-          <Input name='beta' type='checkbox' value='beta' label='Consider me for Beta Testing' defaultValue='checked' />
+            <div style={{fontSize:"2vw"}}>
+            	<Input
+                label="Name"
+                name="name"
+                content={props.name}
+                handleChange={props.handleChange}
+              />
+              <Input
+                label="Email"
+                name="email"
+                content={props.email}
+                handleChange={props.handleChange}
+              />
+              <Checked
+
+              />
+
+            </div>
           </Col>
           <Col s={6}>
           <img
@@ -27,7 +44,8 @@ const Form = props =>{
           </Col>
         </Row>
         <Row>
-          <Button style={{backgroundColor:"#311B92"}} waves='light'>Submit</Button>
+        <a className="waves-effect waves-light btn"
+          style={{backgroundColor:"#311B92",height:"5vw",width:"15.7vw",fontSize:"2vw"}}>Submit</a>
         </Row>
       </div>
     </div>

@@ -27,7 +27,7 @@ const Nav = props =>{
             fontSize:"1.5vw",
             textDecoration:"none"
         }}>
-           Beta Login
+           <a href="/users/sign_in"> Beta Login</a>
         </li>
       </ul>
     </div>
