@@ -86,13 +86,30 @@ input[type=text]:not(.browser-default):focus:not([readonly]) + label {
    flex: 1 0 auto;
  }
 
+ .beta-bg{
+   background-color:#311B92;
+ }
+
  .btn{
    line-height: 5vw;
    padding: 0 0;
  }
 
  .checkbox label{
-   font-size: "2vw";
+   font-size: 2vw;
+ }
+
+ .beta-login-div{
+   color:white;
+ }
+
+ .beta-login{
+   padding-left: 10vw;
+   padding-right:10vw;
+ }
+
+ .beta-login-button{
+   background-color: #E55425;
  }
 
 

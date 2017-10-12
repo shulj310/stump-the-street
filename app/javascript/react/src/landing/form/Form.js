@@ -5,8 +5,15 @@ import Checked from './Checked'
 
 const Form = props =>{
 
+  let success;
+  if (props.submit){
+    success = <p style={{fontSize:"1vw", paddingLeft:"2vw",color:"#311B92"}}>
+                  Success!
+              </p>
+  }
+
   return(
-    <div>
+    <form method="post" action="/leads">
       <div style={{backgroundColor:"#311B92",maxWidth:"30vw"}}>
         <h1
           style={{fontSize:"3vw",paddingLeft:"4vw",paddingTop:"0.5vw",paddingRight:"1vw"}}>Join the Waitlist</h1>
@@ -31,7 +38,8 @@ const Form = props =>{
                 handleChange={props.handleChange}
               />
               <Checked
-
+                content={props.beta}
+                handleChange={props.handleBetaChange}
               />
 
             </div>
@@ -44,11 +52,13 @@ const Form = props =>{
           </Col>
         </Row>
         <Row>
+        {success}
         <a className="waves-effect waves-light btn"
+          onClick={props.handleSubmit}
           style={{backgroundColor:"#311B92",height:"5vw",width:"15.7vw",fontSize:"2vw"}}>Submit</a>
         </Row>
       </div>
-    </div>
+    </form>
   )
 
 }

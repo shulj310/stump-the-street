@@ -1,51 +1,23 @@
-<body>
+<body class="beta-bg">
+<div class="beta-login">
 
-<h2>Log in</h2>
+  <h3 class="beta-login-div">Beta Log in</h3>
+  <a href="/">Go back</a>
 
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true %>
-  </div>
-
-  <div class="field">
-    <%= f.label :password %><br />
-    <%= f.password_field :password, autocomplete: "off" %>
-  </div>
-
-  <% if devise_mapping.rememberable? -%>
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
     <div class="field">
-      <%= f.check_box :remember_me %>
-      <%= f.label :remember_me %>
+      <%= f.label :email %><br />
+      <%= f.email_field :email, autofocus: true %>
     </div>
-  <% end -%>
 
-  <div class="actions">
-    <%= f.submit "Log in", class: "btn waves-effect waves-light green darken-1" %>
-  </div>
-<% end %>
+    <div class="field">
+      <%= f.label :password %><br />
+      <%= f.password_field :password, autocomplete: "off" %>
+    </div>
 
-<%= render "devise/shared/links" %>
-
-<div class="carousel carousel-slider center" data-indicators="true">
-  <div class="carousel-fixed-item center">
-    <a class="btn waves-effect white grey-text darken-text-2">button</a>
-  </div>
-  <div class="carousel-item red white-text" href="#one!">
-    <h2>First Panel</h2>
-    <p class="white-text">This is your first panel</p>
-  </div>
-  <div class="carousel-item amber white-text" href="#two!">
-    <h2>Second Panel</h2>
-    <p class="white-text">This is your second panel</p>
-  </div>
-  <div class="carousel-item green white-text" href="#three!">
-    <h2>Third Panel</h2>
-    <p class="white-text">This is your third panel</p>
-  </div>
-  <div class="carousel-item blue white-text" href="#four!">
-    <h2>Fourth Panel</h2>
-    <p class="white-text">This is your fourth panel</p>
-  </div>
-</div>
+    <div class="actions">
+      <%= f.submit "Log in", class: "btn waves-effect waves-light beta-login-button" %>
+    </div>
+  <% end %>
+<div>
 </body>
