@@ -11,7 +11,7 @@ const Input = props =>{
         type="text"
         style={{marginLeft:"3vw",marginBottom:"2vw"}}
         name={props.name} onChange={props.handleChange} value={props.content} />
-      <label style={{fontSize:"1.5vw",paddingRight:"1vw"}}>{props.label}</label>
+      <label style={{fontSize:"1.5vw",paddingRight:"1vw",zIndex:-1}}>{props.label}</label>
     </div>
   )
 }

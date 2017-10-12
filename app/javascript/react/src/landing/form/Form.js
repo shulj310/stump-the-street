@@ -38,7 +38,7 @@ const Form = props =>{
                 handleChange={props.handleChange}
               />
               <Checked
-                content={props.beta}
+                beta={props.beta}
                 handleChange={props.handleBetaChange}
               />
 
@@ -51,8 +51,10 @@ const Form = props =>{
           />
           </Col>
         </Row>
+        <div style={{paddingLeft:"3vw"}}>
+          {success}
+        </div>
         <div style={{paddingTop:"3vw",paddingLeft:"10vw"}}>
-        {success}
         <a className="waves-effect waves-light btn"
           onClick={props.handleSubmit}
           style={{backgroundColor:"#311B92",height:"5vw",width:"15.7vw",fontSize:"2vw"}}>Submit</a>
