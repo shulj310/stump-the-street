@@ -4,7 +4,7 @@ import {Input} from 'react-materialize'
 const Checked = props =>{
 
   return(
-      <div className="input-field col s12" style={{padding:0, margin:0}}>
+      <div className="input-field col s12" style={{padding:0, margin:"0 1vw"}}>
       <p>
         <input
           onClick={props.handleChange}

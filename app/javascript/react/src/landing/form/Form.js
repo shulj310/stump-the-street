@@ -51,12 +51,12 @@ const Form = props =>{
           />
           </Col>
         </Row>
-        <Row>
+        <div style={{paddingTop:"3vw",paddingLeft:"10vw"}}>
         {success}
         <a className="waves-effect waves-light btn"
           onClick={props.handleSubmit}
           style={{backgroundColor:"#311B92",height:"5vw",width:"15.7vw",fontSize:"2vw"}}>Submit</a>
-        </Row>
+        </div>
       </div>
     </form>
   )
