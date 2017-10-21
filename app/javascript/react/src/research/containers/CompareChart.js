@@ -3,6 +3,10 @@ import {Line,Bar} from "react-chartjs-2"
 import numeral from 'numeral'
 import {priceAdjuster} from '../utils/priceAdjuster'
 
+// legacy fetch polyfill
+// https://stackoverflow.com/questions/35830202/fetch-not-defined-in-safari-referenceerror-cant-find-variable-fetch
+import 'whatwg-fetch';
+
 class CompareChart extends Component{
   constructor(props){
   super(props);

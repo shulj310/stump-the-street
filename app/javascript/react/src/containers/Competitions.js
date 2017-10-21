@@ -7,6 +7,10 @@ import { Link } from 'react-router-dom';
 import numeral from 'numeral'
 import CreditContainer from './CreditContainer'
 
+// legacy fetch polyfill
+// https://stackoverflow.com/questions/35830202/fetch-not-defined-in-safari-referenceerror-cant-find-variable-fetch
+import 'whatwg-fetch';
+
 class Competitions extends Component{
   constructor(props){
   super(props)

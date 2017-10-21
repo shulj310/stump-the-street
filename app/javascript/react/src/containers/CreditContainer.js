@@ -1,6 +1,10 @@
 import React, {Component} from 'react'
 import CreditForm from './CreditForm'
 
+// legacy fetch polyfill
+// https://stackoverflow.com/questions/35830202/fetch-not-defined-in-safari-referenceerror-cant-find-variable-fetch
+import 'whatwg-fetch';
+
 class CreditContainer extends Component {
   constructor(props){
     super(props)

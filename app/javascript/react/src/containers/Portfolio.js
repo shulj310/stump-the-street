@@ -5,7 +5,11 @@ import TradeForm from './TradeForm';
 import PortfolioDash from '../components/PortfolioDash';
 import ReactTable from 'react-table';
 import numeral from 'numeral';
-import TradeQueue from '../components/TradeQueue'
+import TradeQueue from '../components/TradeQueue';
+
+// legacy fetch polyfill
+// https://stackoverflow.com/questions/35830202/fetch-not-defined-in-safari-referenceerror-cant-find-variable-fetch
+import 'whatwg-fetch';
 
 class Portfolio extends Component{
   constructor(props){

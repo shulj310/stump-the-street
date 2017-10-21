@@ -4,6 +4,10 @@ import Form from './form/Form'
 import Tag from './Tag'
 import HowToPlay from './HowToPlay'
 
+// legacy fetch polyfill
+// https://stackoverflow.com/questions/35830202/fetch-not-defined-in-safari-referenceerror-cant-find-variable-fetch
+import 'whatwg-fetch';
+
 class Landing extends Component{
   constructor(props){
     super(props)
