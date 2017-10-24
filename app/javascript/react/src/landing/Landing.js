@@ -15,7 +15,8 @@ class Landing extends Component{
       email:"",
       name:"",
       beta:false,
-      submit:false
+      submit:false,
+      complete:false
     }
     this.handleChange = this.handleChange.bind(this)
     this.handleClear = this.handleClear.bind(this)
@@ -34,22 +35,26 @@ class Landing extends Component{
       name:this.state.name,
       beta:this.state.beta
     }
-    fetch('/api/v1/leads', {
-      method: "POST",
-      body: JSON.stringify(formPayload),
-      credentials: 'same-origin'
-    }).then(response =>{
-      let body = response.json()
-      return body
-    }).then(body=>{
-      if (body["auth"] == "dup"){
-        alert('This email address has already entereted!')
-      }
-      else{
-        this.setState({submit:true})
-      }
-    })
-    this.handleClear()
+    if ((this.state.name == "" || this.state.email == "")){
+      this.setState({complete:true})
+    } else {
+      fetch('/api/v1/leads', {
+        method: "POST",
+        body: JSON.stringify(formPayload),
+        credentials: 'same-origin'
+      }).then(response =>{
+        let body = response.json()
+        return body
+      }).then(body=>{
+        if (body["auth"] == "dup"){
+          alert('This email address has already entereted!')
+        }
+        else{
+          this.setState({submit:true,complete:false})
+        }
+      })
+      this.handleClear()
+    }
   }
 
   handleBetaChange(event){
@@ -87,6 +92,7 @@ class Landing extends Component{
         <div style={{paddingTop:"1vw"}}>
           <HowToPlay />
           <Form
+            complete ={this.state.complete}
             submit={this.state.submit}
             name={this.state.name}
             email={this.state.email}

@@ -6,9 +6,15 @@ import Checked from './Checked'
 const Form = props =>{
 
   let success;
+  let complete;
   if (props.submit){
     success = <p style={{fontSize:"1vw", paddingLeft:"2vw",color:"#311B92"}}>
                   Success!
+              </p>
+  }
+  if (props.complete){
+    complete = <p style={{fontSize:"1vw", paddingLeft:"2vw",color:"#311B92"}}>
+                  Please complete entire form!
               </p>
   }
 
@@ -53,6 +59,7 @@ const Form = props =>{
         </Row>
         <div style={{paddingLeft:"3vw"}}>
           {success}
+          {complete}
         </div>
         <div style={{paddingTop:"3vw",paddingLeft:"10vw"}}>
         <a className="waves-effect waves-light btn"
