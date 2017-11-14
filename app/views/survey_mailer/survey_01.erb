@@ -1,3 +1,5 @@
+<!DOCTYPE html>
+<html>
 <head>
   <style>
     @import url('https://fonts.googleapis.com/css?family=Montserrat');
@@ -18,14 +20,8 @@
       margin: 1vw 5vw;
       ">
     <a href="https://stumpthestreet.com">
-    <img
-      src="../../assets/images/stump_the_street_logo_1.png"
-      alt="logo"
-      style="
-        width:30%;
-        height:auto;
-        "
-    /></a>
+      <%= image_tag 'stump_the_street_logo_1.png', style: 'width:30%;height:auto' %>
+    </a>
   </div>
   <div
     style="
@@ -36,7 +32,7 @@
       padding: 3vw 10vw;
       font-size:90%
     ">
-    {Name},<br/><br/>
+    <%= @lead.name %>,<br/><br/>
 
     Prepare for battle.<br/><br/>
 
@@ -69,17 +65,9 @@
       font-size:70%;
       text-align:center;
     ">
-    This email was sent to {insert email address!!} <br/>
+    This email was sent to <%= @lead.email %><br/>
     This email was sent by: Stump the Street <br/>
     119 Beach Street, Boston, MA 02111</p>
-    <img
-      src="../../assets/images/stump_the_street_logo_1.png"
-      alt="logo"
-      style="
-        width:20%;
-        height:auto;
-        padding-left:10vw;
-        padding-bottom:1vw;
-        "
-    />
+    <%= image_tag 'stump_the_street_logo_1.png', style: 'width:20%;height:auto;padding-left:10vw;padding-bottom:1vw' %>
 </body>
+</html>

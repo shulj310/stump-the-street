@@ -5,7 +5,9 @@ class Api::V1::LeadsController < ApplicationController
     data = JSON.parse(request.body.read)
     @lead = Lead.new(data)
     @lead.referer = cookies["referer"]
-    @lead.save
+    if @lead.save
+      SurveyMailer.survey(@lead, "survey_0#{@lead.id % 3 + 1}").deliver_now
+    end
 
     render json: {auth:true}
   end
