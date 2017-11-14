@@ -87,6 +87,8 @@ Rails.application.configure do
   config.action_mailer.default_url_options =
       {:host => 'https://stump-the-street.herokuapp.com'}
 
+  config.action_mailer.asset_host = 'https://www.stumpthestreet.com'
+
   ActionMailer::Base.smtp_settings = {
     :port           => ENV['MAILGUN_SMTP_PORT'],
     :address        => ENV['MAILGUN_SMTP_SERVER'],
