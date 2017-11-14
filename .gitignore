@@ -13,6 +13,9 @@
 !/log/.keep
 !/tmp/.keep
 
+# Ignore OS tempfiles
+.DS_Store
+
 # Ignore Byebug command history file.
 .byebug_history
 /public/packs
