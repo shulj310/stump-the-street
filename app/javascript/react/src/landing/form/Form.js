@@ -8,29 +8,29 @@ const Form = props =>{
   let success;
   let complete;
   if (props.submit){
-    success = <p style={{fontSize:"1vw", paddingLeft:"2vw",color:"#311B92"}}>
+    success = <p style={{fontSize:"100%", paddingLeft:"2vw",color:"#311B92"}}>
                   Success!
               </p>
   }
   if (props.complete){
-    complete = <p style={{fontSize:"1vw", paddingLeft:"2vw",color:"#311B92"}}>
+    complete = <p style={{fontSize:"100%", paddingLeft:"2vw",color:"#311B92"}}>
                   Please complete entire form!
               </p>
   }
 
   return(
     <form method="post" action="/leads">
-      <div style={{backgroundColor:"#311B92",maxWidth:"30vw"}}>
+      <div style={{backgroundColor:"#311B92",maxWidth:"50vw"}}>
         <h1
-          style={{fontSize:"3vw",paddingLeft:"4vw",paddingTop:"0.5vw",paddingRight:"1vw"}}>Join the Waitlist</h1>
+          style={{fontSize:"4.5vw",paddingLeft:"4vw",paddingTop:"0.5vw",paddingRight:"1vw"}}>Join the Waitlist</h1>
       </div>
-      <div>
-        <p style={{fontSize:"2vw",paddingTop:0,paddingBottom:0, paddingLeft:"1.75vw",color:"black"}}>Stay informed on the latest Stump news and get in line for the first, live event.</p>
+      <div style={{maxWidth:"90vw"}}>
+        <p className="copy" style={{paddingTop:0,paddingBottom:0, paddingLeft:"1.75vw",color:"black"}}>Stay informed on the latest Stump news and get in line for the first, live event.</p>
       </div>
-      <div style={{fontSize:"3vw", paddingLeft:"2vw",color:"#311B92"}}>
+      <div style={{paddingLeft:"2vw",color:"#311B92"}}>
         <Row>
           <Col s={6}>
-            <div style={{fontSize:"2vw"}}>
+            <div>
             	<Input
                 label="Name"
                 name="name"

@@ -13,7 +13,7 @@ const Checked = props =>{
         <input
           onClick={props.handleChange}
           style={{fontSize:"1.5vw",paddingRight:"1vw"}} type="checkbox" id="test6" checked={checked}/>
-        <label style={{fontSize:"1.5vw",paddingLeftt:"1vw"}} htmlFor="test6">Consider me for Beta Testing</label>
+        <label className="beta" htmlFor="test6">Consider me for Beta Testing</label>
       </p>
     </div>
   )
