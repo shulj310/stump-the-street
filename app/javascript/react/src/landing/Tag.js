@@ -23,7 +23,7 @@ const Tag = props =>{
           style={{position:"absolute"}}>
         <img
           src={require(`./../../../../assets/images/stump_homepage_graph.png`)}
-          style={{maxWidth:"60%",height:"auto",width:"auto"}}
+          style={{maxWidth:"65%",height:"auto",width:"auto"}}
         />
         </div>
       </div>

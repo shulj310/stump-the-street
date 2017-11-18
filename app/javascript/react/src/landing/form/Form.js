@@ -64,7 +64,8 @@ const Form = props =>{
         <div style={{paddingTop:"3vw",paddingLeft:"10vw"}}>
         <a className="waves-effect waves-light btn"
           onClick={props.handleSubmit}
-          style={{backgroundColor:"#311B92",height:"5vw",width:"15.7vw",fontSize:"2vw"}}>Submit</a>
+          id="submit-button"
+          style={{backgroundColor:"#E55425",height:"5vw",width:"15.7vw",fontSize:"2vw"}}>Submit</a>
         </div>
       </div>
     </form>
