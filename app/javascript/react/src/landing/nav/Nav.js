@@ -5,7 +5,7 @@ const Nav = props =>{
 
 
   return(
-    <div>
+    <div style={{paddingBottom:"2vw"}}>
       <ul style={{
         listStyleType: "none",
         margin:0,
@@ -24,7 +24,7 @@ const Nav = props =>{
             float:"right",
             display:"block",
             padding:"5px",
-            fontSize:"1.5vw",
+            fontSize:"2vw",
             textDecoration:"none"
         }}>
            <a href="/users/sign_in" style={{color:"white"}}> Beta Login</a>

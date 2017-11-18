@@ -76,7 +76,7 @@ class Landing extends Component{
           style={{
             backgroundColor:"#311B92",
             padding:"3% 6%",
-            height:"37vw"}}>
+            height:"43vw"}}>
           <Nav />
           <Tag />
         </div>

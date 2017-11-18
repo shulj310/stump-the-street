@@ -25,6 +25,77 @@
 
  $primary-color: color("materialize-red", "lighten-2") !default;
 
+ @media all and (min-width: 960px) {
+   p.copy{
+       font-size: 32px;
+       color:black;
+     }
+   label.beta {
+     font-size:30px;
+     padding-left:1vw;
+     color:black;
+   }
+   label.input-override{
+     font-size:20px;
+     padding-left:1vw;
+   }
+   i#icon{
+     font-size: 3vw;
+     max-width: 20px;
+   }
+ }
+
+ @media all and (max-width: 959px) and (min-width: 600px) {
+ p.copy{
+     font-size: 3.25vw;
+     color:black;
+   }
+  label.beta {
+    font-size:3vw;
+    padding-left:1vw;
+    color:black;
+  }
+  label.input-override{
+    font-size:2.5vw;
+    padding-left:1vw;
+  }
+  input#icon_prefix{
+    font-size:2.5vw;
+    padding-left: 10px;
+  }
+  i#icon{
+    font-size: 4vw;
+    max-width: 60px;
+    margin-right:20px;
+  }
+ }
+
+ @media all and (max-width: 599px) and (min-width: 50px) {
+   p.copy{
+       font-size: 3vw;
+       color:black;
+     }
+   label.beta {
+     font-size:3vw;
+     padding-left:1vw;
+     color:black;
+   }
+   label.input-override{
+     font-size:2.5vw;
+     padding-left:1vw;
+   }
+   input#icon_prefix{
+     font-size: 2.5vw;
+     padding-left: 10px;
+   }
+   i#icon{
+     font-size: 6vw;
+     max-width: 100px;
+   }
+ }
+
+
+
  html{
    font-family: "Montserrat"
  }
