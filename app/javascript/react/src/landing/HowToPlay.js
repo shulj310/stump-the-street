@@ -13,8 +13,8 @@ const HowToPlay = props =>{
         <img style={{float:"left",margin:"-0.5em 2vw 1vw 0",height:"auto",width:"auto",paddingLeft:"3vw",maxWidth:"25%"}}
           src={require(`./../../../../assets/images/stump_homepage_icon_group.png`)}
         />
-        Stump the Street is a truly unique, investing experience that allows new investors and seasoned pros compete in stock-picking challenges.
-        Build your own custom stock portfolios, outperform your friends and collect your prizes!
+        Stump the Street is a one of a kind investing experience that allows new traders and seasoned pros to compete in stock-picking challenges.
+        Build your own custom stock portfolios, outperform your friends, and collect your prizes!
         </p>
       </div>
     </div>
