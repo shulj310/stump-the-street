@@ -1,5 +1,5 @@
 class SurveyMailer < ApplicationMailer
-  layout 'survey'
+  layout 'survey_mailer'
 
   def survey(lead, template)
     @lead = lead
