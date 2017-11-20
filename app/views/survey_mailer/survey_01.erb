@@ -1,37 +1,3 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <style>
-    @import url('https://fonts.googleapis.com/css?family=Montserrat');
-  </style>
-</head>
-
-<body
-  style="
-    background-color:#EDEDEB;
-    font-family:Montserrat;">
-  <div
-    style="
-      background-color:#311B92;
-      min-width:90vw;
-      min-height:6vw;
-      padding-top:1vw;
-      padding-left:1vw;
-      margin: 1vw 5vw;
-      ">
-    <a href="https://stumpthestreet.com">
-      <%= image_tag 'stump_the_street_logo_1.png', style: 'width:30%;height:auto' %>
-    </a>
-  </div>
-  <div
-    style="
-      margin-left:10vw;
-      margin-right:10vw;
-      margin-top:0vw;
-      font-family:Montserrat;
-      padding: 3vw 10vw;
-      font-size:90%
-    ">
     <%= @lead.name %>,<br/><br/>
 
     Prepare for battle.<br/><br/>
@@ -41,33 +7,3 @@
     As we finalize our plans, we ask for your input. Please fill out this <a href="https://www.surveymonkey.com/r/7KP3FWT">brief survey</a> for a chance at <u>free plays and other prizes.</u><br/><br/>
 
     Best of luck!<br/><br/>
-  <div
-    style="
-      background-color:#311B92;
-      min-width:60vw;
-      margin: 1vw 0vw;
-      min-height:5vw;
-      padding-top:5px;
-      padding-left:5px;
-      ">
-
-    <hr class='dotted' style="border: 0.5vw dotted #E55425; border-style: none none dotted; color: #E55425; margin: 3vw 5vw"/>
-    <p style="
-      margin: 1vw 10vw;
-      color:white;
-      font-size:80%;
-    ">
-    Stump the Street is a truly unique, investing experience that allows new investors and seasoned pros come to compete in stock-picking challenges.
-    Build your own custom stock portfolios, outperform your friends and watch your Global Rank soar.</p>
-    <p style="
-      margin: 1vw 10vw;
-      color:white;
-      font-size:70%;
-      text-align:center;
-    ">
-    This email was sent to <%= @lead.email %><br/>
-    This email was sent by: Stump the Street <br/>
-    119 Beach Street, Boston, MA 02111</p>
-    <%= image_tag 'stump_the_street_logo_1.png', style: 'width:20%;height:auto;padding-left:10vw;padding-bottom:1vw' %>
-</body>
-</html>
