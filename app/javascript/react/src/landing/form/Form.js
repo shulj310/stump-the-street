@@ -29,7 +29,7 @@ const Form = props =>{
       </div>
       <div style={{paddingLeft:"2vw",color:"#311B92"}}>
         <Row>
-          <Col s={6}>
+          <Col s={12} m={6}>
             <div>
             	<Input
                 label="Name"
@@ -47,26 +47,27 @@ const Form = props =>{
                 beta={props.beta}
                 handleChange={props.handleBetaChange}
               />
-
+            </div>
+            <div className="clearfix center-align">
+              <div style={{paddingTop:"3vw"}}>
+                {success}
+                {complete}
+              </div>
+              <div style={{paddingTop:"3vw"}}>
+              <a className="waves-effect waves-light btn"
+                onClick={props.handleSubmit}
+                id="submit-button"
+                style={{backgroundColor:"#E55425",height:"5vw",width:"15.7vw",fontSize:"2vw"}}>Submit</a>
+              </div>
             </div>
           </Col>
-          <Col s={6}>
+          <Col s={12} m={6}>
           <img
             src={require(`./../../../../../assets/images/stump_homepage_graphic_cannon.png`)}
             style={{maxWidth:"100%",height:"auto",width:"auto"}}
           />
           </Col>
         </Row>
-        <div style={{paddingLeft:"3vw"}}>
-          {success}
-          {complete}
-        </div>
-        <div style={{paddingTop:"3vw",paddingLeft:"10vw"}}>
-        <a className="waves-effect waves-light btn"
-          onClick={props.handleSubmit}
-          id="submit-button"
-          style={{backgroundColor:"#E55425",height:"5vw",width:"15.7vw",fontSize:"2vw"}}>Submit</a>
-        </div>
       </div>
     </form>
   )
