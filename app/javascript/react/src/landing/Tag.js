@@ -21,10 +21,11 @@ const Tag = props =>{
         </div>
         <div
           style={{position:"absolute",
-                  top:-40}}>
+                  top:-50,
+                  left:-10}}>
         <img
+          className="graph-img"
           src={require(`./../../../../assets/images/stump_homepage_graph.png`)}
-          style={{maxWidth:"82%",height:"auto",width:"auto"}}
         />
         </div>
       </div>
