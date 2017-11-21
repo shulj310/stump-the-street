@@ -25,12 +25,13 @@ const Form = props =>{
           style={{fontSize:"4.5vw",paddingLeft:"4vw",paddingTop:"0.5vw",paddingRight:"1vw"}}>Join the Waitlist</h1>
       </div>
       <div style={{maxWidth:"90vw"}}>
-        <p className="copy" style={{paddingTop:0,paddingBottom:0, paddingLeft:"1.75vw",color:"black"}}>Stay informed on the latest Stump news and get in line for the first, live event.</p>
+        <p className="copy" style={{paddingTop:0,paddingBottom:0, paddingLeft:"4.5vw",color:"black"}}>Stay informed on the latest Stump news and get in line for the first, live event.</p>
       </div>
       <div style={{paddingLeft:"2vw",color:"#311B92"}}>
         <Row>
           <Col s={12} m={6}>
-            <div>
+            <div
+              style={{paddingRight:"2vw"}}>
             	<Input
                 label="Name"
                 name="name"

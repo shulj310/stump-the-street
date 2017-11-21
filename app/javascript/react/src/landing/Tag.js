@@ -20,10 +20,11 @@ const Tag = props =>{
           style={{fontSize:"6vw",padding:0,margin:0}}>Collect your prizes.</h1>
         </div>
         <div
-          style={{position:"absolute"}}>
+          style={{position:"absolute",
+                  top:-40}}>
         <img
           src={require(`./../../../../assets/images/stump_homepage_graph.png`)}
-          style={{maxWidth:"65%",height:"auto",width:"auto"}}
+          style={{maxWidth:"82%",height:"auto",width:"auto"}}
         />
         </div>
       </div>
